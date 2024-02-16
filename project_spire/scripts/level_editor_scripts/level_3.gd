@@ -4,7 +4,10 @@ signal spawn_debug(i,j,color,type)
 var x_starts=[470,412,355,297,240,182,125]
 var y_starts=[1469,1536,1334,1671,1739,1806,1875]
 
+var level=3
 var current_counter_value=21
+#yellow=0 , pink=1 , orange=2 , purple=3 ,green=4 ,blue=5 ,
+var weights = [0, 0, 0, 0, 0, 0]
 var width=7
 var height=6
 var score_needed=300
@@ -25,6 +28,8 @@ var x_start = x_starts[width-3]
 var y_start = y_starts[height-3]
 
 func _ready():
+	get_parent().get_node("grid").level=level
+	get_parent().get_node("grid").weights=weights
 	get_parent().get_node("grid").marmalade_spaces=marmalade_spaces
 	get_parent().get_node("grid").marmalade_healths=marmalade_healths
 	get_parent().get_node("grid").ice_spaces=ice_spaces

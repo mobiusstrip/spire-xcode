@@ -86,10 +86,16 @@ func goal_texture_setter():
 		"adjacent":
 			goal_texture=possible_goal_textures[32]
 
-
+signal goal_animation
 func check_goal(goal_type):
 	if goal_type ==goal_string:
 		update_goal()
+
+func is_goal_string(goal_type):
+	if goal_type ==goal_string:
+		return true
+	else:
+		return false
 
 func update_goal():
 	if number_collected<max_needed:

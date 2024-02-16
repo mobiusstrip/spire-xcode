@@ -4,6 +4,9 @@ signal spawn_debug(i,j,color,type)
 var x_starts=[470,412,355,297,240,182,125]
 var y_starts=[1469,1536,1334,1671,1739,1806,1875]
 
+var level=2
+#yellow=0 , pink=1 , orange=2 , purple=3 ,green=4 ,blue=5 ,
+var weights = [0, 0, 0, 0, 0, 0]
 var current_counter_value=25
 var width=6
 var height=8
@@ -26,6 +29,8 @@ var y_start = y_starts[height-3]
 #var concrete_spaces=[(1, 0), (2, 0), (3, 0), (4, 0), (5, 1), (4, 1), (3, 1), (2, 1), (1, 1), (0, 1), (0, 2), (1, 2), (2, 2), (3, 2), (4, 2), (5, 2), (5, 3), (4, 3), (3, 3), (2, 3), (1, 3), (0, 3)]
 
 func _ready():
+	get_parent().get_node("grid").level=level
+	get_parent().get_node("grid").weights=weights
 	get_parent().get_node("grid").marmalade_spaces=marmalade_spaces
 	get_parent().get_node("grid").marmalade_healths=marmalade_healths
 	get_parent().get_node("grid").ice_spaces=ice_spaces
@@ -44,10 +49,11 @@ func _ready():
 	get_parent().get_node("grid").x_start=x_start
 	get_parent().get_node("grid").current_counter_value=current_counter_value
 	
-var signal_count=3
+var signal_count=4
 func level_editor():
 #	emit_signal("spawn_debug",3,4,"pink","column",true) ##for functionality doesnt effect grid
 	emit_signal("spawn_debug",0,6,"pink","regular")
 	emit_signal("spawn_debug",1,6,"pink","regular")
+	emit_signal("spawn_debug",3,6,"pink","regular")
 	emit_signal("spawn_debug",2,7,"pink","column")
 

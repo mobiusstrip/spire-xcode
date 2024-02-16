@@ -1,14 +1,13 @@
-[gd_scene load_steps=16 format=3 uid="uid://bth4pj5jiuyip"]
+[gd_scene load_steps=15 format=3 uid="uid://bth4pj5jiuyip"]
 
 [ext_resource type="PackedScene" uid="uid://cy2jws7k6i5wp" path="res://scenes/level_template.tscn" id="1"]
-[ext_resource type="Shader" path="res://Assets/artwork/vfx/shaders/swirl_ccblue.gdshader" id="2"]
+[ext_resource type="Shader" path="res://Assets/artwork/vfx/shaders/swirl_kushpurple.gdshader" id="2_bbldq"]
 [ext_resource type="Script" path="res://scripts/level_editor_scripts/level_5.gd" id="3_w8x0a"]
-[ext_resource type="PackedScene" uid="uid://cncj37yboccsb" path="res://scenes/ui_scenes/goal.tscn" id="5_rgf67"]
 [ext_resource type="Texture2D" uid="uid://ctkij7jd2xumi" path="res://Assets/artwork/ui/main_ui/top_ui_level_select/exit_pressed.png" id="5_wm7jd"]
 
 [sub_resource type="ShaderMaterial" id="1"]
 resource_local_to_scene = true
-shader = ExtResource("2")
+shader = ExtResource("2_bbldq")
 shader_parameter/water_x = 1.0
 shader_parameter/water_y = 1.0
 shader_parameter/water_z = 1.0
@@ -99,12 +98,8 @@ position = Vector2(0, 0)
 texture = null
 
 [node name="goal_1" parent="goal_holder" index="0"]
-max_needed = 25
+max_needed = 22
 goal_string = "concrete"
-
-[node name="goal_2" parent="goal_holder" index="1" instance=ExtResource("5_rgf67")]
-max_needed = 3
-goal_string = "adjacent"
 
 [node name="silver_explosion" parent="game_won/explosions" index="0"]
 process_material = SubResource("ParticleProcessMaterial_cj4nh")
@@ -121,3 +116,6 @@ process_material = SubResource("ParticleProcessMaterial_0yv0d")
 
 [node name="green_explosion" parent="game_won/explosions" index="4"]
 process_material = SubResource("ParticleProcessMaterial_cj4nh")
+
+[node name="collapse_timer" parent="." index="12"]
+wait_time = 0.3

@@ -6,7 +6,10 @@ var y_starts=[1469,1536,1334,1671,1739,1806,1875]
 #set these values
 #set goal holder values
 #copy paste level editor prints and signal_count
-var current_counter_value=28
+var level=28
+#yellow=0 , pink=1 , orange=2 , purple=3 ,green=4 ,blue=5 ,
+var weights = [0, 0, 2, 0, 0, 0]
+var current_counter_value=35
 var width=9
 var height=9
 var score_needed=3000
@@ -22,12 +25,14 @@ var slime_spaces=[]
 var empty_spaces=[Vector2(3,8), Vector2(5,8), Vector2(3,7), Vector2(5,7), Vector2(3,6), Vector2(5,6), Vector2(3,5), Vector2(5,5), Vector2(3,4), Vector2(5,4), Vector2(3,3), Vector2(5,3), Vector2(4,8), Vector2(4,5)]
 var marmalade_spaces=[Vector2(0,0), Vector2(1,1), Vector2(2,2), Vector2(0,2), Vector2(1,3), Vector2(2,4), Vector2(8,0), Vector2(7,1), Vector2(6,2), Vector2(8,2), Vector2(7,3), Vector2(6,4)]
 var marmalade_healths=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-var sinker_amount=0
+var sinker_amount=4
 
 var x_start = x_starts[width-3]
 var y_start = y_starts[height-3]
 
 func _ready():
+	get_parent().get_node("grid").level=level
+	get_parent().get_node("grid").weights=weights
 	get_parent().get_node("grid").marmalade_spaces=marmalade_spaces
 	get_parent().get_node("grid").marmalade_healths=marmalade_healths
 	get_parent().get_node("grid").sinker_amount=sinker_amount

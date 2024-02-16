@@ -1,0 +1,153 @@
+[gd_scene load_steps=14 format=3 uid="uid://dye4dvua2ni77"]
+
+[ext_resource type="Script" path="res://scripts/general_scripts/game_over.gd" id="1_g1lqw"]
+[ext_resource type="Texture2D" uid="uid://by62ulfgptqrm" path="res://Assets/artwork/ui/win_state_ui/banner.png" id="2_gbbev"]
+[ext_resource type="FontFile" uid="uid://dft0xoqlwfk0m" path="res://Assets/artwork/fonts/MrsSheppards-Regular.ttf" id="3_byaht"]
+[ext_resource type="Texture2D" uid="uid://dg3eghvl8y2va" path="res://Assets/artwork/ui/win_state_ui/game_over_screen.png" id="4_p3nug"]
+[ext_resource type="Texture2D" uid="uid://bnl7l8v3xshms" path="res://Assets/artwork/ui/win_state_ui/buttons_regular/exit_button.png" id="5_6v1fo"]
+[ext_resource type="Texture2D" uid="uid://dbsf83dyufa4j" path="res://Assets/artwork/ui/win_state_ui/buttons_pressed/exit_button_pressed.png" id="6_3eryo"]
+[ext_resource type="Texture2D" uid="uid://c7kmm17gr4an0" path="res://Assets/artwork/ui/win_state_ui/buttons_regular/retry_button.png" id="7_7kj2y"]
+[ext_resource type="Texture2D" uid="uid://wjdri223ix1y" path="res://Assets/artwork/ui/win_state_ui/buttons_pressed/retry_button_pressed.png" id="8_72rsv"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_dhyuw"]
+font = ExtResource("3_byaht")
+font_size = 60
+
+[sub_resource type="LabelSettings" id="LabelSettings_yvkcp"]
+font = ExtResource("3_byaht")
+font_size = 100
+
+[sub_resource type="Animation" id="5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("banner:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -394)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("gameover_menu:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="6"]
+resource_name = "game_over"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("banner:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 1, 1.2, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, -394), Vector2(0, 1100), Vector2(0, 990), Vector2(0, 1033), Vector2(0, 1033), Vector2(0, 1000), Vector2(0, 2612)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("gameover_menu:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1.4, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qkk5b"]
+_data = {
+"RESET": SubResource("5"),
+"game_over": SubResource("6")
+}
+
+[node name="game_lose" type="Node2D"]
+script = ExtResource("1_g1lqw")
+
+[node name="banner" type="TextureRect" parent="."]
+offset_top = -394.0
+offset_right = 1180.0
+offset_bottom = -59.0012
+texture = ExtResource("2_gbbev")
+
+[node name="oom" type="Label" parent="banner"]
+layout_mode = 0
+offset_left = 444.0
+offset_top = 80.0
+offset_right = 741.0
+offset_bottom = 161.0
+text = "Out of moves!"
+label_settings = SubResource("LabelSettings_dhyuw")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="gameover_menu" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+offset_top = 10.0
+offset_right = 1172.0
+offset_bottom = 2544.0
+texture = ExtResource("4_p3nug")
+
+[node name="quit_button" type="TextureButton" parent="gameover_menu"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 0
+offset_left = 293.0
+offset_top = 1167.0
+offset_right = 447.0
+offset_bottom = 1321.0
+texture_normal = ExtResource("5_6v1fo")
+texture_pressed = ExtResource("6_3eryo")
+
+[node name="retry_button" type="TextureButton" parent="gameover_menu"]
+layout_mode = 0
+offset_left = 725.0
+offset_top = 1167.0
+offset_right = 879.0
+offset_bottom = 1321.0
+texture_normal = ExtResource("7_7kj2y")
+texture_pressed = ExtResource("8_72rsv")
+
+[node name="score_label" type="Label" parent="gameover_menu"]
+layout_mode = 0
+offset_left = 445.0
+offset_top = 888.0
+offset_right = 725.0
+offset_bottom = 1025.0
+text = "0000"
+label_settings = SubResource("LabelSettings_yvkcp")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="silver_star" type="Sprite2D" parent="gameover_menu"]
+position = Vector2(405, 958)
+
+[node name="gold_star" type="Sprite2D" parent="gameover_menu"]
+position = Vector2(586, 958)
+
+[node name="platinum_star" type="Sprite2D" parent="gameover_menu"]
+position = Vector2(766, 958)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_qkk5b")
+}
+
+[connection signal="pressed" from="gameover_menu/quit_button" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="gameover_menu/retry_button" to="." method="_on_retry_button_pressed"]

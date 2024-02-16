@@ -34,6 +34,10 @@ window/stretch/mode="viewport"
 window/stretch/aspect="keep_width"
 window/handheld/orientation=1
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/unused_md5_file_cleaner/plugin.cfg")
+
 [global]
 
 main=false

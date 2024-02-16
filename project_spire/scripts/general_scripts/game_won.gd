@@ -12,8 +12,29 @@ extends Node2D
 @onready var platinum_particle=$explosions/platinum_explosion
 @onready var rainbow_particle=$explosions/rainbow_explosion
 
+var reached_level=GameDataManager.reached_level
+var current_level=GameDataManager.current_level
 
 func _ready():
+	$AnimationPlayer.play("game_won")
+	SoundManager.play_fixed_sound("win")
+	#updates current_level_star
+	if star_1_unlocked==true:
+		GameDataManager.modify_dict(current_level,"star","silver")
+		SaveUpdates.current_transition="silver"
+	if star_2_unlocked==true:
+		GameDataManager.modify_dict(current_level,"star","gold")
+		SaveUpdates.current_transition="gold"
+	if star_3_unlocked==true:
+		GameDataManager.modify_dict(current_level,"star","rainbow")
+		SaveUpdates.current_transition="rainbow"
+	SaveUpdates.current_index=current_level
+	#unlocks next level
+	if current_level==reached_level:
+		GameDataManager.modify_dict(current_level+1,"unlocked",true)
+		GameDataManager.modify_dict(current_level+1,"star","green")
+		SaveUpdates.next_index=current_level+1
+#	$wait_timer.start()
 	silver_particle.position=Vector2(405,945)
 	gold_particle.position=Vector2(586,945)
 	rainbow_particle.position=Vector2(766,945)
@@ -48,31 +69,8 @@ func score_draw():
 #	SoundManager.play_fixed_sound("points_tally")
 	
 	
-func _on_goal_holder_game_won():
-	$".".visible=true
-	if wait==false:
-		wait=true
-		var current_level=GameDataManager.level_info[0]["current_level"]
-		$AnimationPlayer.play("game_won")
-		SoundManager.play_fixed_sound("win")
-		#updates current_level_star
-		if star_1_unlocked==true:
-			GameDataManager.modify_dict(current_level,"star","silver")
-			SaveUpdates.current_transition="silver"
-		if star_2_unlocked==true:
-			GameDataManager.modify_dict(current_level,"star","gold")
-			SaveUpdates.current_transition="gold"
-		if star_3_unlocked==true:
-			GameDataManager.modify_dict(current_level,"star","rainbow")
-			SaveUpdates.current_transition="rainbow"
-		SaveUpdates.current_index=current_level
-		#unlocks next level
-		GameDataManager.modify_dict(current_level+1,"unlocked",true)
-		GameDataManager.modify_dict(current_level+1,"star","green")
-		SaveUpdates.next_index=current_level+1
-		$wait_timer.start()
-	
 func _on_continue_button_pressed():
+	print("WON_CONTINUE_PRESSED")
 	SoundManager.stop_tracked_music()
 	SoundManager.stop_tracked_sound()
 	SoundManager.play_fixed_sound("button_pressed")
@@ -80,12 +78,13 @@ func _on_continue_button_pressed():
 	
 var new_value
 func _on_retry_button_pressed():
-	SoundManager.stop_tracked_music()
+	print("WON_RETRY_PRESSSED")
 	SoundManager.play_fixed_sound("button_pressed")
+	SoundManager.stop_tracked_music()
 	if GameDataManager.level_info[0]["lives"] is int:
 		if GameDataManager.level_info[0]["lives"] !=0:
 			new_value=GameDataManager.level_info[0]["lives"]-1
-			Transition.change_scene_to_file("res://scenes/level_scenes/"+str(GameDataManager.level_info[0]["current_level"])+".tscn","fade_blue")
+			Transition.change_scene_to_file("res://scenes/level_scenes/"+str(current_level)+".tscn","fade_blue")
 		else:
 			get_parent().get_node("UI/lives_store").visible=true
 			

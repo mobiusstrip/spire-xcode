@@ -1,0 +1,84 @@
+[gd_scene load_steps=14 format=3 uid="uid://bwnu4v4h5nse0"]
+
+[ext_resource type="Script" path="res://scripts/general_scripts/in_level_settings.gd" id="1_cecxw"]
+[ext_resource type="Texture2D" uid="uid://ds64txytpl8mv" path="res://Assets/artwork/ui/in_level_settings/in_level_settings.png" id="2_116yv"]
+[ext_resource type="Texture2D" uid="uid://d04obdifouy3s" path="res://Assets/artwork/settings/regular/music_regular.png" id="3_i5nor"]
+[ext_resource type="Texture2D" uid="uid://84wxgw7so0ek" path="res://Assets/artwork/settings/pressed/music_pressed.png" id="4_nt826"]
+[ext_resource type="Texture2D" uid="uid://di2yagt3funh" path="res://Assets/artwork/settings/regular/exit_regular.png" id="5_jqj4u"]
+[ext_resource type="Texture2D" uid="uid://sijy83g61clp" path="res://Assets/artwork/settings/pressed/exit_pressed.png" id="6_ly0w3"]
+[ext_resource type="Texture2D" uid="uid://b7s07qjjltpps" path="res://Assets/artwork/settings/regular/sound_regular.png" id="7_ehmc5"]
+[ext_resource type="Texture2D" uid="uid://beylo8rrntaga" path="res://Assets/artwork/settings/pressed/sound_pressed.png" id="8_jbeay"]
+[ext_resource type="Texture2D" uid="uid://crmre6drugaph" path="res://Assets/artwork/settings/regular/vibration_regular.png" id="9_mhroc"]
+[ext_resource type="Texture2D" uid="uid://i7poayhloeka" path="res://Assets/artwork/settings/pressed/vibration_pressed.png" id="10_nihyb"]
+[ext_resource type="Texture2D" uid="uid://hhbhuxc7j2lu" path="res://Assets/artwork/ui/main_ui/top_ui_level_select/top_ui_leave.png" id="11_pb7jk"]
+[ext_resource type="Texture2D" uid="uid://dg27wfqlop2f6" path="res://Assets/artwork/ui/main_ui/top_ui_level_select/leave_pressed.png" id="12_0ko3g"]
+[ext_resource type="Texture2D" uid="uid://cxxrikqkn64us" path="res://Assets/artwork/ui/in_level_settings/heartlose.png" id="13_wdnl6"]
+
+[node name="in_level_settings" type="Node2D"]
+script = ExtResource("1_cecxw")
+
+[node name="in_level_settings_background" type="TextureRect" parent="."]
+offset_right = 1170.0
+offset_bottom = 2536.0
+texture = ExtResource("2_116yv")
+
+[node name="music_button" type="TextureButton" parent="."]
+custom_minimum_size = Vector2(100, 100)
+offset_left = 255.0
+offset_top = 916.976
+offset_right = 375.0
+offset_bottom = 1036.98
+toggle_mode = true
+texture_normal = ExtResource("3_i5nor")
+texture_pressed = ExtResource("4_nt826")
+stretch_mode = 5
+
+[node name="exit_button" type="TextureButton" parent="."]
+custom_minimum_size = Vector2(100, 100)
+offset_left = 517.0
+offset_top = 1978.0
+offset_right = 636.0
+offset_bottom = 2098.0
+texture_normal = ExtResource("5_jqj4u")
+texture_pressed = ExtResource("6_ly0w3")
+stretch_mode = 5
+
+[node name="sound_button" type="TextureButton" parent="."]
+custom_minimum_size = Vector2(100, 100)
+offset_left = 526.0
+offset_top = 913.978
+offset_right = 646.0
+offset_bottom = 1033.98
+toggle_mode = true
+texture_normal = ExtResource("7_ehmc5")
+texture_pressed = ExtResource("8_jbeay")
+stretch_mode = 5
+
+[node name="vibration_button" type="TextureButton" parent="."]
+custom_minimum_size = Vector2(100, 100)
+offset_left = 798.0
+offset_top = 914.978
+offset_right = 918.0
+offset_bottom = 1034.98
+toggle_mode = true
+texture_normal = ExtResource("9_mhroc")
+texture_pressed = ExtResource("10_nihyb")
+stretch_mode = 5
+
+[node name="leave_button" type="TextureButton" parent="."]
+offset_left = 536.057
+offset_top = 1282.75
+offset_right = 634.057
+offset_bottom = 1388.75
+texture_normal = ExtResource("11_pb7jk")
+texture_pressed = ExtResource("12_0ko3g")
+
+[node name="heartlose" type="Sprite2D" parent="."]
+position = Vector2(598.946, 1279.75)
+texture = ExtResource("13_wdnl6")
+
+[connection signal="pressed" from="music_button" to="." method="_on_music_button_pressed"]
+[connection signal="pressed" from="exit_button" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="sound_button" to="." method="_on_sound_button_pressed"]
+[connection signal="pressed" from="vibration_button" to="." method="_on_vibration_button_pressed"]
+[connection signal="pressed" from="leave_button" to="." method="_on_leave_button_pressed"]

@@ -1,16 +1,16 @@
 [gd_scene load_steps=16 format=3 uid="uid://c6tybrlnc1ruk"]
 
 [ext_resource type="Texture2D" uid="uid://dhbpnilln4rya" path="res://Assets/artwork/pieces/adjacent/adjacent_blue.png" id="2_ylrcp"]
-[ext_resource type="Texture2D" uid="uid://dnyh25nrd2lvb" path="res://Assets/artwork/pieces/column/column_blue.png" id="3_xyql3"]
-[ext_resource type="Texture2D" uid="uid://2a1wocdmya2v" path="res://Assets/artwork/pieces/regular/regular_blue.png" id="4_34f0d"]
+[ext_resource type="Texture2D" uid="uid://dqqclabtdl2gx" path="res://Assets/artwork/pieces/column/column_blue.png" id="3_xyql3"]
+[ext_resource type="Texture2D" uid="uid://r786k2on8yop" path="res://Assets/artwork/pieces/regular/regular_blue.png" id="4_34f0d"]
 [ext_resource type="Script" path="res://scripts/general_scripts/piece.gd" id="5"]
-[ext_resource type="Texture2D" uid="uid://dkleisna8d3be" path="res://Assets/artwork/pieces/row/row_blue.png" id="5_0cvj6"]
-[ext_resource type="Texture2D" uid="uid://dhoq30lls4q2s" path="res://Assets/artwork/pieces/shiny_adjacent/shiny_adjacent_blue.png" id="6_qjj6h"]
+[ext_resource type="Texture2D" uid="uid://dek4f1767wnnj" path="res://Assets/artwork/pieces/row/row_blue.png" id="5_0cvj6"]
+[ext_resource type="Texture2D" uid="uid://dx0g1ewj1xr7o" path="res://Assets/artwork/pieces/shiny_adjacent/shiny_adjacent_blue.png" id="6_qjj6h"]
 [ext_resource type="Texture2D" uid="uid://b0n1f53o1mq68" path="res://Assets/artwork/obstacles/rainbow.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://dwyd0vxvd6ycq" path="res://Assets/artwork/pieces/shiny_column/shiny_column_blue.png" id="7_naaq7"]
+[ext_resource type="Texture2D" uid="uid://8gtcrhlxq42i" path="res://Assets/artwork/pieces/shiny_column/shiny_column_blue.png" id="7_naaq7"]
 [ext_resource type="Texture2D" uid="uid://dep88bg1dljsj" path="res://Assets/artwork/obstacles/sinker.png" id="8"]
 [ext_resource type="Texture2D" uid="uid://bkgmnvvg86861" path="res://Assets/artwork/pieces/shiny_regular/shiny_blue.png" id="8_efrk3"]
-[ext_resource type="Texture2D" uid="uid://srej77l3eiaw" path="res://Assets/artwork/pieces/shiny_row/shiny_row_blue.png" id="9_ql611"]
+[ext_resource type="Texture2D" uid="uid://bmikkmsfr2sjx" path="res://Assets/artwork/pieces/shiny_row/shiny_row_blue.png" id="9_ql611"]
 [ext_resource type="Texture2D" uid="uid://c0ep8ss7ecyc0" path="res://Assets/artwork/obstacles/fish/blue_fish.png" id="10_jk86l"]
 
 [sub_resource type="Animation" id="1"]
@@ -51,7 +51,7 @@ _data = {
 }
 
 [node name="blue_piece" type="Node2D"]
-scale = Vector2(1.2, 1.2)
+scale = Vector2(1.25, 1.25)
 script = ExtResource("5")
 color = "blue"
 adjacent_texture = ExtResource("2_ylrcp")

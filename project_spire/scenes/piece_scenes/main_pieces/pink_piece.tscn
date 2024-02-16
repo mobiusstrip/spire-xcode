@@ -1,16 +1,16 @@
 [gd_scene load_steps=16 format=3 uid="uid://duy04coby3onb"]
 
 [ext_resource type="Texture2D" uid="uid://njarv2paawir" path="res://Assets/artwork/pieces/adjacent/adjacent_pink.png" id="2_ths7g"]
-[ext_resource type="Texture2D" uid="uid://dovcfk4dr71o4" path="res://Assets/artwork/pieces/column/column_pink.png" id="3_lq6pr"]
+[ext_resource type="Texture2D" uid="uid://5clq3gutp843" path="res://Assets/artwork/pieces/column/column_pink.png" id="3_lq6pr"]
 [ext_resource type="Texture2D" uid="uid://khkkd5px6c6h" path="res://Assets/artwork/pieces/regular/regular_pink.png" id="4_dqyhc"]
 [ext_resource type="Script" path="res://scripts/general_scripts/piece.gd" id="5"]
-[ext_resource type="Texture2D" uid="uid://bw0oppsc2k1j1" path="res://Assets/artwork/pieces/row/row_pink.png" id="5_0uuev"]
-[ext_resource type="Texture2D" uid="uid://ckogfdqmjpvq6" path="res://Assets/artwork/pieces/shiny_adjacent/shiny_adjacent_pink.png" id="6_3wro3"]
+[ext_resource type="Texture2D" uid="uid://bva40xfn33fmm" path="res://Assets/artwork/pieces/row/row_pink.png" id="5_0uuev"]
+[ext_resource type="Texture2D" uid="uid://7vb4hqnml6pa" path="res://Assets/artwork/pieces/shiny_adjacent/shiny_adjacent_pink.png" id="6_3wro3"]
 [ext_resource type="Texture2D" uid="uid://b0n1f53o1mq68" path="res://Assets/artwork/obstacles/rainbow.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://b1a4b57tyekeu" path="res://Assets/artwork/pieces/shiny_column/shiny_column_pink.png" id="7_xkqcd"]
+[ext_resource type="Texture2D" uid="uid://b40ij8ipqcxyj" path="res://Assets/artwork/pieces/shiny_column/shiny_column_pink.png" id="7_xkqcd"]
 [ext_resource type="Texture2D" uid="uid://dep88bg1dljsj" path="res://Assets/artwork/obstacles/sinker.png" id="8"]
 [ext_resource type="Texture2D" uid="uid://t7o531v3evxu" path="res://Assets/artwork/pieces/shiny_regular/shiny_pink.png" id="8_f074n"]
-[ext_resource type="Texture2D" uid="uid://bwkgambscfu5d" path="res://Assets/artwork/pieces/shiny_row/shiny_row_pink.png" id="9_2vxpo"]
+[ext_resource type="Texture2D" uid="uid://bslsjo6l4ijpm" path="res://Assets/artwork/pieces/shiny_row/shiny_row_pink.png" id="9_2vxpo"]
 [ext_resource type="Texture2D" uid="uid://bw2hfkj8jiyi3" path="res://Assets/artwork/obstacles/fish/pink_fish.png" id="10_uvivf"]
 
 [sub_resource type="Animation" id="1"]
@@ -51,7 +51,7 @@ _data = {
 }
 
 [node name="pink_piece" type="Node2D"]
-scale = Vector2(1.2, 1.2)
+scale = Vector2(1.25, 1.25)
 script = ExtResource("5")
 color = "pink"
 adjacent_texture = ExtResource("2_ths7g")

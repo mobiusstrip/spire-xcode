@@ -1,6 +1,9 @@
 extends TextureRect
 #referencing a node
-
+var game_lose=preload("res://scenes/ui_scenes/game_lose.tscn")
+var game_won=preload("res://scenes/ui_scenes/game_won.tscn")
+var in_level_settings=preload("res://scenes/ui_scenes/in_level_settings.tscn")
+var quit_confirm=preload("res://scenes/ui_scenes/quit_confirm.tscn")
 var star=load("res://Assets/artwork/ui/main_ui/star.png")
 @onready var score_label = $top_ui/score_label
 @onready var counter_label = $top_ui/counter_label
@@ -11,10 +14,12 @@ var current_score = 0
 var current_count = 0
 
 func _ready():
+	var level=get_parent().get_node("grid").level
 	$map_store/current_lives.text=str(GameDataManager.level_info[0]["lives"])
 	_on_grid_update_score(current_score)
 	update_lives()
 	update_booster_screen_labels()
+	$top_ui/level_label.text=str(get_parent().get_node("grid").level)
 
 func update_booster_screen_labels():
 	#also update current_shards
@@ -359,10 +364,8 @@ func _on_exit_button_pressed():
 
 func _on_setting_pressed():
 	SoundManager.play_fixed_sound("button_pressed")
-	if $in_level_settings.visible==false:
-		$in_level_settings.visible=true
-	else:
-		$in_level_settings.visible=false
+	var current = in_level_settings.instantiate()
+	add_child(current)
 	
 #booster_store_buttons
 func _on_blue_booster_buy_button_3x_pressed():
@@ -797,6 +800,7 @@ var current_moves
 var new_moves
 signal booster_bought
 func _on_buy_moves_button_pressed():
+	print("buy_moves_pressed")
 	if GameDataManager.level_info[0]["shards"]>=int($moves_store/buy_moves_button/moves_price.text):
 		SoundManager.play_fixed_sound("obtain")
 		new_shard_value=GameDataManager.level_info[0]["shards"]-int($moves_store/buy_moves_button/moves_price.text)
@@ -815,5 +819,11 @@ func _on_buy_moves_button_pressed():
 		map_store_wiggle()
 		
 func _on_moves_store_exit_button_pressed():
-	$moves_store.visible=false
+	var current = game_lose.instantiate()
+	get_tree().get_root().add_child(current)
+	current.z_index=10
 	emit_signal("booster_bought",false)
+
+
+func _on_grid_bounce():
+	get_node("top_ui/AnimationPlayer").play("ui_bounce")

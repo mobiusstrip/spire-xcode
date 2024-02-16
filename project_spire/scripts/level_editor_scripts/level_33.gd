@@ -6,6 +6,9 @@ var y_starts=[1469,1536,1334,1671,1739,1806,1875]
 #set these values
 #set goal holder values
 #copy paste level editor prints and signal_count
+var level=33
+#yellow=0 , pink=1 , orange=2 , purple=3 ,green=4 ,blue=5 ,
+var weights = [0, 0, 0, 0, 0, 0]
 var current_counter_value=29
 var width=9
 var height=8
@@ -28,6 +31,8 @@ var x_start = x_starts[width-3]
 var y_start = y_starts[height-3]
 
 func _ready():
+	get_parent().get_node("grid").level=level
+	get_parent().get_node("grid").weights=weights
 	get_parent().get_node("grid").marmalade_spaces=marmalade_spaces
 	get_parent().get_node("grid").marmalade_healths=marmalade_healths
 	get_parent().get_node("grid").sinker_amount=sinker_amount

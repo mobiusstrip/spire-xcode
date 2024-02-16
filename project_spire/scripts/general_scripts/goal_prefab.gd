@@ -19,3 +19,8 @@ func update_goal_values(goal_type):
 		current_number-=1
 		if current_number>=0:
 			$VBoxContainer/TextureRect/label.text=""+str(current_number)
+
+
+func _on_grid_bounce():
+	$AnimationPlayer.play("ui_bounce")
+	print("KAKAKAK")

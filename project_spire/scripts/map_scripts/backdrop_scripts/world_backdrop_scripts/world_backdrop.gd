@@ -82,6 +82,7 @@ func button_texture_updater_and_walk():
 		platinum_particle.position=current_button.position+Vector2(+502,+54)
 		rainbow_particle.position=current_button.position+Vector2(+502,+54)
 		green_particle.position=next_button.position+Vector2(+502,+54)
+		
 		var level=GameDataManager.level_info[0]["current_level"]
 		
 		$portal_particles.position=current_button.position

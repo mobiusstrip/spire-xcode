@@ -1,5 +1,7 @@
 extends Node2D
 
+var quit_confirm=preload("res://scenes/ui_scenes/quit_confirm.tscn") 
+
 func _ready():
 	if GameDataManager.level_info[0]["sound_enabled"]:
 		$sound_button.button_pressed=false
@@ -45,16 +47,21 @@ func _on_vibration_button_pressed():
 
 func _on_exit_button_pressed():
 	SoundManager.play_fixed_sound("button_pressed")
-	$".".visible=false
+	queue_free()
 
 func _on_leave_button_pressed():
-	$".".visible=false
-	get_parent().get_node("quit_confirm").visible=true
+	SoundManager.play_fixed_sound("button_pressed")
+	queue_free()
+	var current = quit_confirm.instantiate()
+	get_tree().get_root().add_child(current)
+	current.z_index=10
+	
 
+func _on_quit_cancel_pressed():
+	SoundManager.play_fixed_sound("button_pressed")
+	queue_free()
 
-func _on_confirm_leave_button_pressed():
-	Transition.change_scene_to_file("res://scenes/level_select_scenes/level_select.tscn","fade_blue")
-
-
-func _on_confim_cancel_button_pressed():
-	get_parent().get_node("quit_confirm").visible=false
+func _on_quit_exit_pressed():
+	SoundManager.play_fixed_sound("button_pressed")
+	print("exit")
+	queue_free()

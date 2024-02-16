@@ -1,8 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://cf6xly6e6qlup"]
 
-[ext_resource type="Texture2D" uid="uid://c1nbhgxnn50yu" path="res://Assets/artwork/grids/purple_grid_b.png" id="1_vl1i7"]
+[ext_resource type="Texture2D" uid="uid://bexqag7irt0c4" path="res://Assets/artwork/grids/cc2.png" id="1_dtx6b"]
 
 [node name="grid" type="Node2D"]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_vl1i7")
+modulate = Color(1, 1, 1, 0.596078)
+texture = ExtResource("1_dtx6b")

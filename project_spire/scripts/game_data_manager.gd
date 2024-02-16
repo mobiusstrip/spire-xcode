@@ -2,6 +2,8 @@ extends Node
 
 @onready var path = "user://savegame.dat"
 
+var current_level
+
 func _ready():
 	if FileAccess.file_exists(path):
 		level_info = load_data()
@@ -20,11 +22,12 @@ func which_world():
 		if GameDataManager.level_info[i]["unlocked"] == true:
 			current_world=j
 			
-var current_level=1
+
+var reached_level
 func which_level():
 	for i in range(1,55):
 		if GameDataManager.level_info[i]["unlocked"] == true and GameDataManager.level_info[i]["unlocked"] == false:
-			current_level=i
+			reached_level=i
 		
 func modify_dict(key,subkey,value):
 	level_info[key][str(subkey)] = value
@@ -49,7 +52,7 @@ func load_data():
 var level_info = {
 	0:{
 		"currency":"USD",
-		"current_level":1,
+		"reached_level":1,
 		"lives":5,
 		"shards":500,
 		"music_enabled":true,

@@ -5,15 +5,17 @@ signal spawn_debug(i,j,color,type)
 
 var x_starts=[470,412,355,297,240,182,125]
 var y_starts=[1469,1536,1334,1671,1739,1806,1875]
-var current_counter_value=150
-var width=6
-var height=6
+var current_counter_value=56
+var width=9
+var height=9
 var score_needed=300
 var max_score_star=300
 var score_goal_enabled=false
 #obstacles spaces args are vec2s
 var ice_spaces=[]
 var ice_healths=[]
+#yellow=0 , pink=1 , orange=2 , purple=3 ,green=4 ,blue=5 ,
+var weights = [0, 3, 0, 0, 0, 0]
 var lock_spaces=[]
 var concrete_spaces=[]
 var concrete_healths=[]
@@ -27,6 +29,7 @@ var y_start = y_starts[height-3]
 
 func _ready():
 	get_parent().get_node("grid").sinker_amount=sinker_amount
+	get_parent().get_node("grid").weights=weights
 	get_parent().get_node("grid").marmalade_spaces=marmalade_spaces
 	get_parent().get_node("grid").marmalade_healths=marmalade_healths
 	get_parent().get_node("grid").ice_spaces=ice_spaces
@@ -46,11 +49,8 @@ func _ready():
 	get_parent().get_node("grid").current_counter_value=current_counter_value
 	
 	
-var signal_count=5
+var signal_count=2
 func level_editor():
-	emit_signal("spawn_debug",2,0,"pink","regular")
-	emit_signal("spawn_debug",2,1,"pink","regular")
-	emit_signal("spawn_debug",3,2,"pink","regular")
-	emit_signal("spawn_debug",2,3,"pink","regular")
-	emit_signal("spawn_debug",2,4,"pink","regular")
+	emit_signal("spawn_debug",2,3,"pink","color")
+	emit_signal("spawn_debug",3,3,"pink","adjacent")
 

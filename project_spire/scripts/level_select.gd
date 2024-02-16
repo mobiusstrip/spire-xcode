@@ -57,7 +57,7 @@ func introduction():
 	var current_level
 	for i in range(1, 65,6):
 		current_level=i
-		if GameDataManager.level_info[0]["current_level"]==current_level:
+		if GameDataManager.level_info[0]["reached_level"]==current_level:
 			var curr=GameDataManager.current_world
 			get_node("introductions/"+str(curr)).visible=true
 			$AnimationPlayer.play("introduction",curr)
@@ -91,31 +91,25 @@ func button_texture_setter():
 					"null":
 						current_star.texture_normal=null
 
-func button_texture_updater_and_walk():
+func button_texture_updater_and_walk(): 
+	#seperate next index null condition
 	#current_level
 	if SaveUpdates.current_index!=null:
 		var current_button=get_node("levels/"+str(SaveUpdates.current_index))
-		var next_button=get_node("levels/"+str(SaveUpdates.next_index))
+		
 		var silver_particle=$explosions/silver_explosion
 		var gold_particle=$explosions/gold_explosion
 		var platinum_particle=$explosions/platinum_explosion
-		var green_particle=$explosions/green_explosion
 		var rainbow_particle=$explosions/rainbow_explosion
 		silver_particle.position=current_button.position+Vector2(502,+54)
 		gold_particle.position=current_button.position+Vector2(+502,+54)
 		platinum_particle.position=current_button.position+Vector2(+502,+54)
 		rainbow_particle.position=current_button.position+Vector2(+502,+54)
-		green_particle.position=next_button.position+Vector2(+502,+54)
-		var level=GameDataManager.level_info[0]["current_level"]
-		
 		
 		$portal_particles.position=$Path2D/walk.position+Vector2(0,-300)
 		$portal_particles.emitting=true
 		SoundManager.play_fixed_sound("portal")
 		$AnimationPlayer.play_backwards("character_fade")
-		
-		emit_signal("walk")
-		GameDataManager.modify_dict(0,"current_level",level+1)
 		
 		if SaveUpdates.current_transition=="silver":
 			await get_tree().create_timer(1.5).timeout
@@ -157,6 +151,12 @@ func button_texture_updater_and_walk():
 		
 	#next level
 	if SaveUpdates.next_index!=null:
+		var level=GameDataManager.level_info[0]["current_level"]
+		emit_signal("walk")
+		GameDataManager.modify_dict(0,"current_level",level+1)
+		var next_button=get_node("levels/"+str(SaveUpdates.next_index))
+		var green_particle=$explosions/green_explosion
+		green_particle.position=next_button.position+Vector2(+502,+54)
 		var current_button=get_node("levels/"+str(SaveUpdates.next_index))
 		var current_particle=$explosions/green_explosion
 		current_particle.position=current_button.position+Vector2(+502,+54)

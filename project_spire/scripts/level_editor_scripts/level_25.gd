@@ -6,7 +6,10 @@ var y_starts=[1469,1536,1334,1671,1739,1806,1875]
 #set these values
 #set goal holder values
 #copy paste level editor prints and signal_count
-var current_counter_value=22
+var level=25
+#yellow=0 , pink=1 , orange=2 , purple=3 ,green=4 ,blue=5 ,
+var weights = [0, 2, 0, 0, 0, 0]
+var current_counter_value=32
 var width=9
 var height=9
 var score_needed=3000
@@ -15,7 +18,7 @@ var score_goal_enabled=false
 #obstacles spaces args are vec2s
 var ice_spaces=[]
 var ice_healths=[]
-var lock_spaces=[Vector2(2,6), Vector2(4,6), Vector2(3,4), Vector2(4,4), Vector2(4,3), Vector2(0,3), Vector2(0,2), Vector2(3,0)]
+var lock_spaces=[Vector2(4,4), Vector2(4,3), Vector2(0,3), Vector2(3,0)]
 var concrete_spaces=[Vector2(0,4), Vector2(0,8), Vector2(1,8), Vector2(2,8), Vector2(0,7), Vector2(1,7), Vector2(2,7), Vector2(3,7), Vector2(4,7), Vector2(1,6), Vector2(3,6), Vector2(4,5), Vector2(3,5), Vector2(2,5), Vector2(1,5), Vector2(0,5), Vector2(2,4), Vector2(1,3), Vector2(2,3), Vector2(3,3), Vector2(1,2), Vector2(2,2), Vector2(3,2), Vector2(4,2), Vector2(4,1), Vector2(4,0), Vector2(3,1), Vector2(2,1), Vector2(2,0), Vector2(1,0), Vector2(1,1), Vector2(0,1), Vector2(0,0), Vector2(6,5), Vector2(8,5), Vector2(7,4), Vector2(6,3), Vector2(8,3)]
 var concrete_healths=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 var slime_spaces=[]
@@ -28,6 +31,8 @@ var x_start = x_starts[width-3]
 var y_start = y_starts[height-3]
 
 func _ready():
+	get_parent().get_node("grid").level=level
+	get_parent().get_node("grid").weights=weights
 	get_parent().get_node("grid").marmalade_spaces=marmalade_spaces
 	get_parent().get_node("grid").marmalade_healths=marmalade_healths
 	get_parent().get_node("grid").sinker_amount=sinker_amount

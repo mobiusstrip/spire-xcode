@@ -102,11 +102,11 @@ position = Vector2(0, 0)
 texture = null
 
 [node name="goal_1" parent="goal_holder" index="0"]
-max_needed = 35
+max_needed = 32
 goal_string = "concrete"
 
 [node name="goal_2" parent="goal_holder" index="1" instance=ExtResource("5_en3ds")]
-max_needed = 5
+max_needed = 2
 goal_string = "adjacent"
 
 [node name="silver_explosion" parent="game_won/explosions" index="0"]

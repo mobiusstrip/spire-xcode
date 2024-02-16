@@ -147,10 +147,9 @@ var fixed_sounds= {
 }
 
 var fixed_music = {
-	"space_breeze":preload("res://Assets/artwork/sfx/music/space_breeeze.wav"),
-	"level_select_1":preload("res://Assets/artwork/sfx/music/level_select_1.wav"),
-	"loop_1":preload("res://Assets/artwork/sfx/music/loop_1.wav"),
-	"main_menu":preload("res://Assets/artwork/sfx/music/main_menu.wav"),
+	"space_breeze":preload("res://Assets/artwork/sfx/music/space_breeeze.ogg"),
+	"level_select_1":preload("res://Assets/artwork/sfx/music/level_select_1.ogg"),
+	"loop_1":preload("res://Assets/artwork/sfx/music/loop_1.ogg"),
 }
 
 func turn_on_music():

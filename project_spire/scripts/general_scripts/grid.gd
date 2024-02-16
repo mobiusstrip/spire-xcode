@@ -2,10 +2,10 @@
 #1.3-custom fall paths & more levels
 #-------------
 extends Node2D
-
+@export var level:int
 @export var width:int
 @export var height:int 
-enum {wait,move,win,booster,free_switch}
+enum {wait,move,win,booster,free_switch,find,shuffle}
 var state
 #x_y start value automator
 #var x_starts=[470,412,355,297,240,182,125]
@@ -42,6 +42,10 @@ signal break_ice
 signal break_concrete
 signal break_marmalade
 signal break_swirl
+var game_lose=preload("res://scenes/ui_scenes/game_lose.tscn")
+var game_won=preload("res://scenes/ui_scenes/game_won.tscn")
+var in_level_settings=preload("res://scenes/ui_scenes/in_level_settings.tscn")
+var quit_confirm=preload("res://scenes/ui_scenes/quit_confirm.tscn")
 
 #------------------------------------------------------------
 #booster1:adds a color bomb
@@ -72,10 +76,20 @@ var piece_crumble=preload("res://scenes/animation_scenes/piece_crumble.tscn")
 var halo_grow=preload("res://scenes/animation_scenes/halo_grow.tscn")
 var halo_shrink=preload("res://scenes/animation_scenes/halo_shrink.tscn")
 var piece_shrink=preload("res://scenes/animation_scenes/piece_shrink.tscn")
+var objective=preload("res://scenes/animation_scenes/objective.tscn")
 
 #Preloads a class or variable. (Array makes it easily accesible)
 #enabled pieces are activated and used in possible pieces
 var main_pieces = [
+preload("res://scenes/piece_scenes/main_pieces/yellow_piece.tscn"),
+preload("res://scenes/piece_scenes/main_pieces/pink_piece.tscn"),
+preload("res://scenes/piece_scenes/main_pieces/orange_piece.tscn"),
+preload("res://scenes/piece_scenes/main_pieces/purple_piece.tscn"),
+preload("res://scenes/piece_scenes/main_pieces/green_piece.tscn"),
+preload("res://scenes/piece_scenes/main_pieces/blue_piece.tscn"),
+]
+
+var weighted_array=[
 preload("res://scenes/piece_scenes/main_pieces/yellow_piece.tscn"),
 preload("res://scenes/piece_scenes/main_pieces/pink_piece.tscn"),
 preload("res://scenes/piece_scenes/main_pieces/orange_piece.tscn"),
@@ -104,17 +118,19 @@ var level_editor
 func _ready():
 	randomize()
 	state = move
+	weight_array()
 	array = make_2d_array()
 	clone_array=make_2d_array()
+	spawn_grid()
 	get_parent().get_node("level_editor").level_editor()
 #	spawn_ice()
-	spawn_grid()
 	spawn_slime(position)
 	spawn_swirl()
 	spawn_sinker(sinker_amount)
+	spawn_marmalade()
 	spawn_concrete()
 	spawn_lock()
-	spawn_marmalade()
+	
 	emit_signal("update_counter",current_counter_value)
 	no_longer_restricted_spaces.clear()
 	
@@ -176,13 +192,16 @@ var no_longer_restricted_spaces=[]
 func restricted_fill(place):
 	if is_in_array(get_parent().get_node("level_editor").empty_spaces,place) and !is_in_array(no_longer_restricted_spaces,place):
 		return true
-#	if is_in_array(get_parent().get_node("level_editor").concrete_spaces,place) and !is_in_array(no_longer_restricted_spaces,place):
-#		return true
 	if is_in_array(get_parent().get_node("level_editor").slime_spaces,place) and !is_in_array(no_longer_restricted_spaces,place):
 		return true
-#	if is_in_array(get_parent().get_node("level_editor").marmalade_spaces,place) and !is_in_array(no_longer_restricted_spaces,place):
-#		return true
 	if is_in_array(get_parent().get_node("level_editor").concrete_spaces,place) and !is_in_array(no_longer_restricted_spaces,place):
+		return true
+	return false
+
+func restricted_slide(place):
+	if is_in_array(get_parent().get_node("level_editor").marmalade_spaces,place) and !is_in_array(no_longer_restricted_spaces,place):
+		return true
+	if is_in_array(get_parent().get_node("level_editor").lock_spaces,place) and !is_in_array(no_longer_restricted_spaces,place):
 		return true
 	return false
 
@@ -247,7 +266,8 @@ signal update_counter
 var is_moves=true
 signal game_over
 #goal check 
-signal check_goal
+signal check_goal #objective_effect_animator("concrete",column,row)
+#add crumble to obj spot
 
 #deadlock 
 signal deadlocked
@@ -261,6 +281,7 @@ signal deadlocked
 @export var debug_spaces:PackedVector2Array
 @export var marmalade_spaces:PackedVector2Array
 @export var swirl_spaces:PackedVector2Array
+@export var weights:PackedVector2Array
 
 var debug_press
 var debug_piece
@@ -383,240 +404,247 @@ var pos_release
 #runs find_and_spawn_bombs unless query query only true if swap_back
 var bombs_were_found_after_swap
 func swap_pieces(column,row,direction,query=false):
-	bombs_were_found_after_swap=false
-	SoundManager.play_fixed_sound("swap_pieces")
-	press_piece=array[column][row]
-	release_piece=array[column+direction.x][row+direction.y]
-	released_column=column+direction.x
-	released_row=row+direction.y
-	if press_piece!=null and release_piece!=null:
-		pos_press=pixel_to_grid(press_piece.position.x,press_piece.position.y)
-		pos_release=pixel_to_grid(release_piece.position.x,release_piece.position.y)
-	
-	if press_piece!=null and release_piece!=null :
-		if !restricted_move(Vector2(column,row)) and !restricted_move(Vector2(column,row) + direction) :
+	if state==move:
+		current_counter_value-=1
+		emit_signal("update_counter",-1)
+		bombs_were_found_after_swap=false
+		SoundManager.play_fixed_sound("swap_pieces")
+		press_piece=array[column][row]
+		release_piece=array[column+direction.x][row+direction.y]
+		released_column=column+direction.x
+		released_row=row+direction.y
+		if press_piece!=null and release_piece!=null:
+			pos_press=pixel_to_grid(press_piece.position.x,press_piece.position.y)
+			pos_release=pixel_to_grid(release_piece.position.x,release_piece.position.y)
+		
+		if press_piece!=null and release_piece!=null :
+			if !restricted_move(Vector2(column,row)) and !restricted_move(Vector2(column,row) + direction) :
 
-			#colorcolorinteraction
-			if press_piece.color=="color" and release_piece.color=="color" :
-				clear_board()
-			
-			#fish+adjacent
-			if press_piece!=null and release_piece!=null:
-				if press_piece.is_adjacent_bomb and release_piece.is_fish:
-					press_piece.queue_free()
-					press_piece=null
-					release_piece.queue_free()
-					release_piece=null
-					fish_adjacent()
-					print("fishadjacent1")
-			if press_piece!=null and release_piece!=null:
-				if release_piece.is_adjacent_bomb and press_piece.is_fish:
-					press_piece.queue_free()
-					press_piece=null
-					release_piece.queue_free()
-					release_piece=null
-					fish_adjacent()
-					print("fishadjacent2")
-			
-			#fish+colrow
-			if press_piece!=null and release_piece!=null:
-				if press_piece.is_column_bomb and release_piece.is_fish or press_piece.is_row_bomb and release_piece.is_fish or press_piece.is_fish and release_piece.is_row_bomb or press_piece.is_fish and release_piece.is_column_bomb :
-					press_piece.queue_free()
-					press_piece=null
-					release_piece.queue_free()
-					release_piece=null
-					fish_colrow()
-					print("fishcolrow1")
-#			if press_piece!=null and release_piece!=null:
-#				if release_piece.is_column_bomb or release_piece.is_row_bomb and press_piece.is_fish:
-#					press_piece.queue_free()
-#					press_piece=null
-#					release_piece.queue_free()
-#					release_piece=null
-#					fish_colrow()
-#					print("fishcolrow2")
-			
-			#colorcolrowinteraction1
-			if press_piece!=null and release_piece!=null:
-				if press_piece.color=="color" and release_piece.is_column_bomb or press_piece.color=="color" and release_piece.is_row_bomb:
-					color_colrow(release_piece.color)
-					effect_animator(press_piece.color,pos_press.x,pos_press.y)
-					effect_animator(release_piece.color,pos_release.x,pos_release.y)
-					make_particle_effect(pos_press.x,pos_press.y)
-					make_particle_effect(pos_release.x,pos_release.y)
-					press_piece.queue_free()
-					press_piece=null
-					release_piece.queue_free()
-					release_piece=null
-					print("color+colrow1")
-					
-			#colorcolrowinteraction2
-			if press_piece!=null and release_piece!=null:
-				if press_piece.is_column_bomb and release_piece.color=="color" or press_piece.is_row_bomb and release_piece.color=="color":
-					color_colrow(press_piece.color)
-					effect_animator(press_piece.color,pos_press.x,pos_press.y)
-					effect_animator(release_piece.color,pos_release.x,pos_release.y)
-					make_particle_effect(pos_press.x,pos_press.y)
-					make_particle_effect(pos_release.x,pos_release.y)
-					press_piece.queue_free()
-					press_piece=null
-					release_piece.queue_free()
-					release_piece=null
-					print("color+colrow2")
-					
-			#coloradjacentinteraction1
-			if press_piece!=null and release_piece!=null:
-				if press_piece.color=="color" and release_piece.is_adjacent_bomb==true:
-					print("coloradjacent1")
-					color_adjacent(release_piece.color)
-					destroy_specials_adjacent(pos_release.x,pos_release.y,release_piece.color)
-					effect_animator(press_piece.color,pos_press.x,pos_press.y)
-					effect_animator(release_piece.color,pos_release.x,pos_release.y)
-					make_particle_effect(pos_press.x,pos_press.y)
-					make_particle_effect(pos_release.x,pos_release.y)
-					press_piece.queue_free()
-					press_piece=null
-					release_piece.queue_free()
-					release_piece=null
+				#colorcolorinteraction
+				if press_piece.color=="color" and release_piece.color=="color" :
+					clear_board()
 				
-			#coloradjacentinteraction2
-			if press_piece!=null and release_piece!=null:
-				if press_piece.is_adjacent_bomb==true and release_piece.color=="color":
-					print("coloradjacent2")
-					color_adjacent(press_piece.color)
-					destroy_specials_adjacent(pos_press.x,pos_press.y,press_piece.color)
-					effect_animator(press_piece.color,pos_press.x,pos_press.y)
-					effect_animator(release_piece.color,pos_release.x,pos_release.y)
-					make_particle_effect(pos_press.x,pos_press.y)
-					make_particle_effect(pos_release.x,pos_release.y)
-					press_piece.queue_free()
-					press_piece=null
-					release_piece.queue_free()
-					release_piece=null
+				#fish+adjacent
+				if press_piece!=null and release_piece!=null:
+					if press_piece.is_adjacent_bomb and release_piece.is_fish:
+						press_piece.queue_free()
+						press_piece=null
+						release_piece.queue_free()
+						release_piece=null
+						fish_adjacent()
+						print("fishadjacent1")
+				if press_piece!=null and release_piece!=null:
+					if release_piece.is_adjacent_bomb and press_piece.is_fish:
+						press_piece.queue_free()
+						press_piece=null
+						release_piece.queue_free()
+						release_piece=null
+						fish_adjacent()
+						print("fishadjacent2")
+				
+				#fish+colrow
+				if press_piece!=null and release_piece!=null:
+					if press_piece.is_column_bomb and release_piece.is_fish or press_piece.is_row_bomb and release_piece.is_fish or press_piece.is_fish and release_piece.is_row_bomb or press_piece.is_fish and release_piece.is_column_bomb :
+						press_piece.queue_free()
+						press_piece=null
+						release_piece.queue_free()
+						release_piece=null
+						fish_colrow()
+						print("fishcolrow1")
+	#			if press_piece!=null and release_piece!=null:
+	#				if release_piece.is_column_bomb or release_piece.is_row_bomb and press_piece.is_fish:
+	#					press_piece.queue_free()
+	#					press_piece=null
+	#					release_piece.queue_free()
+	#					release_piece=null
+	#					fish_colrow()
+	#					print("fishcolrow2")
+				
+				#colorcolrowinteraction1
+				if press_piece!=null and release_piece!=null:
+					if press_piece.color=="color" and release_piece.is_column_bomb or press_piece.color=="color" and release_piece.is_row_bomb:
+						color_colrow(release_piece.color)
+						effect_animator(press_piece.color,pos_press.x,pos_press.y)
+						effect_animator(release_piece.color,pos_release.x,pos_release.y)
+						make_particle_effect(pos_press.x,pos_press.y)
+						make_particle_effect(pos_release.x,pos_release.y)
+						press_piece.queue_free()
+						press_piece=null
+						release_piece.queue_free()
+						release_piece=null
+						print("color+colrow1")
+						
+				#colorcolrowinteraction2
+				if press_piece!=null and release_piece!=null:
+					if press_piece.is_column_bomb and release_piece.color=="color" or press_piece.is_row_bomb and release_piece.color=="color":
+						color_colrow(press_piece.color)
+						effect_animator(press_piece.color,pos_press.x,pos_press.y)
+						effect_animator(release_piece.color,pos_release.x,pos_release.y)
+						make_particle_effect(pos_press.x,pos_press.y)
+						make_particle_effect(pos_release.x,pos_release.y)
+						press_piece.queue_free()
+						press_piece=null
+						release_piece.queue_free()
+						release_piece=null
+						print("color+colrow2")
+						
+				#coloradjacentinteraction1
+				if press_piece!=null and release_piece!=null:
+					if press_piece.color=="color" and release_piece.is_adjacent_bomb==true:
+						print("coloradjacent1")
+						color_adjacent(release_piece.color)
+						destroy_specials_adjacent(pos_release.x,pos_release.y,release_piece.color)
+						effect_animator(press_piece.color,pos_press.x,pos_press.y)
+						effect_animator(release_piece.color,pos_release.x,pos_release.y)
+						make_particle_effect(pos_press.x,pos_press.y)
+						make_particle_effect(pos_release.x,pos_release.y)
+						press_piece.queue_free()
+						press_piece=null
+						release_piece.queue_free()
+						release_piece=null
 					
-			#colorregularinteraction
-			if press_piece!=null and release_piece!=null:
-				if press_piece.is_color_bomb and release_piece.is_sinker or press_piece.is_sinker and release_piece.is_color_bomb:
-					swap_back()
-					print("color_regular1")
-				if press_piece.color =="color" and release_piece.is_special==false and press_piece.color!="blocker" :
-					if press_piece.is_fish!=true and release_piece.is_fish!=true:
-						match_color(release_piece.color)
+				#coloradjacentinteraction2
+				if press_piece!=null and release_piece!=null:
+					if press_piece.is_adjacent_bomb==true and release_piece.color=="color":
+						print("coloradjacent2")
+						color_adjacent(press_piece.color)
+						destroy_specials_adjacent(pos_press.x,pos_press.y,press_piece.color)
+						effect_animator(press_piece.color,pos_press.x,pos_press.y)
+						effect_animator(release_piece.color,pos_release.x,pos_release.y)
+						make_particle_effect(pos_press.x,pos_press.y)
+						make_particle_effect(pos_release.x,pos_release.y)
+						press_piece.queue_free()
+						press_piece=null
+						release_piece.queue_free()
+						release_piece=null
+						
+				#colorregularinteraction
+				if press_piece!=null and release_piece!=null:
+					if press_piece.is_color_bomb and release_piece.is_sinker or press_piece.is_sinker and release_piece.is_color_bomb:
+						swap_back()
+						print("color_regular1")
+					if press_piece.color =="color" and release_piece.is_special==false and press_piece.color!="blocker" :
+						if press_piece.is_fish!=true and release_piece.is_fish!=true:
+							match_color(release_piece.color)
+							match_and_add_to_matches(pos_press.x,pos_press.y)
+							print("color_regular2")
+					if release_piece.color=="color" and press_piece.is_special==false and release_piece.color!="blocker" :
+						match_color(press_piece.color)
+						match_and_add_to_matches(pos_release.x,pos_release.y)
+						print("color_regular3")
+						
+				#adjadjinteraction 
+				#2x2 explosion #dont destroy press,release pieces but explode and change them to bright pseudo adjbombs
+				#they start shaking and glowing  #after refill 2x2 explosion and destruction 
+				if press_piece!=null and release_piece!=null:
+					if press_piece.is_adjacent_bomb and release_piece.is_adjacent_bomb:
+						SoundManager.play_fixed_sound("adjacent_combine")
+						var pres_color=press_piece.color
+						var release_color=release_piece.color
+						press_piece.make_pseudo_adjacent_bomb()
+						release_piece.make_pseudo_adjacent_bomb()
+						destroy_adjacent_for_adjacentadjacent(pos_press.x,pos_press.y,pres_color)
+						destroy_adjacent_for_adjacentadjacent(pos_release.x,pos_release.y,release_color)
+						adj_adj2(pres_color,release_color)
+						emit_signal("check_goal","adjacent")
+						emit_signal("check_goal","adjacent")
+						emit_signal("check_goal","striped")
+						emit_signal("check_goal","striped")
+						objective_effect_animator("adjacent",column,row)
+						objective_effect_animator("adjacent",column,row)
+						objective_effect_animator("striped",column,row)
+						objective_effect_animator("striped",column,row)
+						print("adj+adj")
+					
+				#colrow+adjacentinteraction1
+				if press_piece!=null and release_piece!=null:
+					if press_piece.is_column_bomb or press_piece.is_row_bomb:
+						if release_piece.is_adjacent_bomb:
+							press_piece.is_row_bomb=false
+							release_piece.is_row_bomb=false
+							press_piece.is_column_bomb=false
+							release_piece.is_column_bomb=false
+							press_piece.is_adjacent_bomb=false
+							release_piece.is_adjacent_bomb=false
+							var release_color
+							release_color=release_piece.color
+							for w in range(-1,2):
+								if pos_press.x+w>=0 and pos_press.y+w<width:
+									match_all_in_row(pos_release.x,pos_release.y+w)
+									if w!=0:
+										make_bomb_explode_effects("row",release_color,pos_release.x,pos_release.y+w)
+									SoundManager.play_fixed_sound("whoosh")
+							await get_tree().create_timer(0.5).timeout
+							for h in range(-1,2):
+								if pos_press.x+h>=0 and pos_press.x+h<height:
+									match_all_in_column(pos_press.x+h,pos_press.y)
+									if h!=0:
+										make_bomb_explode_effects("column",release_color,pos_press.x+h,pos_press.y)
+									SoundManager.play_fixed_sound("whoosh")
+							emit_signal("shake_harder")
+							print("colrow+adjacent1")
+							
+				#colrow+adjacentinteraction2
+				if press_piece!=null and release_piece!=null:
+					if press_piece.is_adjacent_bomb:
+						if release_piece.is_column_bomb or release_piece.is_row_bomb:
+							press_piece.is_row_bomb=false
+							release_piece.is_row_bomb=false
+							press_piece.is_column_bomb=false
+							release_piece.is_column_bomb=false
+							press_piece.is_adjacent_bomb=false
+							release_piece.is_adjacent_bomb=false
+							var release_color
+							release_color=release_piece.color
+							for w in range(-1,2):
+								if pos_press.y+w>=0 and pos_press.y+w<width:
+									match_all_in_row(pos_press.x,pos_press.y+w)
+									if w!=0:
+										make_bomb_explode_effects("row",release_color,pos_press.x,pos_press.y+w)
+									SoundManager.play_fixed_sound("whoosh")
+							await get_tree().create_timer(0.5).timeout
+							for h in range(-1,2):
+								if pos_release.x+h>=0 and pos_release.x+h<height:
+									match_all_in_column(pos_release.x+h,pos_release.y)
+									if h!=0:
+										make_bomb_explode_effects("column",release_color,pos_release.x+h,pos_release.y)
+									SoundManager.play_fixed_sound("whoosh")
+							emit_signal("shake_harder")
+							print("colrow+adjacent2")
+							
+				#colrow_interaction1
+				if press_piece!=null and release_piece!=null:
+					if press_piece.is_column_bomb and release_piece.is_row_bomb:
 						match_and_add_to_matches(pos_press.x,pos_press.y)
-						print("color_regular2")
-				if release_piece.color=="color" and press_piece.is_special==false and release_piece.color!="blocker" :
-					match_color(press_piece.color)
-					match_and_add_to_matches(pos_release.x,pos_release.y)
-					print("color_regular3")
-					
-			#adjadjinteraction 
-			#2x2 explosion #dont destroy press,release pieces but explode and change them to bright pseudo adjbombs
-			#they start shaking and glowing  #after refill 2x2 explosion and destruction 
-			if press_piece!=null and release_piece!=null:
-				if press_piece.is_adjacent_bomb and release_piece.is_adjacent_bomb:
-					SoundManager.play_fixed_sound("adjacent_combine")
-					var pres_color=press_piece.color
-					var release_color=release_piece.color
-					press_piece.make_pseudo_adjacent_bomb()
-					release_piece.make_pseudo_adjacent_bomb()
-					destroy_adjacent_for_adjacentadjacent(pos_press.x,pos_press.y,pres_color)
-					destroy_adjacent_for_adjacentadjacent(pos_release.x,pos_release.y,release_color)
-					adj_adj2(pres_color,release_color)
-					emit_signal("check_goal","adjacent")
-					emit_signal("check_goal","adjacent")
-					emit_signal("check_goal","striped")
-					emit_signal("check_goal","striped")
-					print("adj+adj")
-				
-			#colrow+adjacentinteraction1
-			if press_piece!=null and release_piece!=null:
-				if press_piece.is_column_bomb or press_piece.is_row_bomb:
-					if release_piece.is_adjacent_bomb:
-						press_piece.is_row_bomb=false
-						release_piece.is_row_bomb=false
-						press_piece.is_column_bomb=false
-						release_piece.is_column_bomb=false
-						press_piece.is_adjacent_bomb=false
-						release_piece.is_adjacent_bomb=false
-						var release_color
-						release_color=release_piece.color
-						for w in range(-1,2):
-							if pos_press.x+w>=0 and pos_press.y+w<width:
-								destroy_specials_row(pos_release.x,pos_release.y+w)
-								if w!=0:
-									make_bomb_explode_effects("row",release_color,pos_release.x,pos_release.y+w)
-								SoundManager.play_fixed_sound("whoosh")
-						await get_tree().create_timer(0.5).timeout
-						for h in range(-1,2):
-							if pos_press.x+h>=0 and pos_press.x+h<height:
-								destroy_specials_column(pos_press.x+h,pos_press.y)
-								if h!=0:
-									make_bomb_explode_effects("column",release_color,pos_press.x+h,pos_press.y)
-								SoundManager.play_fixed_sound("whoosh")
-						emit_signal("shake_harder")
-						print("colrow+adjacent1")
+						match_and_add_to_matches(pos_release.x,pos_release.y)
+						print("col+row1")
+				#colrow_interaction2
+				if press_piece!=null and release_piece!=null:
+					if press_piece.is_row_bomb and release_piece.is_column_bomb:
+						match_and_add_to_matches(pos_press.x,pos_press.y)
+						match_and_add_to_matches(pos_release.x,pos_release.y)
+						print("col+row2")
 						
-			#colrow+adjacentinteraction2
-			if press_piece!=null and release_piece!=null:
-				if press_piece.is_adjacent_bomb:
-					if release_piece.is_column_bomb or release_piece.is_row_bomb:
-						press_piece.is_row_bomb=false
-						release_piece.is_row_bomb=false
-						press_piece.is_column_bomb=false
-						release_piece.is_column_bomb=false
-						press_piece.is_adjacent_bomb=false
-						release_piece.is_adjacent_bomb=false
-						var release_color
-						release_color=release_piece.color
-						for w in range(-1,2):
-							if pos_press.y+w>=0 and pos_press.y+w<width:
-								destroy_specials_row(pos_press.x,pos_press.y+w)
-								if w!=0:
-									make_bomb_explode_effects("row",release_color,pos_press.x,pos_press.y+w)
-								SoundManager.play_fixed_sound("whoosh")
-						await get_tree().create_timer(0.5).timeout
-						for h in range(-1,2):
-							if pos_release.x+h>=0 and pos_release.x+h<height:
-								destroy_specials_column(pos_release.x+h,pos_release.y)
-								if h!=0:
-									make_bomb_explode_effects("column",release_color,pos_release.x+h,pos_release.y)
-								SoundManager.play_fixed_sound("whoosh")
-						emit_signal("shake_harder")
-						print("colrow+adjacent2")
-						
-			#colrow_interaction1
-			if press_piece!=null and release_piece!=null:
-				if press_piece.is_column_bomb and release_piece.is_row_bomb:
-					match_and_add_to_matches(pos_press.x,pos_press.y)
-					match_and_add_to_matches(pos_release.x,pos_release.y)
-					print("col+row1")
-			#colrow_interaction2
-			if press_piece!=null and release_piece!=null:
-				if press_piece.is_row_bomb and release_piece.is_column_bomb:
-					match_and_add_to_matches(pos_press.x,pos_press.y)
-					match_and_add_to_matches(pos_release.x,pos_release.y)
-					print("col+row2")
-					
-			#rest
-			store_info(press_piece,release_piece,Vector2(column,row),direction)
-			state = wait
-			array[column][row]=release_piece
-			array[column+direction.x][row+direction.y]=press_piece
-			if press_piece!=null and press_piece.is_pseudo_adjacent_bomb!=true:
-				press_piece.move(grid_to_pixel(column+direction.x,row+direction.y))
-			if !halo_used :
-				make_effect(halo_shrink,column,row,"halo_shrink")
-				make_effect(halo_shrink,column+direction.x,row+direction.y,"halo_shrink")
-			if release_piece!=null and release_piece.is_pseudo_adjacent_bomb!=true:
-				release_piece.move(grid_to_pixel(column,row))
-			if query:
-				pass
-			else:
-				find_and_spawn_bombs(true)
-				if find_and_spawn_bombs:
-					bombs_were_found_after_swap=true
+				#rest
+				store_info(press_piece,release_piece,Vector2(column,row),direction)
+				state = wait
+				array[column][row]=release_piece
+				array[column+direction.x][row+direction.y]=press_piece
+				if press_piece!=null and press_piece.is_pseudo_adjacent_bomb!=true:
+					press_piece.move(grid_to_pixel(column+direction.x,row+direction.y))
+				if !halo_used :
+					make_effect(halo_shrink,column,row,"halo_shrink")
+					make_effect(halo_shrink,column+direction.x,row+direction.y,"halo_shrink")
+				if release_piece!=null and release_piece.is_pseudo_adjacent_bomb!=true:
+					release_piece.move(grid_to_pixel(column,row))
+				if query:
+					pass
 				else:
-					bombs_were_found_after_swap=false
+					find_and_spawn_bombs(true)
+					if find_and_spawn_bombs:
+						bombs_were_found_after_swap=true
+					else:
+						bombs_were_found_after_swap=false
 	
 #part 2 of adj+adj
 func adj_adj2(presscolor,releasecolor):
@@ -653,16 +681,17 @@ func adj_adj2(presscolor,releasecolor):
 func color_colrow(color):
 	for i in width:
 		for j in height:
-			var piece=array[i][j]
-			var current_color=array[i][j].color
-			if current_color==color:
-				var rand = randi_range(0,100)
-				if rand>=50:
-					piece.make_column_bomb()
-					piece.matched=false
-				else:
-					piece.make_row_bomb()
-					piece.matched=false
+			if array[i][j]!=null:
+				var piece=array[i][j]
+				var current_color=array[i][j].color
+				if current_color==color:
+					var rand = randi_range(0,100)
+					if rand>=50:
+						piece.make_column_bomb()
+						piece.matched=false
+					else:
+						piece.make_row_bomb()
+						piece.matched=false
 	print("color_colrow_p1")
 	color_colrow2()
 
@@ -682,10 +711,10 @@ func color_colrow2():
 						array[i][j].matched=true
 						if array[i][j]!=null:
 							if array[i][j].is_row_bomb:
-								destroy_specials_row(i,j)
+								match_all_in_row(i,j)
 						if array[i][j]!=null:
 							if array[i][j].is_column_bomb:
-								destroy_specials_column(i,j)
+								match_all_in_column(i,j)
 	print("color_colrow_p2")
 
 #helper method for adj+color interaction
@@ -694,11 +723,12 @@ func color_adjacent(color):
 	color_adjacent_array.clear()
 	for i in width:
 		for j in height:
-			var piece=array[i][j]
-			var current_color=array[i][j].color
-			if current_color==color:
-				piece.make_adjacent_bomb()
-				if_not_has_add_to_array(Vector2(i,j),color_adjacent_array)
+			if array[i][j]!=null:
+				var piece=array[i][j]
+				var current_color=array[i][j].color
+				if current_color==color:
+					piece.make_adjacent_bomb()
+					if_not_has_add_to_array(Vector2(i,j),color_adjacent_array)
 	await get_tree().create_timer(0.1).timeout
 	for k in color_adjacent_array.size():
 		var piece=array[color_adjacent_array[k].x][color_adjacent_array[k].y]
@@ -717,6 +747,8 @@ func swap_back():
 		swap_pieces(last_place.x,last_place.y,last_direction,true)
 		halo_used=false
 	state=move
+	current_counter_value+=2
+	emit_signal("update_counter",+2)
 	$hint_timer.start()
 
 
@@ -776,23 +808,55 @@ func pixel_to_grid(pixel_column,pixel_row):
 
 #not using var for a variable will make the scope global
 #Instanced variable is created and stored in memory, but for it to be visible,it has to be added as a child to the scene tree.
+func sum(array):
+	var sum=0
+	for i in array:
+		sum += i
+	return sum
+	
+#yellow=0 , pink=1 , orange=2 , purple=3 ,green=4 ,blue=5
+func weight_array():
+	var weights=get_parent().get_node("level_editor").weights
+	for i in weights.size():
+		if i==0:
+			for r in range(0,weights[i]):
+				weighted_array.append(main_pieces[0])
+		if i==1:
+			for r in range(0,weights[i]):
+				weighted_array.append(main_pieces[1])
+		if i==2:
+			for r in range(0,weights[i]):
+				weighted_array.append(main_pieces[2])
+		if i==3:
+			for r in range(0,weights[i]):
+				weighted_array.append(main_pieces[3])
+		if i==4:
+			for r in range(0,weights[i]):
+				weighted_array.append(main_pieces[4])
+		if i==5:
+			for r in range(0,weights[i]):
+				weighted_array.append(main_pieces[5])
+#	print(weighted_array)
+
 func spawn_pieces():
 	spawn_ice()
 	for i in width:
 		for j in height:
 			if !restricted_fill(Vector2(i,j)) and array[i][j]==null and !debug_fill(Vector2(i,j)):
-				#choose random number and store it 
+				
 				var rand = randi_range(0,main_pieces.size()-1)
 				var piece = main_pieces[rand].instantiate()
 				var _loops=0
 				while match_at(i,j,piece.color) and _loops<100:
 					rand=randi_range(0,main_pieces.size()-1)
 					_loops+=1
-					piece=main_pieces[rand].instantiate()
-				#instance that piece from the array
+				piece=main_pieces[rand].instantiate()
+#				#instance that piece from the array
 				add_child(piece)
+				piece.z_index=1
 				array[i][j]=piece
 				piece.position = grid_to_pixel(i,j)
+				
 	if await is_deadlocked():
 		shuffle_board()
 		pass
@@ -805,6 +869,7 @@ func spawn_ice():
 				ice_pieces=make_2d_array()
 			var current = ice.instantiate()
 			add_child(current)
+			current.z_index=0
 			current.health=ice_healths[i]
 			current.text_setter()
 			position=ice_spaces[i]
@@ -836,6 +901,9 @@ func spawn_lock():
 				lock_pieces=make_2d_array()
 			var current = lock.instantiate()
 			add_child(current)
+			current.health=1
+			current.z_index = 2
+	#			current.text_setter()
 			position=lock_spaces[i]
 			current.position=grid_to_pixel(position.x,position.y)
 			lock_pieces[position.x][position.y]=current
@@ -860,6 +928,7 @@ func spawn_marmalade():
 				marmalade_pieces=make_2d_array()
 			var current = marmalade.instantiate()
 			add_child(current)
+			current.z_index=1
 			current.health=marmalade_healths[i]
 			current.text_setter()
 			position=marmalade_spaces[i]
@@ -936,51 +1005,177 @@ func match_at(i,j,color):
 					return true
 		
 		
-func effect_animator(color,column,row):
-	if color=="blue":
-		make_effect(piece_crumble,column,row,"blue_crumble")
-		make_effect(piece_shrink,column,row,"blue_shrink")
-		make_effect(halo_grow,column,row,"blue_grow")
-	elif color=="green":
-		make_effect(piece_crumble,column,row,"green_crumble")
-		make_effect(piece_shrink,column,row,"green_shrink")
-		make_effect(halo_grow,column,row,"green_grow")
-	elif color=="purple":
-		make_effect(piece_crumble,column,row,"purple_crumble")
-		make_effect(piece_shrink,column,row,"purple_shrink")
-		make_effect(halo_grow,column,row,"purple_grow")
-	elif color=="orange":
-		make_effect(piece_crumble,column,row,"orange_crumble")
-		make_effect(piece_shrink,column,row,"orange_shrink")
-		make_effect(halo_grow,column,row,"orange_grow")
-	elif color=="pink":
-		make_effect(piece_crumble,column,row,"pink_crumble")
-		make_effect(piece_shrink,column,row,"pink_shrink")
-		make_effect(halo_grow,column,row,"pink_grow")
-	elif color=="yellow":
-		make_effect(piece_crumble,column,row,"yellow_crumble")
-		make_effect(piece_shrink,column,row,"yellow_shrink")
-		make_effect(halo_grow,column,row,"yellow_grow")
-	elif color=="ice":
-		make_effect(piece_crumble,column,row,"ice_crumble")
-	elif color=="slime":
-		make_effect(piece_crumble,column,row,"slime_crumble")
-	elif color=="concrete":
-		make_effect(piece_crumble,column,row,"concrete_crumble")
-	elif color=="lock":
-		make_effect(piece_crumble,column,row,"lock_crumble")
-	elif color=="sinker":
-		make_effect(piece_crumble,column,row,"sinker_crumble")
-	elif color=="marmalade":
-		make_effect(piece_crumble,column,row,"marmalade_crumble")
-	elif color=="swirl":
-		make_effect(piece_crumble,column,row,"swirl_crumble")
+func effect_animator(color,column,row,query=false):
+	if query:
+		if color=="blue":
+			make_effect(piece_crumble,column,row,"blue_crumble",true)
+		elif color=="green":
+			make_effect(piece_crumble,column,row,"green_crumble",true)
+		elif color=="purple":
+			make_effect(piece_crumble,column,row,"purple_crumble",true)
+		elif color=="orange":
+			make_effect(piece_crumble,column,row,"orange_crumble",true)
+		elif color=="pink":
+			make_effect(piece_crumble,column,row,"pink_crumble",true)
+		elif color=="yellow":
+			make_effect(piece_crumble,column,row,"yellow_crumble",true)
+		elif color=="ice":
+			make_effect(piece_crumble,column,row,"ice_crumble",true)
+		elif color=="slime":
+			make_effect(piece_crumble,column,row,"slime_crumble",true)
+		elif color=="concrete":
+			make_effect(piece_crumble,column,row,"concrete_crumble",true)
+		elif color=="lock":
+			make_effect(piece_crumble,column,row,"lock_crumble",true)
+		elif color=="sinker":
+			make_effect(piece_crumble,column,row,"sinker_crumble",true)
+		elif color=="marmalade":
+			make_effect(piece_crumble,column,row,"marmalade_crumble",true)
+		elif color=="swirl":
+			make_effect(piece_crumble,column,row,"swirl_crumble",true)
 	
+	else:
+		if color=="blue":
+			make_effect(piece_crumble,column,row,"blue_crumble")
+			make_effect(piece_shrink,column,row,"blue_shrink")
+			make_effect(halo_grow,column,row,"blue_grow")
+		elif color=="green":
+			make_effect(piece_crumble,column,row,"green_crumble")
+			make_effect(piece_shrink,column,row,"green_shrink")
+			make_effect(halo_grow,column,row,"green_grow")
+		elif color=="purple":
+			make_effect(piece_crumble,column,row,"purple_crumble")
+			make_effect(piece_shrink,column,row,"purple_shrink")
+			make_effect(halo_grow,column,row,"purple_grow")
+		elif color=="orange":
+			make_effect(piece_crumble,column,row,"orange_crumble")
+			make_effect(piece_shrink,column,row,"orange_shrink")
+			make_effect(halo_grow,column,row,"orange_grow")
+		elif color=="pink":
+			make_effect(piece_crumble,column,row,"pink_crumble")
+			make_effect(piece_shrink,column,row,"pink_shrink")
+			make_effect(halo_grow,column,row,"pink_grow")
+		elif color=="yellow":
+			make_effect(piece_crumble,column,row,"yellow_crumble")
+			make_effect(piece_shrink,column,row,"yellow_shrink")
+			make_effect(halo_grow,column,row,"yellow_grow")
+		elif color=="ice":
+			make_effect(piece_crumble,column,row,"ice_crumble")
+		elif color=="slime":
+			make_effect(piece_crumble,column,row,"slime_crumble")
+		elif color=="concrete":
+			make_effect(piece_crumble,column,row,"concrete_crumble")
+		elif color=="lock":
+			make_effect(piece_crumble,column,row,"lock_crumble")
+	#	elif color=="sinker":
+	#		make_effect(piece_crumble,column,row,"sinker_crumble")
+		elif color=="marmalade":
+			make_effect(piece_crumble,column,row,"marmalade_crumble")
+		elif color=="swirl":
+			make_effect(piece_crumble,column,row,"swirl_crumble")
 
-func make_effect(effect,column,row,animation):
+signal bounce
+func objective_effect_animator(goal_type,column,row):
+	var bouncer=get_parent().get_node("UI/top_ui/goal_container/goal_prefab")
+	
+	var current=get_parent().get_node("goal_holder")
+	for i in current.get_child_count():
+		if current.get_child(i).is_goal_string(goal_type):
+			if goal_type=="blue":
+				make_effect_2(objective,column,row,"blue_objective")
+				await get_tree().create_timer(.7).timeout
+				effect_animator("blue",column,row,true)
+				emit_signal("bounce")
+				
+			elif goal_type=="green":
+				make_effect_2(objective,column,row,"green_objective")
+				await get_tree().create_timer(.7).timeout
+				effect_animator("green",column,row,true)
+				emit_signal("bounce")
+				
+			elif goal_type=="purple":
+				make_effect_2(objective,column,row,"purple_objective")
+				await get_tree().create_timer(.7).timeout
+				effect_animator("purple",column,row,true)
+				emit_signal("bounce")
+				
+			elif goal_type=="orange":
+				make_effect_2(objective,column,row,"orange_objective")
+				await get_tree().create_timer(.7).timeout
+				effect_animator("orange",column,row,true)
+				emit_signal("bounce")
+				
+			elif goal_type=="pink":
+				make_effect_2(objective,column,row,"pink_objective")
+				await get_tree().create_timer(.7).timeout
+				effect_animator("pink",column,row,true)
+				emit_signal("bounce")
+				
+			elif goal_type=="yellow":
+				make_effect_2(objective,column,row,"yellow_objective")
+				await get_tree().create_timer(.7).timeout
+				effect_animator("yellow",column,row,true)
+				emit_signal("bounce")
+				
+			elif goal_type=="ice":
+				make_effect_2(objective,column,row,"ice_objective")
+				await get_tree().create_timer(.7).timeout
+				effect_animator("ice",column,row,true)
+				emit_signal("bounce")
+				
+			elif goal_type=="slime":
+				make_effect_2(objective,column,row,"slime_objective")
+				await get_tree().create_timer(.7).timeout
+				effect_animator("slime",column,row,true)
+				emit_signal("bounce")
+				
+			elif goal_type=="concrete":
+				make_effect_2(objective,column,row,"concrete_objective")
+				await get_tree().create_timer(.7).timeout
+				effect_animator("concrete",column,row,true)
+				emit_signal("bounce")
+				
+			elif goal_type=="lock":
+				make_effect_2(objective,column,row,"lock_objective")
+				await get_tree().create_timer(.7).timeout
+				effect_animator("lock",column,row,true)
+				emit_signal("bounce")
+				
+			elif goal_type=="sinker":
+				make_effect_2(objective,column,row,"sinker_objective")
+				await get_tree().create_timer(.7).timeout
+				effect_animator("sinker",column,row,true)
+				emit_signal("bounce")
+				
+			elif goal_type=="marmalade":
+				make_effect_2(objective,column,row,"marmalade_objective")
+				await get_tree().create_timer(.7).timeout
+				effect_animator("marmalade",column,row,true)
+				emit_signal("bounce")
+				
+			elif goal_type=="swirl":
+				make_effect_2(objective,column,row,"swirl_objective")
+				await get_tree().create_timer(.7).timeout
+				effect_animator("swirl",column,row,true)
+				emit_signal("bounce")
+				
+
+func make_effect_2(effect,column,row,animation):
+	var current=effect.instantiate()
+#	current.position=grid_to_pixel(column,row)
+	current.get_node("AnimationPlayer").get_animation(animation).track_set_key_value(0,0,grid_to_pixel(column,row))
+	current.get_node("AnimationPlayer").get_animation(animation).track_set_key_value(0,1,Vector2(585,280))
+	current.get_node("AnimationPlayer").play(animation)
+	add_child(current)
+
+func make_effect(effect,column,row,animation,query=false):
 	var current=effect.instantiate()
 	current.get_node("AnimationPlayer").play(animation)
-	current.position=grid_to_pixel(column,row)
+	if !query:
+		current.position=grid_to_pixel(column,row)
+	else:
+		current.position=Vector2(585,280)
+	current.z_index=1
 	add_child(current)
 
 func make_bomb_explode_effects(type,color,column,row):
@@ -1145,8 +1340,8 @@ func find_matches(hint_query=false,array_choice=array,query2=false,swap_query=fa
 										if array[r][j]!=null and restricted_fill(Vector2(r,j)):
 											if array[r][j].color == array[r-1][j].color or array[r][j].color==array[r+1][j].color :
 												if_not_has_add_to_array(Vector2(r,j),pieces_matched_when_spawning_color_bomb)
-											else:
-												break
+#											else:
+#												break
 					if i>1: #horizontal
 						if array[i-1][j]!=null and array[i-2][j]!=null:
 							if array[i-1][j].color == array[i-2][j].color:
@@ -1154,8 +1349,8 @@ func find_matches(hint_query=false,array_choice=array,query2=false,swap_query=fa
 									if array[r][j]!=null:
 										if array[r][j].color==array[r-1][j].color or array[r][j].color==array[r+1][j].color:
 											if_not_has_add_to_array(Vector2(r,j),pieces_matched_when_spawning_color_bomb)
-										else:
-											break
+#										else:
+#											break
 					#---------------------------------------------------------------------
 					if j<height-2: #vertical
 						if array[i][j+1]!=null and array[i][j+2]!=null:
@@ -1163,8 +1358,8 @@ func find_matches(hint_query=false,array_choice=array,query2=false,swap_query=fa
 								for r in range(height-1,j+1):
 									if array[i][r].color==array[i][r+1] or array[i][r].color==array[i][r-1].color:
 										if_not_has_add_to_array(Vector2(i,r),pieces_matched_when_spawning_color_bomb)
-									else:
-										break
+#									else:
+#										break
 					if j>1: #vertical
 						if array[i][j-1]!=null and array[i][j-2]!=null:
 							if array[i][j-1].color == array[i][j-2].color:
@@ -1172,10 +1367,58 @@ func find_matches(hint_query=false,array_choice=array,query2=false,swap_query=fa
 									if array[i][r]!=null:
 										if array[i][r].color==array[i][r+1].color or array[i][r].color==array[i][r-1].color:
 											if_not_has_add_to_array(Vector2(i,r),pieces_matched_when_spawning_color_bomb)
-										else:
-											break
+#										else:
+#											break
 					for t in pieces_matched_when_spawning_color_bomb.size():
 						match_and_add_to_matches(pieces_matched_when_spawning_color_bomb[t].x,pieces_matched_when_spawning_color_bomb[t].y)
+				
+				#3+1 row_bomb
+				if i>2 and i<width-3:
+					var piece=array[i][j]
+					if piece.is_row_bomb:
+						for k in range(-3,4):
+							if array[i][j]!=null and array[i+k][j]!=null:
+								if array[i][j].color==array[i+k][j].color and k!=0:
+									if array[i+k][j].matched==true:
+										three_plus_one.append("g")
+						if three_plus_one.size()==3:
+							for p in width:
+								if p!=i:
+									match_and_add_to_matches(p,j)
+							make_bomb_explode_effects("row",current_color,i,j)
+							emit_signal("shake_harder")
+							effect_animator(current_color,i,j)
+							make_particle_effect(i,j)
+							print("3+1row")
+							
+				#3+1 column_bomb
+				if j>0 and j<width-3:
+					var piece=array[i][j]
+					if piece.is_column_bomb:
+						for k in range(-1,3):
+							if array[i][j]!=null and array[i][j+k]!=null:
+								if array[i][j].color==array[i][j+k].color and k!=0:
+									if array[i][j+k].matched==true:
+										three_plus_one.append("g")
+										
+				if j>2 and j<width-2:
+					var piece=array[i][j]
+					if piece.is_column_bomb:
+						for k in range(-2,2):
+							if array[i][j]!=null and array[i][j+k]!=null:
+								if array[i][j].color==array[i][j+k].color and k!=0:
+									if array[i][j+k].matched==true:
+										three_plus_one.append("g")
+										
+						if three_plus_one.size()==3:
+							for p in height:
+								if p!=j:
+									match_and_add_to_matches(i,p)
+							make_bomb_explode_effects("column",current_color,i,j)
+							emit_signal("shake_harder")
+							effect_animator(current_color,i,j)
+							make_particle_effect(i,j)
+							print("3+1col")
 				#3matches
 				if i>0 and i<width-1 :
 					if array_choice[i-1][j]!=null && array_choice[i+1][j]!=null && !restricted_fill(Vector2(i,j)):
@@ -1257,54 +1500,6 @@ func find_matches(hint_query=false,array_choice=array,query2=false,swap_query=fa
 								match_and_add_to_matches(i,j+1)
 								match_and_add_to_matches(i,j-1)
 								fish_match()
-				#3+1 row_bomb
-				if i>2 and i<width-3:
-					var piece=array[i][j]
-					if piece.is_row_bomb:
-						for k in range(-3,4):
-							if array[i][j]!=null and array[i+k][j]!=null:
-								if array[i][j].color==array[i+k][j].color and k!=0:
-									if array[i+k][j].matched==true:
-										three_plus_one.append("g")
-						if three_plus_one.size()==3:
-							for p in width:
-								if p!=i:
-									match_and_add_to_matches(p,j)
-							make_bomb_explode_effects("row",current_color,i,j)
-							emit_signal("shake_harder")
-							effect_animator(current_color,i,j)
-							make_particle_effect(i,j)
-							print("3+1row")
-							
-				#3+1 column_bomb
-				if j>0 and j<width-3:
-					var piece=array[i][j]
-					if piece.is_column_bomb:
-						for k in range(-1,3):
-							if array[i][j]!=null and array[i][j+k]!=null:
-								if array[i][j].color==array[i][j+k].color and k!=0:
-									if array[i][j+k].matched==true:
-										three_plus_one.append("g")
-										
-				if j>2 and j<width-2:
-					var piece=array[i][j]
-					if piece.is_column_bomb:
-						for k in range(-2,2):
-							if array[i][j]!=null and array[i][j+k]!=null:
-								if array[i][j].color==array[i][j+k].color and k!=0:
-									if array[i][j+k].matched==true:
-										three_plus_one.append("g")
-										
-						if three_plus_one.size()==3:
-							for p in height:
-								if p!=j:
-									match_and_add_to_matches(i,p)
-							make_bomb_explode_effects("column",current_color,i,j)
-							emit_signal("shake_harder")
-							effect_animator(current_color,i,j)
-							make_particle_effect(i,j)
-							print("3+1col")
-							
 	if hint_query:
 		return false
 	print("findmatches")
@@ -1333,6 +1528,7 @@ var three_plus_one=[]
 var color_not_colorrow
 #what does queies do
 func find_and_spawn_bombs(query=false,swap_query=false):
+	state=find
 	color_not_colorrow=false
 	three_plus_one.clear()
 	for i in width:
@@ -1395,6 +1591,9 @@ func find_and_spawn_bombs(query=false,swap_query=false):
 							if color_not_colorrow==false:
 								var piece=array[i][j]
 								create_bomb(piece,1)
+								if press_piece!=null:
+									if press_piece.is_special:
+										press_piece.matched=true
 								if_not_has_add_to_array(Vector2(i,j),newly_made_specials)
 							
 				if i>1 and i<width-1:
@@ -1414,6 +1613,9 @@ func find_and_spawn_bombs(query=false,swap_query=false):
 							if color_not_colorrow==false:
 								var piece=array[i][j]
 								create_bomb(piece,1)
+								if press_piece!=null:
+									if press_piece.is_special:
+										press_piece.matched=true
 								if_not_has_add_to_array(Vector2(i,j),newly_made_specials)
 				#-------------------------------------------------------------------
 				#color_bomb_vertical
@@ -1537,12 +1739,15 @@ func find_and_spawn_bombs(query=false,swap_query=false):
 		else:
 			find_matches()
 	emit_signal("found_and_spawned_bombs")
+	state=move
 
 func create_bomb(piece,type):
 	piece.matched=false
 	var pos=pixel_to_grid(piece.position.x,piece.position.y)
 	damage_special(pos.x,pos.y)
-	emit_signal("check_goal",piece.color)
+	emit_signal("check_goal",piece.color) #pos press?
+	objective_effect_animator(str(piece.color),pos.x,pos.y) #experimental
+	
 	change_bomb(type,piece)
 
 func change_bomb(type,piece):
@@ -1594,6 +1799,7 @@ func change_bomb(type,piece):
 			piece.make_color_bomb()
 		
 func destroy_adjacent_for_coloradjacent(i,j,current_color):
+	state=find
 	print("destroy_adj_for_coloradj")
 	if array[i][j].matched==true:
 		make_bomb_explode_effects("adjacent",current_color,i,j)
@@ -1611,6 +1817,7 @@ func destroy_adjacent_for_coloradjacent(i,j,current_color):
 							if piece.is_special!=true:
 								current_color=array[column+i][row+j].color
 								emit_signal("check_goal",array[column+i][row+j].color)
+								objective_effect_animator(array[column+i][row+j].color,column,row)
 								damage_special(column+i,row+j)
 								array[column+i][row+j].queue_free()
 								array[column+i][row+j]=null
@@ -1624,8 +1831,11 @@ func destroy_adjacent_for_coloradjacent(i,j,current_color):
 							else:
 								destroy_special_matched(column+i,row+j)
 		print("destroy_adjacent_for_coloradjacent")
+		state=move
 		
 func destroy_adjacent_for_adjacentadjacent(i,j,current_color,removal_query=false):
+	state=find
+	shock_effect(i,j)
 	make_bomb_explode_effects("big_adjacent",current_color,i,j)
 	make_particle_effect(i,j)
 	emit_signal("shake_harder")
@@ -1638,6 +1848,7 @@ func destroy_adjacent_for_adjacentadjacent(i,j,current_color,removal_query=false
 							if removal_query:
 								current_color=array[column+i][row+j].color
 								emit_signal("check_goal",array[column+i][row+j].color)
+								objective_effect_animator(array[column+i][row+j].color,column,row)
 								damage_special(column+i,row+j)
 								array[column+i][row+j].queue_free()
 								array[column+i][row+j]=null
@@ -1652,9 +1863,10 @@ func destroy_adjacent_for_adjacentadjacent(i,j,current_color,removal_query=false
 								if piece.is_pseudo_adjacent_bomb!=true:
 									current_color=array[column+i][row+j].color
 									emit_signal("check_goal",array[column+i][row+j].color)
-									damage_special(column+i,row+j)
+									objective_effect_animator(array[column+i][row+j].color,column,row)
 									array[column+i][row+j].queue_free()
 									array[column+i][row+j]=null
+									damage_special(column+i,row+j)
 									effect_animator(current_color,column+i,row+j)
 									make_particle_effect(column+i,row+j)
 									emit_signal("update_score",piece_value*streak)
@@ -1665,8 +1877,10 @@ func destroy_adjacent_for_adjacentadjacent(i,j,current_color,removal_query=false
 						else:
 							destroy_special_matched(column+i,row+j)
 	print("destroy_adjacent_for_adjacentadjacent")
+	state=move
 	
 func destroy_special_matched(i,j):
+	state=find
 	var piece=array[i][j]
 	if piece!=null and piece.is_pseudo_adjacent_bomb!=true:
 		var current_color=array[i][j].color
@@ -1680,14 +1894,17 @@ func destroy_special_matched(i,j):
 				array[i][j].queue_free()
 				array[i][j]=null
 			if piece.is_adjacent_bomb:
+				print("tt2")
 				destroy_specials_adjacent(i,j,current_color)
 				array[i][j].queue_free()
 				array[i][j]=null
 			if piece.is_fish():
 				array[i][j].queue_free()
 				array[i][j]=null
-				
+	state=move
+	
 func destroy_all_in_row(i,j,current_color,dont_collapse_query=false):
+	state=find
 	print("destroyed_all_in_row")
 	effect_animator(current_color,i,j)
 	make_particle_effect(i,j)
@@ -1700,39 +1917,52 @@ func destroy_all_in_row(i,j,current_color,dont_collapse_query=false):
 				if array[i+x][j].is_special!=true:
 					if array[i+x][j].color=="blocker":
 						return
-					else:
-						var x_color = array[i+x][j].color
-						effect_animator(x_color,i+x,j)
-						make_particle_effect(i+x,j)
-						emit_signal("check_goal",array[i+x][j].color)
-						array[i+x][j].queue_free()
-						array[i+x][j]=null
-						emit_signal("update_score",piece_value*streak)
-						var amount_to_change=piece_value*streak
-						current_score += amount_to_change
-						emit_signal("update_current_score",current_score)
-						damage_special(i+x,j,true)
-						print("A")
-						
+					var x_color = array[i+x][j].color
+					effect_animator(x_color,i+x,j)
+					make_particle_effect(i+x,j)
+					emit_signal("check_goal",array[i+x][j].color)
+					objective_effect_animator(array[i+x][j].color,i,j)
+					array[i+x][j].queue_free()
+					array[i+x][j]=null
+					emit_signal("update_score",piece_value*streak)
+					var amount_to_change=piece_value*streak
+					current_score += amount_to_change
+					emit_signal("update_current_score",current_score)
+					damage_special(i+x,j,true)
+					print("A")
+				else:
+					if array[i+x][j].is_column_bomb:
+						destroy_all_in_column(i+x,j,array[i+x][j].color)
+						if array[i+x][j]!=null:
+							array[i+x][j].queue_free()
+							array[i+x][j]=null
+							print("destroy_row_col_bomb2")
+					if array[i+x][j].is_adjacent_bomb:
+						print("tt")
+						destroy_specials_adjacent(i+x,j,current_color)
+						if array[i+x][j]!=null:
+							array[i+x][j].queue_free()
+							array[i+x][j]=null
+							
 		if i+y>=0 and i+y<width:
 			if array[i+y][j]!=null:
 				if array[i+y][j].is_special!=true:
 					if array[i+y][j].color=="blocker":
 						return
-					else:
-						var y_piece = array[i+y][j]
-						var y_color =y_piece.color
-						effect_animator(y_color,i+y,j)
-						make_particle_effect(i+y,j)
-						emit_signal("check_goal",array[i+y][j].color)
-						array[i+y][j].queue_free()
-						array[i+y][j]=null
-						emit_signal("update_score",piece_value*streak)
-						var amount_to_change=piece_value*streak
-						current_score += amount_to_change
-						emit_signal("update_current_score",current_score)
-						damage_special(i+y,j,true)
-						print("B")
+					var y_piece = array[i+y][j]
+					var y_color =y_piece.color
+					effect_animator(y_color,i+y,j)
+					make_particle_effect(i+y,j)
+					emit_signal("check_goal",array[i+y][j].color)
+					objective_effect_animator(array[i+y][j].color,i,j)
+					array[i+y][j].queue_free()
+					array[i+y][j]=null
+					emit_signal("update_score",piece_value*streak)
+					var amount_to_change=piece_value*streak
+					current_score += amount_to_change
+					emit_signal("update_current_score",current_score)
+					damage_special(i+y,j,true)
+					print("B")
 				else:
 					if array[i+y][j].is_column_bomb:
 						destroy_all_in_column(i+y,j,array[i+y][j].color)
@@ -1742,6 +1972,7 @@ func destroy_all_in_row(i,j,current_color,dont_collapse_query=false):
 							print("destroy_row_col_bomb2")
 					if array[i+y][j].is_adjacent_bomb:
 						destroy_specials_adjacent(i+y,j,current_color)
+						print("tt")
 						if array[i+y][j]!=null:
 							array[i+y][j].queue_free()
 							array[i+y][j]=null
@@ -1768,52 +1999,72 @@ func destroy_all_in_column(i,j,current_color):
 				if array[i][j+x].is_special!=true:
 					if array[i][j+x].color=="blocker":
 						return
-					else:
-						var x_color = array[i][j+x].color
-						effect_animator(x_color,i,j+x)
-						make_particle_effect(i,j+x)
-						emit_signal("check_goal",array[i][j+x].color)
-						array[i][j+x].queue_free()
-						array[i][j+x]=null
-						emit_signal("update_score",piece_value*streak)
-						var amount_to_change=piece_value*streak
-						current_score += amount_to_change
-						emit_signal("update_current_score",current_score)
-						damage_special(i,j+x,true)
-						print("C")
+					var x_color = array[i][j+x].color
+					effect_animator(x_color,i,j+x)
+					make_particle_effect(i,j+x)
+					emit_signal("check_goal",array[i][j+x].color)
+					objective_effect_animator(array[i][j+x].color,i,j)
+					array[i][j+x].queue_free()
+					array[i][j+x]=null
+					emit_signal("update_score",piece_value*streak)
+					var amount_to_change=piece_value*streak
+					current_score += amount_to_change
+					emit_signal("update_current_score",current_score)
+					damage_special(i,j+x,true)
+					print("C")
 				else:
-					destroy_specials()
-					pass
+					if array[i][j+x].is_column_bomb:
+						destroy_all_in_column(i,j+x,array[i][j+x].color)
+						if array[i][j+x]!=null:
+							array[i][j+x].queue_free()
+							array[i][j+x]=null
+							print("destroy_row_col_bomb2")
+					if array[i][j+x].is_adjacent_bomb:
+						destroy_specials_adjacent(i,j+x,current_color)
+						if array[i][j+x]!=null:
+							array[i][j+x].queue_free()
+							array[i][j+x]=null
 					
 		if j+y>=0 and j+y<height:
 			if array[i][j+y]!=null:
 				if array[i][j+y].is_special!=true:
 					if array[i][j+y].color=="blocker":
 						return
-					else:
-						var y_color = array[i][j+y].color
-						effect_animator(y_color,i,j+y)
-						make_particle_effect(i,j+y)
-						emit_signal("check_goal",array[i][j+y].color)
-						array[i][j+y].queue_free()
-						array[i][j+y]=null
-						emit_signal("update_score",piece_value*streak)
-						var amount_to_change=piece_value*streak
-						current_score += amount_to_change
-						emit_signal("update_current_score",current_score)
-						damage_special(i,j+y,true)
-						print("D")
+					var y_color = array[i][j+y].color
+					effect_animator(y_color,i,j+y)
+					make_particle_effect(i,j+y)
+					emit_signal("check_goal",array[i][j+y].color)
+					objective_effect_animator(array[i][j+y].color,i,j)
+					array[i][j+y].queue_free()
+					array[i][j+y]=null
+					emit_signal("update_score",piece_value*streak)
+					var amount_to_change=piece_value*streak
+					current_score += amount_to_change
+					emit_signal("update_current_score",current_score)
+					damage_special(i,j+y,true)
+					print("D")
 				else:
-					destroy_specials()
-					pass
+					if array[i][j+x].is_column_bomb:
+						destroy_all_in_column(i,j+y,array[i][j+y].color)
+						if array[i][j+y]!=null:
+							array[i][j+y].queue_free()
+							array[i][j+y]=null
+							print("destroy_row_col_bomb2")
+					if array[i][j+y].is_adjacent_bomb:
+						destroy_specials_adjacent(i,j+y,current_color)
+						if array[i][j+y]!=null:
+							array[i][j+y].queue_free()
+							array[i][j+y]=null
 		x+=1
 		y-=1
 		await get_tree().create_timer(.020).timeout
 		
 	await get_tree().create_timer(.2).timeout
 	collapse_columns()
+	state=move
 	
 func destroy_specials(colrowquery=false):
+	state=find
 	var x=0
 	var y=0
 	for i in width:
@@ -1842,6 +2093,7 @@ func destroy_specials(colrowquery=false):
 											effect_animator(x_color,i,j+x)
 											make_particle_effect(i,j+x)
 											emit_signal("check_goal",array[i][j+x].color)
+											objective_effect_animator(array[i][j+x].color,i,j)
 #											damage_special2(i,j+x)
 											array[i][j+x].queue_free()
 											array[i][j+x]=null
@@ -1851,7 +2103,7 @@ func destroy_specials(colrowquery=false):
 											emit_signal("update_current_score",current_score)
 #									else:
 #										if array[i][j+x]!=null and array[i][j+x].is_row_bomb and array[i][j+x].is_adjacent_bomb!=true:
-#											destroy_specials_row(i,j+x)
+#											match_all_in_row(i,j+x)
 											
 							if j+y>=0 and j+y<height:
 								if array[i][j+y]!=null:
@@ -1863,6 +2115,7 @@ func destroy_specials(colrowquery=false):
 											effect_animator(y_color,i,j+y)
 											make_particle_effect(i,j+y)
 											emit_signal("check_goal",array[i][j+y].color)
+											objective_effect_animator(array[i][j+y].color,i,j)
 #											damage_special2(i,j+y)
 											array[i][j+y].queue_free()
 											array[i][j+y]=null
@@ -1872,11 +2125,11 @@ func destroy_specials(colrowquery=false):
 											emit_signal("update_current_score",current_score)
 #									else:
 #										if array[i][j+y]!=null and array[i][j+y].is_row_bomb and array[i][j+y].is_adjacent_bomb!=true:
-#											destroy_specials_row(i,j+y)
+#											match_all_in_row(i,j+y)
 											
 							x+=1
 							y-=1
-							await get_tree().create_timer(.020).timeout
+							await get_tree().create_timer(.05).timeout
 #						get_parent().get_node("collapse_timer").start()
 						
 					if array[i][j]!=null and array[i][j].is_row_bomb:
@@ -1885,7 +2138,7 @@ func destroy_specials(colrowquery=false):
 						effect_animator(current_color,i,j)
 						make_particle_effect(i,j)
 						make_bomb_explode_effects("row",current_color,i,j)
-						print("destroy_specials_row_bomb_detected")
+						print("match_all_in_row_bomb_detected")
 						
 						for w in width:
 							if i+x>=0 and i+x<width:
@@ -1898,6 +2151,7 @@ func destroy_specials(colrowquery=false):
 											effect_animator(x_color,i+x,j)
 											make_particle_effect(i+x,j)
 											emit_signal("check_goal",array[i+x][j].color)
+											objective_effect_animator(array[i+x][j].color,i,j)
 #											damage_special2(i+x,j)
 											array[i+x][j].queue_free()
 											array[i+x][j]=null
@@ -1920,6 +2174,7 @@ func destroy_specials(colrowquery=false):
 											effect_animator(y_color,i+y,j)
 											make_particle_effect(i+y,j)
 											emit_signal("check_goal",array[i+y][j].color)
+											objective_effect_animator(array[i+y][j].color,i,j)
 #											damage_special2(i+y,j)
 											array[i+y][j].queue_free()
 											array[i+y][j]=null
@@ -1935,40 +2190,60 @@ func destroy_specials(colrowquery=false):
 							y-=1
 							await get_tree().create_timer(.020).timeout
 							
-	print("destroy_specials")
+#	print("destroy_specials")
 	if colrowquery:
 		destroy_matched(true)
 	else:
 		destroy_matched()
+		
+	state=move
+	
+func destroy_specials_adjacent(column,row,current_color):
+	print("destroy_specials_adjacent",column,row)
+	state=find
 
-func destroy_specials_adjacent(i,j,current_color):
-	if array[i][j].matched==true:
-		make_bomb_explode_effects("adjacent",current_color,i,j)
-		shock_effect(i,j)
-		match_and_add_to_matches(i,j)
-		effect_animator(current_color,i,j)
-		make_particle_effect(i,j)
-		emit_signal("shake_harder")
-		for column in range(-1,+2):
-			for row in range(-1,2):
-				if i!=0 and j!=0:
-					if is_in_grid(Vector2(column+i,row+j)):
-						if array[column+i][row+j]!=null and !is_piece_sinker(column+i,row+j) and array[column+i][row+j].matched==false :
-							current_color=array[column+i][row+j].color
-							emit_signal("check_goal",array[column+i][row+j].color)
-							damage_special(column+i,row+j)
-							array[column+i][row+j].queue_free()
-							array[column+i][row+j]=null
-							effect_animator(current_color,column+i,row+j)
-							make_particle_effect(column+i,row+j)
-							emit_signal("update_score",piece_value*streak)
-							var amount_to_change=piece_value*streak
-							current_score += amount_to_change
-							emit_signal("update_current_score",current_score)
-							await get_tree().create_timer(0.05).timeout
-		print("destroy_specials_adjacent")
+	make_bomb_explode_effects("adjacent",current_color,column,row)
+	shock_effect(column,row)
+	match_and_add_to_matches(column,row)
+	effect_animator(current_color,column,row)
+	make_particle_effect(column,row)
+	
+	damage_special(column+1,row+1)
+	damage_special(column+1,row)
+	damage_special(column+1,row-1)
+	
+	damage_special(column,row+1)
+	damage_special(column,row)
+	damage_special(column,row-1)
+	
+	damage_special(column-1,row+1)
+	damage_special(column-1,row)
+	damage_special(column-1,row-1)
+		
+		
+	emit_signal("shake_harder")
+	for i in range(-1,+2):
+		for j in range(-1,2):
+			if is_in_grid(Vector2(column+i,row+j)):
+				if array[column+i][row+j]!=null and !is_piece_sinker(column+i,row+j) and array[column+i][row+j].matched==false :
+					current_color=array[column+i][row+j].color
+					emit_signal("check_goal",array[column+i][row+j].color)
+					objective_effect_animator(array[column+i][row+j].color,column+i,row+j)
+#					if i!=0 and j!=0:
+					array[column+i][row+j].queue_free()
+					array[column+i][row+j]=null
+					effect_animator(current_color,column+i,row+j)
+					make_particle_effect(column+i,row+j)
+					emit_signal("update_score",piece_value*streak)
+					var amount_to_change=piece_value*streak
+					current_score += amount_to_change
+					emit_signal("update_current_score",current_score)
+					await get_tree().create_timer(0.05).timeout
+	print("destroy_specials_adjacent")
+	state=move
 
 func destroy_specials_for_colrowcolor(colrowquery=false):
+	state=find
 	var x=0
 	var y=0
 	for i in width:
@@ -1993,6 +2268,7 @@ func destroy_specials_for_colrowcolor(colrowquery=false):
 										effect_animator(x_color,i,j+x)
 										make_particle_effect(i,j+x)
 										emit_signal("check_goal",array[i][j+x].color)
+										objective_effect_animator(array[i][j+x].color,i,j)
 										damage_special2(i,j+x)
 										array[i][j+x].queue_free()
 										array[i][j+x]=null
@@ -2002,7 +2278,7 @@ func destroy_specials_for_colrowcolor(colrowquery=false):
 										emit_signal("update_current_score",current_score)
 									else:
 										if array[i][j+x]!=null and array[i][j+x].is_row_bomb and array[i][j+x].is_adjacent_bomb!=true:
-											destroy_specials_row(i,j+x)
+											match_all_in_row(i,j+x)
 											print("DSCRC"+str(j+x))
 											
 							if j+y>=0 and j+y<height:
@@ -2012,6 +2288,7 @@ func destroy_specials_for_colrowcolor(colrowquery=false):
 										effect_animator(y_color,i,j+y)
 										make_particle_effect(i,j+y)
 										emit_signal("check_goal",array[i][j+y].color)
+										objective_effect_animator(array[i][j+y].color,i,j)
 										damage_special2(i,j+y)
 										array[i][j+y].queue_free()
 										array[i][j+y]=null
@@ -2021,7 +2298,7 @@ func destroy_specials_for_colrowcolor(colrowquery=false):
 										emit_signal("update_current_score",current_score)
 									else:
 										if array[i][j+y]!=null and array[i][j+y].is_row_bomb and array[i][j+y].is_adjacent_bomb!=true:
-											destroy_specials_row(i,j+y)
+											match_all_in_row(i,j+y)
 											print("DSCRC"+str(j+x))
 											
 							x+=1
@@ -2044,6 +2321,7 @@ func destroy_specials_for_colrowcolor(colrowquery=false):
 										effect_animator(x_color,i+x,j)
 										make_particle_effect(i+x,j)
 										emit_signal("check_goal",array[i+x][j].color)
+										objective_effect_animator(array[i+x][j].color,i,j)
 										damage_special2(i+x,j)
 										array[i+x][j].queue_free()
 										array[i+x][j]=null
@@ -2053,7 +2331,7 @@ func destroy_specials_for_colrowcolor(colrowquery=false):
 										emit_signal("update_current_score",current_score)
 									else:
 										if array[i+x][j]!=null and array[i+x][j].is_column_bomb and array[i+x][j].is_adjacent_bomb!=true:
-											destroy_specials_column(i+x,j)
+											match_all_in_column(i+x,j)
 											
 							if i+y>=0 and i+y<width:
 								if array[i+y][j]!=null:
@@ -2063,6 +2341,7 @@ func destroy_specials_for_colrowcolor(colrowquery=false):
 										effect_animator(y_color,i+y,j)
 										make_particle_effect(i+y,j)
 										emit_signal("check_goal",array[i+y][j].color)
+										objective_effect_animator(array[i+y][j].color,i,j)
 										damage_special2(i+y,j)
 										array[i+y][j].queue_free()
 										array[i+y][j]=null
@@ -2072,7 +2351,7 @@ func destroy_specials_for_colrowcolor(colrowquery=false):
 										emit_signal("update_current_score",current_score)
 									else:
 										if array[i+y][j]!=null and array[i+y][j].is_column_bomb and array[i+y][j].is_adjacent_bomb!=true:
-											destroy_specials_column(i+y,j)
+											match_all_in_column(i+y,j)
 											
 							x+=1
 							y-=1
@@ -2093,8 +2372,14 @@ func destroy_specials_for_colrowcolor(colrowquery=false):
 		destroy_matched(true)
 	else:
 		destroy_matched()
+	state=move
 
-func destroy_specials_row(i,j):
+func match_all_in_row(i,j):
+	state=find
+	emit_signal("check_goal","row")
+	objective_effect_animator("row",i,j)
+	emit_signal("check_goal","striped")
+	objective_effect_animator("striped",i,j)
 	var x=0
 	var y=0
 	if array[i][j]!=null:
@@ -2104,7 +2389,7 @@ func destroy_specials_row(i,j):
 		effect_animator(current_color,i,j)
 		make_particle_effect(i,j)
 		make_bomb_explode_effects("row",current_color,i,j)
-		print('destroy_specials_row')
+		print('match_all_in_row: ',i,j)
 	
 	for w in width:
 		if i+x>=0 and i+x<width:
@@ -2116,13 +2401,14 @@ func destroy_specials_row(i,j):
 					
 					if array[i+x][j]!=null:
 						if array[i+x][j].is_column_bomb:
-							match_all_in_column(i+x,j,array[i+x][j].color)
+							match_all_in_column(i+x,j)
 							
 					if array[i+x][j]!=null:
 						if array[i+x][j].is_row_bomb:
-							match_all_in_row(i+x,j,array[i+x][j].color)
+							match_all_in_row(i+x,j)
 							
 					if array[i+x][j]!=null:
+						print("mair1")
 						if array[i+x][j].is_adjacent_bomb:
 							find_adjacent_pieces(i+x,j,array[i+x][j].color)
 				else:
@@ -2130,6 +2416,7 @@ func destroy_specials_row(i,j):
 					effect_animator(x_color,i+x,j)
 					make_particle_effect(i+x,j)
 					emit_signal("check_goal",array[i+x][j].color)
+					objective_effect_animator(array[i+x][j].color,i,j)
 					array[i+x][j].queue_free()
 					array[i+x][j]=null
 					emit_signal("update_score",piece_value*streak)
@@ -2146,14 +2433,15 @@ func destroy_specials_row(i,j):
 					
 					if array[i+y][j]!=null:
 						if array[i+y][j].is_column_bomb:
-							match_all_in_column(i+y,j,array[i+y][j].color)
+							match_all_in_column(i+y,j)
 					
 					if array[i+y][j]!=null:
 						if array[i+y][j].is_row_bomb:
-							match_all_in_row(i+y,j,array[i+y][j].color)
+							match_all_in_row(i+y,j)
 							
 					if array[i+y][j]!=null:
 						if array[i+y][j].is_adjacent_bomb:
+							print("mair2")
 							find_adjacent_pieces(i+y,j,array[i+y][j].color)
 				
 				else:
@@ -2162,6 +2450,7 @@ func destroy_specials_row(i,j):
 					effect_animator(y_color,i+y,j)
 					make_particle_effect(i+y,j)
 					emit_signal("check_goal",array[i+y][j].color)
+					objective_effect_animator(array[i+y][j].color,i,j)
 					array[i+y][j].queue_free()
 					array[i+y][j]=null
 					emit_signal("update_score",piece_value*streak)
@@ -2174,8 +2463,15 @@ func destroy_specials_row(i,j):
 		y-=1
 		await get_tree().create_timer(.020).timeout
 	get_parent().get_node("collapse_timer").start()
+	state=move
 
-func destroy_specials_column(i,j):
+func match_all_in_column(i,j):
+	state=find
+	print('match_all_in_column')
+	emit_signal("check_goal","column")
+	emit_signal("check_goal","striped")
+	objective_effect_animator("column",i,j)
+	objective_effect_animator("striped",i,j)
 	var x=0
 	var y=0
 	if array[i][j]!=null:
@@ -2185,7 +2481,7 @@ func destroy_specials_column(i,j):
 		effect_animator(current_color,i,j)
 		make_particle_effect(i,j)
 		make_bomb_explode_effects("column",current_color,i,j)
-		print('destroy_specials_col')
+		print('destroy_specials_col: ',i,j)
 	
 	for w in height:
 		if j+x>=0 and j+x<height:
@@ -2196,18 +2492,18 @@ func destroy_specials_column(i,j):
 				if array[i][j+x].is_special==true and array[i][j+x].matched==false:
 					var piece=array[i][j+x]
 					if piece.is_column_bomb:
-#						destroy_specials_column(i,j)
-						match_all_in_column(i,j+x,array[i][j+x].color)
+						match_all_in_column(i,j+x)
 					if piece.is_row_bomb:
-#						destroy_specials_row(i,j)
-						match_all_in_row(i,j+x,array[i][j+x].color)
+						match_all_in_row(i,j+x)
 					if piece.is_adjacent_bomb:
+						print("ajaja3")
 						find_adjacent_pieces(i,j+x,array[i][j+x].color)
 				else:
 					var x_color = array[i][j+x].color
 					effect_animator(x_color,i,j+x)
 					make_particle_effect(i,j+x)
 					emit_signal("check_goal",array[i][j+x].color)
+					objective_effect_animator(array[i][j+x].color,i,j)
 					array[i][j+x].queue_free()
 					array[i][j+x]=null
 					emit_signal("update_score",piece_value*streak)
@@ -2223,18 +2519,18 @@ func destroy_specials_column(i,j):
 				if array[i][j+y].is_special==true and array[i][j+y].matched==false:
 					var piece=array[i][j+y]
 					if piece.is_column_bomb:
-#						destroy_specials_column(i,j)
-						match_all_in_column(i,j+y,array[i][j+y].color)
+						match_all_in_column(i,j+y)
 					if piece.is_row_bomb:
-#						destroy_specials_row(i,j)
-						match_all_in_row(i,j+y,array[i][j+y].color)
+						match_all_in_row(i,j+y)
 					if piece.is_adjacent_bomb:
+						print("ajaja4")
 						find_adjacent_pieces(i,j+y,array[i][j+y].color)
 				else:
 					var y_color = array[i][j+y].color
 					effect_animator(y_color,i,j+y)
 					make_particle_effect(i,j+y)
 					emit_signal("check_goal",array[i][j+y].color)
+					objective_effect_animator(array[i][j+y].color,i,j)
 					array[i][j+y].queue_free()
 					array[i][j+y]=null
 					emit_signal("update_score",piece_value*streak)
@@ -2246,9 +2542,11 @@ func destroy_specials_column(i,j):
 		y-=1
 		await get_tree().create_timer(.020).timeout
 	get_parent().get_node("collapse_timer").start()
+	state=move
 
 signal destroy_matched_finished
 func destroy_matched(colrowquery=false):
+	state=find
 	var was_matched =false
 	for i in width:
 		for j in height:
@@ -2260,6 +2558,7 @@ func destroy_matched(colrowquery=false):
 						effect_animator(current_color,i,j)
 						make_particle_effect(i,j)
 						emit_signal("check_goal",array[i][j].color)
+						objective_effect_animator(array[i][j].color,i,j)
 						emit_signal("shake")
 						damage_special(i,j)
 						was_matched=true
@@ -2307,14 +2606,23 @@ func destroy_matched(colrowquery=false):
 		pass
 	else:
 		current_matches.clear()
-	print("destroymatched")
+#	print("destroymatched")
 	emit_signal("destroy_matched_finished")
+	state=move
 
 #when swapped concrete damages around it but bombs dont
 func damage_special(column,row,bomb_query=false):
+	state=find
 	if bomb_query:
+#		print("DAMAGE_SPECIAL_WQUERY")
 		damage_concrete(column,row)
+		damage_ice(column,row)
+		check_marmalade(column,row)
+		check_swirl(column,row)
+		check_blocker(column,row)
+		damage_lock(column,row)
 	else:
+#		print("DAMAGE_SPECIAL_WOQUERY")
 		damage_lock(column,row)
 		damage_ice(column,row)
 		check_concrete(column,row)
@@ -2322,6 +2630,7 @@ func damage_special(column,row,bomb_query=false):
 		check_marmalade(column,row)
 		check_swirl(column,row)
 		check_blocker(column,row)
+	state=move
 
 #stop blockers from getting yeeted and deleted with colrow bombs
 func damage_special2(column,row):
@@ -2346,6 +2655,9 @@ func damage_marmalade(column,row):
 				position=Vector2(column,row)
 				remove_marmalade(position)
 				emit_signal("break_marmalade","marmalade")
+				emit_signal("check_goal","marmalade")
+				objective_effect_animator("marmalade",column,row)
+				no_longer_restricted_spaces.append(Vector2(column,row))
 				effect_animator("marmalade",column,row)
 
 func damage_swirl(column,row):
@@ -2360,25 +2672,30 @@ func damage_swirl(column,row):
 				position=Vector2(column,row)
 				remove_swirl(position)
 				emit_signal("break_swirl","swirl")
+				emit_signal("check_goal","swirl")
+				objective_effect_animator("swirl",column,row)
+				no_longer_restricted_spaces.append(Vector2(column,row))
 				effect_animator("swirl",column,row)
 
 func damage_concrete(column,row):
 	if concrete_pieces.size()!=0:
-		if concrete_pieces[column][row] !=null:
-			SoundManager.play_tracked_sound("damage_concrete")
-			Input.vibrate_handheld(100)
-			effect_animator("sinker",column,row)
-			concrete_pieces[column][row].take_damage(1)
-			concrete_pieces[column][row].text_setter()
-			if concrete_pieces[column][row].health<=0 :
-				concrete_pieces[column][row].queue_free()
-				concrete_pieces[column][row]=null
-				position=Vector2(column,row)
-				remove_concrete(position)
-				emit_signal("break_concrete","concrete")
-				no_longer_restricted_spaces.append(Vector2(column,row))
-				print('no_longer_restricted_spaces: ',no_longer_restricted_spaces)
-				effect_animator("concrete",column,row)
+		if column<height and row<width:
+			if concrete_pieces[column][row]!=null:
+				SoundManager.play_tracked_sound("damage_concrete")
+				Input.vibrate_handheld(100)
+				effect_animator("sinker",column,row)
+				concrete_pieces[column][row].take_damage(1)
+				concrete_pieces[column][row].text_setter()
+				if concrete_pieces[column][row].health<=0 :
+					concrete_pieces[column][row].queue_free()
+					concrete_pieces[column][row]=null
+					position=Vector2(column,row)
+					remove_concrete(position)
+					emit_signal("break_concrete","concrete")
+					objective_effect_animator("concrete",column,row)
+					no_longer_restricted_spaces.append(Vector2(column,row))
+	#				print('no_longer_restricted_spaces: ',no_longer_restricted_spaces)
+					effect_animator("concrete",column,row)
 
 func damage_slime(column,row):
 	if slime_pieces.size() !=0 :
@@ -2392,6 +2709,8 @@ func damage_slime(column,row):
 				position=Vector2(column,row)
 				remove_slime(position)
 				emit_signal("break_slime","slime")
+				objective_effect_animator("slime",column,row)
+				no_longer_restricted_spaces.append(Vector2(column,row))
 				effect_animator("slime",column,row)
 
 func damage_ice(column,row):
@@ -2406,6 +2725,8 @@ func damage_ice(column,row):
 				ice_pieces[column][row].queue_free()
 				ice_pieces[column][row]=null
 				emit_signal("break_ice","ice")
+				objective_effect_animator("ice",column,row)
+				no_longer_restricted_spaces.append(Vector2(column,row))
 				effect_animator("ice",column,row)
 
 func ice_counter(column,row):
@@ -2416,17 +2737,20 @@ func ice_counter(column,row):
 	return tally
 
 func damage_lock(column,row):
-	if lock_pieces.size() !=0 :
+	if lock_pieces.size()!=0 and row<width:
 		if lock_pieces[column][row]!=null :
 			SoundManager.play_fixed_sound("damage_lock")
 			Input.vibrate_handheld(100)
 			lock_pieces[column][row].take_damage(1)
-			if lock_pieces[column][row].health<=0 :
-				lock_pieces[column][row].queue_free()
-				lock_pieces[column][row]=null
-				remove_lock(Vector2(column,row))
-				emit_signal("break_lock","lock")
-				effect_animator("lock",column,row) 
+			if lock_pieces[column][row].health!=null:
+				if lock_pieces[column][row].health<=0 :
+					lock_pieces[column][row].queue_free()
+					lock_pieces[column][row]=null
+					remove_lock(Vector2(column,row))
+					emit_signal("break_lock","lock")
+					objective_effect_animator("lock",column,row)
+					no_longer_restricted_spaces.append(Vector2(column,row))
+					effect_animator("lock",column,row) 
 
 
 func remove_lock(place):
@@ -2441,117 +2765,78 @@ func get_bomb_pieces(query=false):
 				if array[i][j].matched==true :
 					if array[i][j].is_column_bomb :
 						var color_of_bomb=array[i][j].color
-						destroy_specials_column(i,j)
-#						match_all_in_column(i,j,color_of_bomb)
+						match_all_in_column(i,j)
 					if array[i][j]!=null:
 						if array[i][j].is_row_bomb :
 							var color_of_bomb=array[i][j].color
-							destroy_specials_row(i,j)
-#							match_all_in_row(i,j,color_of_bomb)
+							match_all_in_row(i,j)
 					if array[i][j]!=null:
 						if array[i][j].is_adjacent_bomb :
 							var color_of_bomb=array[i][j].color
+							print("tt3")
 							find_adjacent_pieces(i,j,color_of_bomb)
 	if query:
 		print("bombsgetgot")
 		destroy_specials(true)
 	else:
-#		await get_tree().create_timer(.1).timeout
 		newly_made_specials.clear()
-		print("cleared")
 		destroy_specials()
 	
 #matches every piece of certain color in the board
 func match_color(color):
+	print("1")
 	SoundManager.play_fixed_sound("color_bomb_explode")
 	Input.vibrate_handheld(100)
 	for i in width:
 		for j in height :
+#			damage_special(i,j,true)
 			if array[i][j]!=null and !is_piece_sinker(i,j) and !restricted_fill(Vector2(i,j)):
 				if array[i][j].color==color and array[i][j].matched==false:
 					if array[i][j]!=null:
 						if array[i][j].is_column_bomb :
-							destroy_specials_column(i,j)
-#							match_all_in_column(i,j,color)
+							match_all_in_column(i,j)
 					if array[i][j]!=null:
-							destroy_specials_row(i,j)
-#							match_all_in_row(i,j,color)
+							match_all_in_row(i,j)
 					if array[i][j]!=null:
 						if array[i][j].is_adjacent_bomb:
 							find_adjacent_pieces(i,j,color)
 					match_and_add_to_matches(i,j)
 
-func match_all_in_row(column,row,color_of_bomb):
-	emit_signal("check_goal","row")
-	emit_signal("check_goal","striped")
-	for i in width :
-		if array[i][row]!=null and !is_piece_sinker(i,row) and array[i][row].matched==false:
-			
-			if array[i][row]!=null and array[i][row].matched==false:
-				if array[i][row].is_column_bomb:
-					array[i][row].matched=true
-					match_all_in_column(i,row,color_of_bomb)
-					
-			if array[i][row]!=null and array[i][row].matched==false:
-				if array[i][row].is_adjacent_bomb:
-					find_adjacent_pieces(i,row,color_of_bomb)
-					
-			if array[i][row]!=null and array[i][row].matched==false:
-				if array[i][row].is_color_bomb:
-					match_color(color_of_bomb)
-				
-	destroy_specials_row(column,row)
-	print("MAIR",row)
-
-func match_all_in_column(column,row,color_of_bomb) :
-	print('match_all_in_column')
-	emit_signal("check_goal","column")
-	emit_signal("check_goal","striped")
-	for i in height :
-		if array[column][i] !=null and !is_piece_sinker(column,i) and array[column][i].matched==false :
-			
-			if array[column][i]!=null and array[column][i].matched==false:
-				if array[column][i].is_row_bomb:
-					array[column][i].matched=true
-					match_all_in_row(i,row,color_of_bomb)
-				
-			if array[column][i]!=null and array[column][i].matched==false:
-				if array[column][i].is_adjacent_bomb:
-					find_adjacent_pieces(column,i,color_of_bomb)
-					
-			if array[column][i]!=null and array[column][i].matched==false:
-				if array[column][i].is_color_bomb:
-					match_color(color_of_bomb)
-				
-	destroy_specials_column(column,row)
-	print('MAIC',column)
-
 func find_adjacent_pieces(column,row,color_of_bomb):
 	emit_signal("check_goal","adjacent")
 	emit_signal("check_goal","striped")
+	objective_effect_animator("adjacent",column,row)
+	objective_effect_animator("striped",column,row)
 	#-1,0,1
 	for i in range(-1,+2):
 		for j in range(-1,2):
 			if is_in_grid(Vector2(column+i,row+j)):
 				if array[column+i][row+j]!=null and !is_piece_sinker(column+i,row+j) and array[column+i][row+j].matched==false :
-					if array[column+i][row+j].is_row_bomb:
-						match_all_in_row(i,j,color_of_bomb)
-					if array[column+i][row+j].is_column_bomb:
-						match_all_in_column(i,j,color_of_bomb)
-					if array[column+i][row+j].is_color_bomb:
-						match_color(color_of_bomb)
+					if array[column+i][row+j]!=null:
+						if array[column+i][row+j].is_row_bomb:
+							match_all_in_row(column+i,row+j)
+					if array[column+i][row+j]!=null:
+						if array[column+i][row+j].is_column_bomb:
+							match_all_in_column(column+i,row+j)
+					if array[column+i][row+j]!=null:
+						if array[column+i][row+j].is_color_bomb:
+							match_color(color_of_bomb)
+					if array[column+i][row+j]!=null:
+						if array[column+i][row+j].is_adjacent_bomb:
+							destroy_specials_adjacent(column+i,row+j,color_of_bomb)
 	destroy_specials_adjacent(column,row,color_of_bomb)
 
 func clear_board():
+	print("1")
 	for i in width :
 		for j in height :
-			print(array[i][j])
-			if array[i][j]!=null and !is_piece_sinker(i,j):
+			if !is_piece_sinker(i,j):
 				if check_if_blocker(i,j):
-					damage_special(i,j)
+					damage_special(i,j,true)
 				else:
 					match_and_add_to_matches(i,j)
-
+	get_parent().get_node("collapse_timer").start()
+	
 func check_if_blocker(column,row):
 #	print(column,row)
 	for i in concrete_spaces.size():
@@ -2623,25 +2908,25 @@ func check_concrete(column,row):
 
 func check_blocker(column,row):
 		#check right
-		if column<width-1 :
+		if column+1<width and row<height :
 			if array[column+1][row]!=null:
 				if array[column+1][row].color=="blocker":
 					array[column+1][row].queue_free()
 					array[column+1][row]=null
 		#check left
-		if column>0 :
+		if column>0 and row<width:
 			if array[column-1][row]!=null:
 				if array[column-1][row].color=="blocker":
 					array[column-1][row].queue_free()
 					array[column-1][row]=null
 		#check up 
-		if row<height-1 :
+		if column<height and row+1<width :
 			if array[column][row+1]!=null:
 				if array[column][row+1].color=="blocker":
 					array[column][row+1].queue_free()
 					array[column][row+1]=null
 		#check down
-		if row>0 :
+		if column<height and row>0 :
 			if array[column][row-1]!=null:
 				if array[column][row-1].color=="blocker":
 					array[column][row-1].queue_free()
@@ -2662,34 +2947,53 @@ func check_slime(column,row):
 		if row>0 :
 			damage_slime(column,row-1)
 
-signal collapse_done
+var sinker_flag
 func collapse_columns():
-	SoundManager.play_fixed_sound("cascade_"+str(streak))
-	SoundManager.play_fixed_sound("refill_"+str(streak))
-	for i in width:
-		for j in height:
-			if array[i][j]==null and !restricted_fill(Vector2(i,j)): #and doesnt have restricted spaces above
-				for k in range(j+1,height):
-					if array[i][k]!=null:
+	sinker_flag=false
+	if state!=find:
+		
+		state=wait
+	#	print('COLLAPSE_COLUMNS')
+		if streak==12 or streak>12:
+			SoundManager.play_fixed_sound("cascade_"+str(12))
+		else:
+			SoundManager.play_fixed_sound("cascade_"+str(streak))
+		if streak==4 or streak>4:
+			SoundManager.play_fixed_sound("refill_"+str(4))
+		else:
+			SoundManager.play_fixed_sound("refill_"+str(streak))
+			
+		for i in width:
+			for j in height:
+				if array[i][j]==null and !restricted_fill(Vector2(i,j)) and !restricted_slide(Vector2(i,j)):
+					for k in range(j+1,height):
+						if array[i][k]!=null and !restricted_slide(Vector2(i,k)):
 
-						if !restricted_fill_checker(i,j,k):
-							array[i][k].move(grid_to_pixel(i,j))
-							array[i][j]=array[i][k]
-							array[i][k]=null
-							break
-						else: #there is a restricted fill between j,k
-							var t=restricted_fill_finder(i,j,k)
-							if t==null:
-								break
-							else:
-								print('T:',t)
-								array[i][k].move(grid_to_pixel(i,t))
-								array[i][t]=array[i][k]
+							if !restricted_fill_checker(i,j,k):
+								array[i][k].move(grid_to_pixel(i,j))
+								array[i][j]=array[i][k]
 								array[i][k]=null
 								break
-	destroy_sinkers()
-	get_parent().get_node("refill_timer").start()
-	emit_signal("collapse_done")
+							else: #there is a restricted fill between j,k
+								var t=restricted_fill_finder(i,j,k)
+								if t==null:
+									break
+								else:
+									print('T:',t)
+									array[i][k].move(grid_to_pixel(i,t))
+									array[i][t]=array[i][k]
+									array[i][k]=null
+		for i in width:
+			for j in height:
+				if array[i][j]!=null:
+					if array[i][j].is_sinker:
+						sinker_flag=true
+						print("COLLAPSE_FOUND_SINKER")
+		if sinker_flag:
+			destroy_sinkers()
+						
+		refill_columns_2()
+	#	print("COLLAPSE_COLUMNS_DONE")
 
 var rest_fill=false
 func restricted_fill_checker(i,j,k):
@@ -2712,86 +3016,99 @@ func restricted_fill_finder(i,j,k):
 				if array[i][t]==null and !restricted_fill(Vector2(i,t)):
 					return t
 
-#refill_timer => refill_columns_2 => refill_columns => after_refill
-func refill_columns_2(arg=true):
-#	await get_tree().create_timer(.2).timeout
-	for i in width:
-		for j in height:
-			if array[i][j]==null and !restricted_fill(Vector2(i,j)):
-				
-				if i-1>=0 and j+1<height and i+1<width and j+1<height:
+#used in refill columns checks if above j is not restricted 
+var restriction_flag
+func above_restriction_checker(i,j):
+	return false
+#	restriction_flag=false
+#	for h in range(j,height):
+#			restriction_flag=true
+#	if restriction_flag:
+#		return true
+#	else:
+#		return false
+
+#collapse_columns => refill_columns_2 => refill_columns => after_refill
+func refill_columns_2():
+	if state!=find:
+#		await get_tree().create_timer(.1).timeout
+	#	print("REFILL_2")
+		for i in width:
+			for j in height:
+				if array[i][j]==null and !restricted_fill(Vector2(i,j)) and !restricted_slide(Vector2(i,j)):
 					
-					if array[i-1][j+1]!=null and !restricted_fill(Vector2(i-1,j+1)):
-						array[i-1][j+1].move(grid_to_pixel(i,j))
-						array[i][j]=array[i-1][j+1]
-						array[i-1][j+1]=null
-						print("2: ",i,j)
-						refill_columns_2(false)
-				
-					elif array[i+1][j+1]!=null and !restricted_fill(Vector2(i+1,j+1)):
-						array[i+1][j+1].move(grid_to_pixel(i,j))
-						array[i][j]=array[i+1][j+1]
-						array[i+1][j+1]=null
-						print("1: ",i,j)
-						refill_columns_2(false)
-				#
-				
-				elif i-1>=0 and j+1<height:
-					if array[i-1][j+1]!=null and !restricted_fill(Vector2(i-1,j+1)):
-						array[i-1][j+1].move(grid_to_pixel(i,j))
-						array[i][j]=array[i-1][j+1]
-						array[i-1][j+1]=null
-						print("2: ",i,j)
-						refill_columns_2(false)
+					if i-1>=0 and j+1<height and i+1<width and j+1<height:
 						
+						if array[i-1][j+1]!=null and !restricted_fill(Vector2(i-1,j+1)) and !restricted_slide(Vector2(i-1,j+1)):
+							array[i-1][j+1].move(grid_to_pixel(i,j))
+							array[i][j]=array[i-1][j+1]
+							array[i-1][j+1]=null
+	#						print("2: ",i,j)
+#							await get_tree().create_timer(.05).timeout
+							collapse_columns()
+					
+						elif array[i+1][j+1]!=null and !restricted_fill(Vector2(i+1,j+1)) and !restricted_slide(Vector2(i+1,j+1)):
+							array[i+1][j+1].move(grid_to_pixel(i,j))
+							array[i][j]=array[i+1][j+1]
+							array[i+1][j+1]=null
+	#						print("1: ",i,j)
+#							await get_tree().create_timer(.05).timeout
+							collapse_columns()
 				
-				elif i+1<width and j+1<height:
-					if array[i+1][j+1]!=null and !restricted_fill(Vector2(i+1,j+1)):
-						array[i+1][j+1].move(grid_to_pixel(i,j))
-						array[i][j]=array[i+1][j+1]
-						array[i+1][j+1]=null
-						print("1: ",i,j)
-						refill_columns_2(false)
-						
-	if arg==true:
-		refill_columns()
+					elif i-1>=0 and j+1<height:
+						if array[i-1][j+1]!=null and !restricted_fill(Vector2(i-1,j+1)) and !restricted_slide(Vector2(i-1,j+1)):
+							array[i-1][j+1].move(grid_to_pixel(i,j))
+							array[i][j]=array[i-1][j+1]
+							array[i-1][j+1]=null
+	#						print("2: ",i,j)
+#							await get_tree().create_timer(.05).timeout
+							collapse_columns()
+					
+					elif i+1<width and j+1<height:
+						if array[i+1][j+1]!=null and !restricted_fill(Vector2(i+1,j+1)) and !restricted_slide(Vector2(i+1,j+1)):
+							array[i+1][j+1].move(grid_to_pixel(i,j))
+							array[i][j]=array[i+1][j+1]
+							array[i+1][j+1]=null
+	#						print("1: ",i,j)
+#							await get_tree().create_timer(.05).timeout
+							collapse_columns()
+	#	print("REFILL_2_DONE")
+	refill_columns()
 
 signal refill_is_done
+#arg makes sure moves -1 only applies once
 func refill_columns():
-	print("refill_columns")
-#	await "collapse_done"
-	streak+=1
-	for i in width:
-		for j in height:
-			if array[i][j]==null and !restricted_fill(Vector2(i,j)):
-				if !above_restriction_checker(i,j):
-					#
-					var rand = randi_range(0,main_pieces.size())-1
-					var piece = main_pieces[rand].instantiate()
-					var loops=0
-					while match_at(i,j,piece.color) and loops<100:
-						rand=randi_range(0,main_pieces.size())-1
-						loops+=1
-						piece=main_pieces[rand].instantiate()
-					#instance that piece from the array
-					add_child(piece)
-					#0,0 is top left j-x is above
-					piece.position = grid_to_pixel(i,j+height_offset)
-					piece.move(grid_to_pixel(i,j))
-					array[i][j]=piece
-					#
-	#add a condition runs multiple times 
-	emit_signal("refill_is_done")
-	after_refill()
+#	print("REFILL_COLUMNS")
+	if state!=find:
+		state=wait
+		streak+=1
+		for i in width:
+			for j in height:
+				if array[i][j]==null and !restricted_fill(Vector2(i,j)) and !restricted_slide(Vector2(i,j)):
+					if !above_restriction_checker(i,j):
+						
+						var rand = randi_range(0,weighted_array.size())-1
+						var piece = weighted_array[rand].instantiate()
+						var loops=0
+						while match_at(i,j,piece.color) and loops<100:
+							rand=randi_range(0,weighted_array.size())-1
+							loops+=1
+							piece=weighted_array[rand].instantiate()
+						#instance that piece from the array
+						add_child(piece)
+						#0,0 is top left j-x is above
+						piece.position = grid_to_pixel(i,j+height_offset)
+						piece.move(grid_to_pixel(i,j))
+						array[i][j]=piece
+						#
 
+	after_refill()
+		
 var slime_generated=false
 
 func after_refill():
 	bombs_were_found_after_swap=false
 	find_and_spawn_bombs(false,true)
-#	await refill_is_done
-	print("after_refill")
-	
 	if !damaged_slime and !slime_generated:
 		generate_slime()
 		slime_generated=true
@@ -2803,8 +3120,6 @@ func after_refill():
 		print("started_shuffle_timer")
 		emit_signal("deadlocked")
 	if state!=win:
-		current_counter_value-=1
-		emit_signal("update_counter",-1)
 		if current_counter_value==0:
 			state=wait
 			get_parent().get_node("UI/moves_store").visible=true
@@ -2820,25 +3135,9 @@ func after_refill():
 	$hint_timer.start()
 	if current_sinkers!=0:
 		sinker_matcher()
-	for i in width:
-		for j in height:
-			if array [i][j] !=null :
-				if match_at(i,j,array[i][j].color) or array[i][j].matched :
-					return
 	streak=1
-
-#used in refill columns checks if above j is not restricted 
-#true means above is restricted
-var restriction_flag
-func above_restriction_checker(i,j):
-	restriction_flag=false
-	for h in range(j,height+1):
-		if restricted_fill(Vector2(i,h)):
-			restriction_flag=true
-	if restriction_flag:
-		return true
-	else:
-		return false
+	state=move
+#	print("AFFTER_REFILL_IS_DONE")
 
 func sinker_matcher():
 	for i in width:
@@ -2984,12 +3283,8 @@ func booster_input(boostertype):
 			state=move
 
 func _on_collapse_timer_timeout():
-	collapse_columns()
-	print('collapse_collumns')
-
-func _on_refill_timer_timeout():
-	refill_columns_2()
-	print('refill_2')
+	if state!=find:
+		collapse_columns()
 
 func booster_input2():
 	if Input.is_action_just_pressed("ui_touch"):
@@ -3001,18 +3296,30 @@ func booster_input2():
 				array[temp_grid.x][temp_grid.y].matched=true
 		state=move
 
+var sinker_level
+func sinker_level_finder(i):
+		for j in range(0,height-1):
+			if array[i][j]!=null:
+				sinker_level=j
+				return sinker_level
+
 func destroy_sinkers():
-	for i in width-1 :
-		if array[i][0]!=null:
-			if array[i][0].color=="sinker" :
-#				array[i][0]==null
-#				array[i][0].queue_free()
-				match_and_add_to_matches(i,0)
+	for i in width :
+		sinker_level_finder(i)
+		if array[i][sinker_level]!=null:
+			if array[i][sinker_level].color=="sinker" :
+				array[i][sinker_level]==null
+				array[i][sinker_level].queue_free()
+				match_and_add_to_matches(i,sinker_level)
 				current_sinkers-=1
 				get_parent().get_node("destroy_timer").start()
 				print("destroy_sinkers")
 				SoundManager.play_fixed_sound("damage_slime")
+				emit_signal("check_goal","sinker")
+				objective_effect_animator("sinker",i,sinker_level)
+				effect_animator(array[i][sinker_level].color,i,sinker_level)
 				Input.vibrate_handheld(100)
+				get_parent().get_node("collapse_timer").start()
 
 func remove_concrete(place):
 	for i in range(concrete_spaces.size()-1,-1,-1) :
@@ -3040,8 +3347,8 @@ func remove_slime(place):
 			effect_animator("slime",place.x,place.y)
 
 func switch_pieces(place,direction,array_choice):
-	if is_in_grid(place) and !restricted_fill(place) :
-		if is_in_grid(place+direction) and !restricted_fill(place+direction):
+	if is_in_grid(place) and !restricted_fill(place) and !restricted_move(place):
+		if is_in_grid(place+direction) and !restricted_fill(place+direction) and !restricted_move(place+direction):
 			#first hold the place to swap with
 			var holder=array_choice[place.x+direction.x][place.y+direction.y]
 			#then set the swap spot as the original piece
@@ -3062,17 +3369,29 @@ func is_deadlocked():
 	clone_array=copy_array(array)
 	for i in width:
 		for j in height:
-			if array[i][j]!=null and !restricted_fill(Vector2(i,j)):
+			if array[i][j]!=null and !restricted_fill(Vector2(i,j)) and !restricted_move(Vector2(i,j)):
 				
 				#switch and check right
-				if !restricted_fill(Vector2(i+1,j)):
+				if !restricted_fill(Vector2(i+1,j)) and !restricted_move(Vector2(i+1,j)):
 					if await switch_and_check(Vector2(i,j),Vector2(1,0),clone_array)==true:
 						print("checkrightfound"+str(i,j))
 						return false
 						
 				#switch and check up
-				if !restricted_fill(Vector2(i,j+1)):
+				if !restricted_fill(Vector2(i,j+1)) and !restricted_move(Vector2(i,j+1)):
 					if await switch_and_check(Vector2(i,j),Vector2(0,1),clone_array)==true:
+						print("checkupfound"+str(i,j))
+						return false
+				
+					#switch and check left
+				if !restricted_fill(Vector2(i-1,j)) and !restricted_move(Vector2(i-1,j)):
+					if await switch_and_check(Vector2(i,j),Vector2(-1,0),clone_array)==true:
+						print("checkrightfound"+str(i,j))
+						return false
+						
+				#switch and check down
+				if !restricted_fill(Vector2(i,j-1)) and !restricted_move(Vector2(i,j-1)):
+					if await switch_and_check(Vector2(i,j),Vector2(0,-1),clone_array)==true:
 						print("checkupfound"+str(i,j))
 						return false
 						
@@ -3080,7 +3399,14 @@ func is_deadlocked():
 			if clone_array[i][j]!=null and !restricted_fill(Vector2(i,j)):
 				#color
 				if clone_array[i][j].is_color_bomb:
-					return false
+					if clone_array[i+1][j]!=null and !restricted_move(Vector2(i,j)):
+						return false
+					if clone_array[i-1][j]!=null and !restricted_move(Vector2(i,j)):
+						return false
+					if clone_array[i][j+1]!=null and !restricted_move(Vector2(i,j)):
+						return false
+					if clone_array[i][j-1]!=null and !restricted_move(Vector2(i,j)):
+						return false
 					
 				#fishadjacent
 				if clone_array[i][j].is_fish:
@@ -3255,47 +3581,72 @@ func clear_and_store_board():
 	var holder_array=[]
 	for i in width:
 		for j in height:
-			if array[i][j]!=null and !restricted_fill(Vector2(i,j)) and !is_piece_sinker(i,j) and !is_piece_special(i,j):
+			if array[i][j]!=null and !restricted_fill(Vector2(i,j)) and !is_piece_sinker(i,j) and !is_piece_special(i,j) and !is_piece_special(i,j) and !restricted_slide(Vector2(i,j)):
 				holder_array.append(array[i][j])
 				array[i][j]=null
 	return holder_array
 
-
+var running
 func shuffle_board():
-#	SoundManager.play_fixed_sound("shuffle")
-	var holder_array=clear_and_store_board()
-	print("shuffling")
-	for i in width:
-		for j in height:
-			if !restricted_fill(Vector2(i,j)) and array[i][j]==null and !is_piece_sinker(i,j) and !is_piece_fish(i,j) and !is_piece_special(i,j):
-				#choose random number and store it 
-				var t=holder_array.size()
-				var rand = randi_range(0,t-1)
-				var piece = holder_array[rand]
-				var loops=0
-				while match_at(i,j,piece.color) and loops<100:
-					rand=randi_range(0,holder_array.size()-1)
-					loops+=1
-					piece=holder_array[rand]
-				piece.move(grid_to_pixel(i,j))
-				array[i][j]=piece
-				piece.position = grid_to_pixel(i,j)
-				holder_array.remove_at(rand)
-	if await is_deadlocked():
-		await get_tree().create_timer(1.5).timeout
-		shuffle_board()
-		pass
-		sinker_matcher()
-	state=move
+	await get_tree().create_timer(1).timeout
+	if running!=true:
+		running=true
+		for k in width:
+			for p in height:
+				if array[k][p]==null and !restricted_fill(Vector2(k,p)):
+					return
+			state=shuffle
+			#crashes if there are null spaces after refill 
+		#	SoundManager.play_fixed_sound("shuffle")
+			var holder_array=clear_and_store_board()
+			var empty=0
+			var empties=[]
+			var holdies=[]
+			print("SHUFFLING")
+			for i in width:
+				for j in height:
+					if array[i][j]==null and !restricted_fill(Vector2(i,j)) and !is_piece_sinker(i,j) and !is_piece_fish(i,j) and !is_piece_special(i,j) and !restricted_slide(Vector2(i,j)):
+						empties.append(Vector2(i,j))
+	#					print("EMPTIES: ",empties,empties.size())
+						#choose random number and store it
+	#					print("HOLDER ARRAY:",holder_array,holder_array.size())
+						var t=holder_array.size()-1
+						var rand = randi_range(0,t)
+						if t<0:
+							return
+						var piece = holder_array[rand]
+						var loops=0
+						while match_at(i,j,piece.color) and loops<100:
+							rand=randi_range(0,t-1)
+							loops+=1
+							piece=holder_array[rand]
+						piece.move(grid_to_pixel(i,j))
+						array[i][j]=piece
+						piece.position = grid_to_pixel(i,j)
+						holder_array.remove_at(rand)
+						
+			if await is_deadlocked():
+				if running!=true:
+					print("DEADLOCK A")
+					await get_tree().create_timer(1).timeout
+					shuffle_board()
+					collapse_columns()
+					running=false
+				
+			print("SHUFFLE B")
+			sinker_matcher()
+			collapse_columns() #experimental
+			state=move
+	running=false
 	
 var hint_holder=[[],[],[],[]]
-func generate_hint(query=false):
+func generate_hint(query=true):
 	hint_holder=[[],[],[],[]]
-	if state==move:
+	if state==move and state!=find:
 		for i in width-1:
 			for j in height-1:
 				if array[i][j]!=null and !restricted_fill(Vector2(i,j)) and array[i][j].is_special==false and array[i][j].color!="blocker" and array[i][j].is_fish!=true and !restricted_move(Vector2(i,j)):
-					
+
 					if await switch_and_check(Vector2(i,j),Vector2(1,0),array):
 						if source_color==array[i][j].color:
 							hint_holder[0].append(array[i][j])
@@ -3316,10 +3667,12 @@ func generate_hint(query=false):
 			
 		for i in width:
 			for j in height:
-				if array[i][j]!=null:
+				if array[i][j]!=null and !array[i][j].is_sinker:
+					if array[i][j].color=="color":
+						hint_holder[0].append(array[i][j])
 					if array[i][j].is_special:
 						#check up
-						if j+1<width:
+						if j+1<height:
 							if array[i][j+1]!=null:
 								if array[i][j+1].is_special:
 									hint_holder[0].append(array[i][j])
@@ -3344,6 +3697,7 @@ func generate_hint(query=false):
 									hint_holder[0].append(array[i+1][j])
 				
 		if await is_deadlocked():
+#			await get_tree().create_timer(3).timeout
 			shuffle_board()
 
 		
@@ -3364,8 +3718,11 @@ func generate_hint(query=false):
 			hint_piece.wiggle2()
 		var hint_pos=pixel_to_grid(hint_piece.position.x,hint_piece.position.y)
 		var pieces_that_match_with_hint=[]
-		if !restricted_fill(Vector2(hint_pos.x,hint_pos.y)):
-			if rand==0: #right
+		
+		print(Vector2(hint_pos.x,hint_pos.y))
+		
+		if rand==0: #right
+			if !restricted_move(Vector2(hint_pos.x+1,hint_pos.y)):
 				#checks right
 				if hint_pos.x+3<width:
 					if array[hint_pos.x+2][hint_pos.y]!=null and array[hint_pos.x+3][hint_pos.y]!=null:
@@ -3373,12 +3730,14 @@ func generate_hint(query=false):
 							for k in range(2,8):
 								if hint_pos.x+k<width and hint_pos.x+k>=0:
 									if k==2:
-										if hint_piece.color==array[hint_pos.x+k][hint_pos.y].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y])
+										if array[hint_pos.x+k][hint_pos.y]!=null:
+											if hint_piece.color==array[hint_pos.x+k][hint_pos.y].color:
+													pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y])
 									else:
-										if !restricted_fill(Vector2(hint_pos.x+k,hint_pos.y)) and !restricted_fill(Vector2(hint_pos.x+k-1,hint_pos.y)):
-											if hint_piece.color==array[hint_pos.x+k][hint_pos.y].color and hint_piece.color==array[hint_pos.x+k-1][hint_pos.y].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y])
+										if array[hint_pos.x+k][hint_pos.y]!=null and array[hint_pos.x+k-1][hint_pos.y]!=null:
+											if !restricted_fill(Vector2(hint_pos.x+k,hint_pos.y)) and !restricted_fill(Vector2(hint_pos.x+k-1,hint_pos.y)):
+												if hint_piece.color==array[hint_pos.x+k][hint_pos.y].color and hint_piece.color==array[hint_pos.x+k-1][hint_pos.y].color:
+													pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y])
 							if query:
 								print("right-right")
 				#checks up
@@ -3388,12 +3747,14 @@ func generate_hint(query=false):
 							for k in range(1,8):
 								if hint_pos.y+k<height and hint_pos.y+k>=0:
 									if k==1:
-										if hint_piece.color==array[hint_pos.x+1][hint_pos.y+k].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x+1][hint_pos.y+k])
-									else:
-										if !restricted_fill(Vector2(hint_pos.x+1,hint_pos.y+k)) and !restricted_fill(Vector2(hint_pos.x+1,hint_pos.y+k-1)):
-											if hint_piece.color==array[hint_pos.x+1][hint_pos.y+k].color and hint_piece.color==array[hint_pos.x+1][hint_pos.y+k-1].color:
+										if array[hint_pos.x+1][hint_pos.y+k]!=null:
+											if hint_piece.color==array[hint_pos.x+1][hint_pos.y+k].color:
 													pieces_that_match_with_hint.append(array[hint_pos.x+1][hint_pos.y+k])
+									else:
+										if array[hint_pos.x+1][hint_pos.y+k]!=null and array[hint_pos.x+1][hint_pos.y+k-1]!=null:
+											if !restricted_fill(Vector2(hint_pos.x+1,hint_pos.y+k)) and !restricted_fill(Vector2(hint_pos.x+1,hint_pos.y+k-1)):
+												if hint_piece.color==array[hint_pos.x+1][hint_pos.y+k].color and hint_piece.color==array[hint_pos.x+1][hint_pos.y+k-1].color:
+														pieces_that_match_with_hint.append(array[hint_pos.x+1][hint_pos.y+k])
 							if query:
 								print("right-up")
 				#checks down
@@ -3403,12 +3764,14 @@ func generate_hint(query=false):
 							for k in range(1,8):
 								if hint_pos.y-k<height and hint_pos.y-k>=0:
 									if k==1:
-										if hint_piece.color==array[hint_pos.x+1][hint_pos.y-k].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x+1][hint_pos.y-k])
+										if array[hint_pos.x+1][hint_pos.y-k]!=null:
+											if hint_piece.color==array[hint_pos.x+1][hint_pos.y-k].color:
+													pieces_that_match_with_hint.append(array[hint_pos.x+1][hint_pos.y-k])
 									else:
-										if !restricted_fill(Vector2(hint_pos.x+1,hint_pos.y-k)) and !restricted_fill(Vector2(hint_pos.x+1,hint_pos.y-k+1)):
-											if hint_piece.color==array[hint_pos.x+1][hint_pos.y-k].color and hint_piece.color==array[hint_pos.x+1][hint_pos.y-k+1].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x+1][hint_pos.y-k])
+										if array[hint_pos.x+1][hint_pos.y-k]!=null and array[hint_pos.x+1][hint_pos.y-k+1]!=null:
+											if !restricted_fill(Vector2(hint_pos.x+1,hint_pos.y-k)) and !restricted_fill(Vector2(hint_pos.x+1,hint_pos.y-k+1)):
+												if hint_piece.color==array[hint_pos.x+1][hint_pos.y-k].color and hint_piece.color==array[hint_pos.x+1][hint_pos.y-k+1].color:
+													pieces_that_match_with_hint.append(array[hint_pos.x+1][hint_pos.y-k])
 							if query:
 								print("right-down")
 				#checks up and down
@@ -3419,20 +3782,25 @@ func generate_hint(query=false):
 								if hint_pos.y+k<height and hint_pos.y+k>=0:
 									if hint_pos.y-k<height and hint_pos.y-k>=0:
 										if k==1:
-											if hint_piece.color==array[hint_pos.x+1][hint_pos.y+k].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x+1][hint_pos.y+k])
-											if hint_piece.color==array[hint_pos.x+1][hint_pos.y-k].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x+1][hint_pos.y-k])
-										else:
-											if !restricted_fill(Vector2(hint_pos.x+1,hint_pos.y+k)) and !restricted_fill(Vector2(hint_pos.x+1,hint_pos.y+k-1)):
-												if hint_piece.color==array[hint_pos.x+1][hint_pos.y+k].color and hint_piece.color==array[hint_pos.x+1][hint_pos.y+k-1].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x+1][hint_pos.y+k])
-											if !restricted_fill(Vector2(hint_pos.x+1,hint_pos.y-k)) and !restricted_fill(Vector2(hint_pos.x+1,hint_pos.y-k+1)):
-												if hint_piece.color==array[hint_pos.x+1][hint_pos.y-k].color and hint_piece.color==array[hint_pos.x+1][hint_pos.y-k+1].color:
+											if array[hint_pos.x+1][hint_pos.y+k]!=null:
+												if hint_piece.color==array[hint_pos.x+1][hint_pos.y+k].color:
+														pieces_that_match_with_hint.append(array[hint_pos.x+1][hint_pos.y+k])
+											if array[hint_pos.x+1][hint_pos.y-k]!=null:
+												if hint_piece.color==array[hint_pos.x+1][hint_pos.y-k].color:
 														pieces_that_match_with_hint.append(array[hint_pos.x+1][hint_pos.y-k])
+										else:
+											if array[hint_pos.x+1][hint_pos.y+k]!=null and array[hint_pos.x+1][hint_pos.y+k-1]!=null:
+												if !restricted_fill(Vector2(hint_pos.x+1,hint_pos.y+k)) and !restricted_fill(Vector2(hint_pos.x+1,hint_pos.y+k-1)):
+													if hint_piece.color==array[hint_pos.x+1][hint_pos.y+k].color and hint_piece.color==array[hint_pos.x+1][hint_pos.y+k-1].color:
+														pieces_that_match_with_hint.append(array[hint_pos.x+1][hint_pos.y+k])
+											if array[hint_pos.x+1][hint_pos.y-k]!=null and array[hint_pos.x+1][hint_pos.y-k+1]!=null:
+												if !restricted_fill(Vector2(hint_pos.x+1,hint_pos.y-k)) and !restricted_fill(Vector2(hint_pos.x+1,hint_pos.y-k+1)):
+													if hint_piece.color==array[hint_pos.x+1][hint_pos.y-k].color and hint_piece.color==array[hint_pos.x+1][hint_pos.y-k+1].color:
+															pieces_that_match_with_hint.append(array[hint_pos.x+1][hint_pos.y-k])
 							if query:
 								print("right-updown")
-			if rand==1: #left
+		if rand==1: #left
+			if !restricted_move(Vector2(hint_pos.x-1,hint_pos.y)):
 				#checks left
 				if hint_pos.x-3>=0:
 					if array[hint_pos.x-2][hint_pos.y]!=null and array[hint_pos.x-3][hint_pos.y]!=null:
@@ -3440,13 +3808,15 @@ func generate_hint(query=false):
 							for k in range(2,8):
 								if hint_pos.x-k<width and hint_pos.x-k>=0:
 									if k==2:
-										if !restricted_fill(Vector2(hint_pos.x-k,hint_pos.y)):
-											if hint_piece.color==array[hint_pos.x-k][hint_pos.y].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y])
+										if array[hint_pos.x-k][hint_pos.y]!=null:
+											if !restricted_fill(Vector2(hint_pos.x-k,hint_pos.y)):
+												if hint_piece.color==array[hint_pos.x-k][hint_pos.y].color:
+														pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y])
 									else:
-										if !restricted_fill(Vector2(hint_pos.x-k,hint_pos.y)):
-											if hint_piece.color==array[hint_pos.x-k][hint_pos.y].color and hint_piece.color==array[hint_pos.x-k+1][hint_pos.y].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y])
+										if array[hint_pos.x-k][hint_pos.y]!=null and array[hint_pos.x-k+1][hint_pos.y]!=null:
+											if !restricted_fill(Vector2(hint_pos.x-k,hint_pos.y)):
+												if hint_piece.color==array[hint_pos.x-k][hint_pos.y].color and hint_piece.color==array[hint_pos.x-k+1][hint_pos.y].color:
+													pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y])
 							if query:
 								print("left-left")
 				#checks up
@@ -3456,12 +3826,14 @@ func generate_hint(query=false):
 							for k in range(1,8):
 								if hint_pos.y+k<height and hint_pos.y+k>=0:
 									if k==1:
-										if hint_piece.color==array[hint_pos.x-1][hint_pos.y+k].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x-1][hint_pos.y+k])
+										if array[hint_pos.x-1][hint_pos.y+k]!=null:
+											if hint_piece.color==array[hint_pos.x-1][hint_pos.y+k].color:
+													pieces_that_match_with_hint.append(array[hint_pos.x-1][hint_pos.y+k])
 									else:
-										if !restricted_fill(Vector2(hint_pos.x-1,hint_pos.y+k)) and !restricted_fill(Vector2(hint_pos.x-1,hint_pos.y+k-1)):
-											if hint_piece.color==array[hint_pos.x-1][hint_pos.y+k].color and hint_piece.color==array[hint_pos.x-1][hint_pos.y+k-1].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x-1][hint_pos.y+k])
+										if array[hint_pos.x-1][hint_pos.y+k]!=null and array[hint_pos.x-1][hint_pos.y+k-1]!=null: 
+											if !restricted_fill(Vector2(hint_pos.x-1,hint_pos.y+k)) and !restricted_fill(Vector2(hint_pos.x-1,hint_pos.y+k-1)):
+												if hint_piece.color==array[hint_pos.x-1][hint_pos.y+k].color and hint_piece.color==array[hint_pos.x-1][hint_pos.y+k-1].color:
+													pieces_that_match_with_hint.append(array[hint_pos.x-1][hint_pos.y+k])
 							if query:
 								print("left-up")
 				#checks down
@@ -3471,34 +3843,41 @@ func generate_hint(query=false):
 							for k in range(1,8):
 								if hint_pos.y-k<height and hint_pos.y-k>=0:
 									if k==1:
-										if hint_piece.color==array[hint_pos.x-1][hint_pos.y-k].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x-1][hint_pos.y-k])
+										if array[hint_pos.x-1][hint_pos.y-k]!=null:
+											if hint_piece.color==array[hint_pos.x-1][hint_pos.y-k].color:
+													pieces_that_match_with_hint.append(array[hint_pos.x-1][hint_pos.y-k])
 									else:
-										if !restricted_fill(Vector2(hint_pos.x-1,hint_pos.y-k)) and !restricted_fill(Vector2(hint_pos.x-1,hint_pos.y-k+1)):
-											if hint_piece.color==array[hint_pos.x-1][hint_pos.y-k].color and hint_piece.color==array[hint_pos.x-1][hint_pos.y-k+1].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x-1][hint_pos.y-k])
+										if array[hint_pos.x-1][hint_pos.y-k]!=null and array[hint_pos.x-1][hint_pos.y-k+1]!=null:
+											if !restricted_fill(Vector2(hint_pos.x-1,hint_pos.y-k)) and !restricted_fill(Vector2(hint_pos.x-1,hint_pos.y-k+1)):
+												if hint_piece.color==array[hint_pos.x-1][hint_pos.y-k].color and hint_piece.color==array[hint_pos.x-1][hint_pos.y-k+1].color:
+													pieces_that_match_with_hint.append(array[hint_pos.x-1][hint_pos.y-k])
 				#checks up and down
 				if hint_pos.x-1>=0 and hint_pos.y-1>=0 and hint_pos.y+1<height:
 					if array[hint_pos.x-1][hint_pos.y+1]!=null and array[hint_pos.x-1][hint_pos.y-1]!=null:
 						if hint_piece.color==array[hint_pos.x-1][hint_pos.y+1].color and hint_piece.color==array[hint_pos.x-1][hint_pos.y-1].color:
 							for k in range(1,8):
 								if hint_pos.y+k<height and hint_pos.y+k>=0:
-									if hint_pos.y+k<height and hint_pos.y-k>=0 and hint_pos.x-1>=0:
+									if hint_pos.y+k<height and hint_pos.y-k>=0 and hint_pos.x-1>=0 and !restricted_move(Vector2(hint_pos.x,hint_pos.y-k)):
 										if k==1:
-											if hint_piece.color==array[hint_pos.x-1][hint_pos.y+k].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x-1][hint_pos.y+k])
-											if hint_piece.color==array[hint_pos.x-1][hint_pos.y-k].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x-1][hint_pos.y-k])
+											if array[hint_pos.x-1][hint_pos.y+k]!=null:
+												if hint_piece.color==array[hint_pos.x-1][hint_pos.y+k].color:
+														pieces_that_match_with_hint.append(array[hint_pos.x-1][hint_pos.y+k])
+											if array[hint_pos.x-1][hint_pos.y-k]!=null:
+												if hint_piece.color==array[hint_pos.x-1][hint_pos.y-k].color:
+														pieces_that_match_with_hint.append(array[hint_pos.x-1][hint_pos.y-k])
 										else:
-											if !restricted_fill(Vector2(hint_pos.x-1,hint_pos.y+k)) and !restricted_fill(Vector2(hint_pos.x-1,hint_pos.y+k-1)):
-												if hint_piece.color==array[hint_pos.x-1][hint_pos.y+k].color and hint_piece.color==array[hint_pos.x-1][hint_pos.y+k-1].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x-1][hint_pos.y+k])
-											if !restricted_fill(Vector2(hint_pos.x-1,hint_pos.y-k)) and !restricted_fill(Vector2(hint_pos.x-1,hint_pos.y-k+1)):
-												if hint_piece.color==array[hint_pos.x-1][hint_pos.y-k].color and hint_piece.color==array[hint_pos.x-1][hint_pos.y-k+1].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x-1][hint_pos.y-k])
+											if array[hint_pos.x-1][hint_pos.y+k]!=null and array[hint_pos.x-1][hint_pos.y+k-1]!=null:
+												if !restricted_fill(Vector2(hint_pos.x-1,hint_pos.y+k)) and !restricted_fill(Vector2(hint_pos.x-1,hint_pos.y+k-1)):
+													if hint_piece.color==array[hint_pos.x-1][hint_pos.y+k].color and hint_piece.color==array[hint_pos.x-1][hint_pos.y+k-1].color:
+														pieces_that_match_with_hint.append(array[hint_pos.x-1][hint_pos.y+k])
+											if array[hint_pos.x-1][hint_pos.y-k]!=null and array[hint_pos.x-1][hint_pos.y-k+1]!=null:
+												if !restricted_fill(Vector2(hint_pos.x-1,hint_pos.y-k)) and !restricted_fill(Vector2(hint_pos.x-1,hint_pos.y-k+1)):
+													if hint_piece.color==array[hint_pos.x-1][hint_pos.y-k].color and hint_piece.color==array[hint_pos.x-1][hint_pos.y-k+1].color:
+														pieces_that_match_with_hint.append(array[hint_pos.x-1][hint_pos.y-k])
 							if query:
 								print("left-updown")
-			if rand==2: #up
+		if rand==2: #up
+			if !restricted_move(Vector2(hint_pos.x,hint_pos.y+1)):
 				#checks up
 				if hint_pos.y+3<height:
 					if array[hint_pos.x][hint_pos.y+2]!=null and array[hint_pos.x][hint_pos.y+3]!=null:
@@ -3506,13 +3885,15 @@ func generate_hint(query=false):
 							for k in range(2,8):
 								if hint_pos.y+k<height and hint_pos.y+k>=0:
 									if k==2:
-										if !restricted_fill(Vector2(hint_pos.x,hint_pos.y+k)):
-											if hint_piece.color==array[hint_pos.x][hint_pos.y+k].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x][hint_pos.y+k])
+										if array[hint_pos.x][hint_pos.y+k]!=null:
+											if !restricted_fill(Vector2(hint_pos.x,hint_pos.y+k)):
+												if hint_piece.color==array[hint_pos.x][hint_pos.y+k].color:
+														pieces_that_match_with_hint.append(array[hint_pos.x][hint_pos.y+k])
 									else:
-										if !restricted_fill(Vector2(hint_pos.x,hint_pos.y+k)):
-											if hint_piece.color==array[hint_pos.x][hint_pos.y+k].color and hint_piece.color==array[hint_pos.x][hint_pos.y+k-1].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x][hint_pos.y+k])
+										if array[hint_pos.x][hint_pos.y+k]!=null and array[hint_pos.x][hint_pos.y+k-1]!=null:
+											if !restricted_fill(Vector2(hint_pos.x,hint_pos.y+k)):
+												if hint_piece.color==array[hint_pos.x][hint_pos.y+k].color and hint_piece.color==array[hint_pos.x][hint_pos.y+k-1].color:
+													pieces_that_match_with_hint.append(array[hint_pos.x][hint_pos.y+k])
 							if query:
 								print("up-up")
 				#checks left
@@ -3522,13 +3903,15 @@ func generate_hint(query=false):
 							for k in range(1,8):
 								if hint_pos.x-k<width and hint_pos.x-k>=0:
 									if k==1:
-										if !restricted_fill(Vector2(hint_pos.x-k,hint_pos.y+1)):
-											if hint_piece.color==array[hint_pos.x-k][hint_pos.y+1].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y+1])
+										if array[hint_pos.x-k][hint_pos.y+1]!=null:
+											if !restricted_fill(Vector2(hint_pos.x-k,hint_pos.y+1)):
+												if hint_piece.color==array[hint_pos.x-k][hint_pos.y+1].color:
+														pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y+1])
 									else:
-										if !restricted_fill(Vector2(hint_pos.x-k,hint_pos.y+1)) and !restricted_fill(Vector2(hint_pos.x-k+1,hint_pos.y+1)):
-											if hint_piece.color==array[hint_pos.x-k][hint_pos.y+1].color and hint_piece.color==array[hint_pos.x-k+1][hint_pos.y+1].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y+1])
+										if array[hint_pos.x-k][hint_pos.y+1]!=null and array[hint_pos.x-k+1][hint_pos.y+1]!=null:
+											if !restricted_fill(Vector2(hint_pos.x-k,hint_pos.y+1)) and !restricted_fill(Vector2(hint_pos.x-k+1,hint_pos.y+1)):
+												if hint_piece.color==array[hint_pos.x-k][hint_pos.y+1].color and hint_piece.color==array[hint_pos.x-k+1][hint_pos.y+1].color:
+													pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y+1])
 							if query:
 								print("up-left")
 				#checks right
@@ -3538,13 +3921,15 @@ func generate_hint(query=false):
 							for k in range(1,8):
 								if hint_pos.x+k<width and hint_pos.x+k>=0:
 									if k==1:
-										if !restricted_fill(Vector2(hint_pos.x+k,hint_pos.y+1)):
-											if hint_piece.color==array[hint_pos.x+k][hint_pos.y+1].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y+1])
+										if array[hint_pos.x+k][hint_pos.y+1]!=null:
+											if !restricted_fill(Vector2(hint_pos.x+k,hint_pos.y+1)):
+												if hint_piece.color==array[hint_pos.x+k][hint_pos.y+1].color:
+														pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y+1])
 									else:
-										if !restricted_fill(Vector2(hint_pos.x+k,hint_pos.y+1)):
-											if hint_piece.color==array[hint_pos.x+k][hint_pos.y+1].color and hint_piece.color==array[hint_pos.x+k-1][hint_pos.y+1].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y+1])
+										if array[hint_pos.x+k][hint_pos.y+1]!=null and array[hint_pos.x+k-1][hint_pos.y+1]!=null:
+											if !restricted_fill(Vector2(hint_pos.x+k,hint_pos.y+1)):
+												if hint_piece.color==array[hint_pos.x+k][hint_pos.y+1].color and hint_piece.color==array[hint_pos.x+k-1][hint_pos.y+1].color:
+													pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y+1])
 							if query:
 								print("up-right")
 				#checks left and right
@@ -3555,20 +3940,25 @@ func generate_hint(query=false):
 								if hint_pos.x+k<width and hint_pos.x+k>=0:
 									if hint_pos.x-k>=0:
 										if k==1:
-											if hint_piece.color==array[hint_pos.x-k][hint_pos.y+1].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y+1])
-											if hint_piece.color==array[hint_pos.x+k][hint_pos.y+1].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y+1])
+											if array[hint_pos.x-k][hint_pos.y+1]!=null and !array[hint_pos.x-k][hint_pos.y+1].is_sinker:
+												if hint_piece.color==array[hint_pos.x-k][hint_pos.y+1].color:
+														pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y+1])
+											if array[hint_pos.x+k][hint_pos.y+1]!=null:
+												if hint_piece.color==array[hint_pos.x+k][hint_pos.y+1].color:
+														pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y+1])
 										else:
-											if !restricted_fill(Vector2(hint_pos.x-k,hint_pos.y+1)) and !restricted_fill(Vector2(hint_pos.x-k+1,hint_pos.y+1)):
-												if hint_piece.color==array[hint_pos.x-k][hint_pos.y+1].color and hint_piece.color==array[hint_pos.x-k+1][hint_pos.y+1].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y+1])
-											if !restricted_fill(Vector2(hint_pos.x+k,hint_pos.y+1)) and !restricted_fill(Vector2(hint_pos.x+k-1,hint_pos.y+1)):
-												if hint_piece.color==array[hint_pos.x+k][hint_pos.y+1].color and hint_piece.color==array[hint_pos.x+k-1][hint_pos.y+1].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y+1])
+											if array[hint_pos.x-k][hint_pos.y+1]!=null and array[hint_pos.x-k+1][hint_pos.y+1]!=null:
+												if !restricted_fill(Vector2(hint_pos.x-k,hint_pos.y+1)) and !restricted_fill(Vector2(hint_pos.x-k+1,hint_pos.y+1)):
+													if hint_piece.color==array[hint_pos.x-k][hint_pos.y+1].color and hint_piece.color==array[hint_pos.x-k+1][hint_pos.y+1].color:
+														pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y+1])
+											if array[hint_pos.x+k][hint_pos.y+1]!=null and array[hint_pos.x+k-1][hint_pos.y+1]!=null:
+												if !restricted_fill(Vector2(hint_pos.x+k,hint_pos.y+1)) and !restricted_fill(Vector2(hint_pos.x+k-1,hint_pos.y+1)):
+													if hint_piece.color==array[hint_pos.x+k][hint_pos.y+1].color and hint_piece.color==array[hint_pos.x+k-1][hint_pos.y+1].color:
+														pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y+1])
 							if query:
 								print("up-leftright")
-			if rand==3: #down
+		if rand==3: #down
+			if !restricted_move(Vector2(hint_pos.x,hint_pos.y-1)):
 				#checks down
 				if hint_pos.y-3>=0:
 					if array[hint_pos.x][hint_pos.y-2]!=null and array[hint_pos.x][hint_pos.y-3]!=null:
@@ -3576,12 +3966,14 @@ func generate_hint(query=false):
 							for k in range(2,8):
 								if hint_pos.y-k<height and hint_pos.y-k>=0:
 									if k==2:
-										if hint_piece.color==array[hint_pos.x][hint_pos.y-k].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x][hint_pos.y-k])
+										if array[hint_pos.x][hint_pos.y-k]!=null:
+											if hint_piece.color==array[hint_pos.x][hint_pos.y-k].color:
+													pieces_that_match_with_hint.append(array[hint_pos.x][hint_pos.y-k])
 									else:
-										if !restricted_fill(Vector2(hint_pos.x,hint_pos.y-k)) and !restricted_fill(Vector2(hint_pos.x,hint_pos.y-k+1)):
-											if hint_piece.color==array[hint_pos.x][hint_pos.y-k].color and hint_piece.color==array[hint_pos.x][hint_pos.y-k+1].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x][hint_pos.y-k])
+										if array[hint_pos.x][hint_pos.y-k]!=null and array[hint_pos.x][hint_pos.y-k+1]!=null:
+											if !restricted_fill(Vector2(hint_pos.x,hint_pos.y-k)) and !restricted_fill(Vector2(hint_pos.x,hint_pos.y-k+1)):
+												if hint_piece.color==array[hint_pos.x][hint_pos.y-k].color and hint_piece.color==array[hint_pos.x][hint_pos.y-k+1].color:
+													pieces_that_match_with_hint.append(array[hint_pos.x][hint_pos.y-k])
 							if query:
 								print("down-down")
 				#checks left
@@ -3589,14 +3981,16 @@ func generate_hint(query=false):
 					if array[hint_pos.x-1][hint_pos.y-1]!=null and array[hint_pos.x-2][hint_pos.y-1]!=null:
 						if hint_piece.color==array[hint_pos.x-1][hint_pos.y-1].color and hint_piece.color==array[hint_pos.x-2][hint_pos.y-1].color:
 							for k in range(1,8):
-								if hint_pos.x-k<width and hint_pos.x-k>=0:
+								if hint_pos.x-k<width and hint_pos.x-k>=0 :
 									if k==1:
-										if hint_piece.color==array[hint_pos.x-k][hint_pos.y-1].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y-1])
+										if array[hint_pos.x-k][hint_pos.y-1]!=null:
+											if hint_piece.color==array[hint_pos.x-k][hint_pos.y-1].color:
+													pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y-1])
 									else:
-										if !restricted_fill(Vector2(hint_pos.x-k,hint_pos.y-1)) and !restricted_fill(Vector2(hint_pos.x-k+1,hint_pos.y-1)):
-											if hint_piece.color==array[hint_pos.x-k][hint_pos.y-1].color and hint_piece.color==array[hint_pos.x-k+1][hint_pos.y-1].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y-1])
+										if array[hint_pos.x-k][hint_pos.y-1]!=null and array[hint_pos.x-k+1][hint_pos.y-1]!=null:
+											if !restricted_fill(Vector2(hint_pos.x-k,hint_pos.y-1)) and !restricted_fill(Vector2(hint_pos.x-k+1,hint_pos.y-1)):
+												if hint_piece.color==array[hint_pos.x-k][hint_pos.y-1].color and hint_piece.color==array[hint_pos.x-k+1][hint_pos.y-1].color:
+													pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y-1])
 							if query:
 								print("down-left")
 				#checks right
@@ -3604,15 +3998,17 @@ func generate_hint(query=false):
 					if array[hint_pos.x+1][hint_pos.y-1]!=null and array[hint_pos.x+2][hint_pos.y-1]!=null:
 						if hint_piece.color==array[hint_pos.x+1][hint_pos.y-1].color and hint_piece.color==array[hint_pos.x+2][hint_pos.y-1].color:
 							for k in range(1,8):
-								if hint_pos.x+k<width and hint_pos.x+k>=0:
+								if hint_pos.x+k<width and hint_pos.x+k>=0 :
 									if k==1:
-										if !restricted_fill(Vector2(hint_pos.x+k,hint_pos.y-1)):
-											if hint_piece.color==array[hint_pos.x+k][hint_pos.y-1].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y-1])
+										if array[hint_pos.x+k][hint_pos.y-1]!=null:
+											if !restricted_fill(Vector2(hint_pos.x+k,hint_pos.y-1)):
+												if hint_piece.color==array[hint_pos.x+k][hint_pos.y-1].color:
+														pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y-1])
 									else:
-										if !restricted_fill(Vector2(hint_pos.x+k,hint_pos.y-1)) and !restricted_fill(Vector2(hint_pos.x+k-1,hint_pos.y-1)):
-											if hint_piece.color==array[hint_pos.x+k][hint_pos.y-1].color and hint_piece.color==array[hint_pos.x+k-1][hint_pos.y-1].color:
-												pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y-1])
+										if array[hint_pos.x+k][hint_pos.y-1]!=null and array[hint_pos.x+k-1][hint_pos.y-1]!=null:
+											if !restricted_fill(Vector2(hint_pos.x+k,hint_pos.y-1)) and !restricted_fill(Vector2(hint_pos.x+k-1,hint_pos.y-1)):
+												if hint_piece.color==array[hint_pos.x+k][hint_pos.y-1].color and hint_piece.color==array[hint_pos.x+k-1][hint_pos.y-1].color:
+													pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y-1])
 							if query:
 								print("down-right")
 				#checks left and right
@@ -3620,25 +4016,29 @@ func generate_hint(query=false):
 					if array[hint_pos.x-1][hint_pos.y-1]!=null and array[hint_pos.x+1][hint_pos.y-1]!=null:
 						if hint_piece.color==array[hint_pos.x-1][hint_pos.y-1].color and hint_piece.color==array[hint_pos.x+1][hint_pos.y-1].color:
 							for k in range(1,8):
-								if hint_pos.x+k<width and hint_pos.x+k>=0:
-									if hint_pos.x-k<width and hint_pos.x-k>=0:
+								if hint_pos.x+k<width and hint_pos.x+k>=0 :
+									if hint_pos.x-k<width and hint_pos.x-k>=0 :
 										if k==1:
-											if hint_piece.color==array[hint_pos.x-k][hint_pos.y-1].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y-1])
-											if hint_piece.color==array[hint_pos.x+k][hint_pos.y-1].color:
-													pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y-1])
-										else:
-											if !restricted_fill(Vector2(hint_pos.x-k,hint_pos.y-1)) and !restricted_fill(Vector2(hint_pos.x-k+1,hint_pos.y-1)):
-												if hint_piece.color==array[hint_pos.x-k][hint_pos.y-1].color and hint_piece.color==array[hint_pos.x-k+1][hint_pos.y-1].color:
+											if array[hint_pos.x-k][hint_pos.y-1]!=null:
+												if hint_piece.color==array[hint_pos.x-k][hint_pos.y-1].color:
 														pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y-1])
-											if !restricted_fill(Vector2(hint_pos.x+k,hint_pos.y-1)) and !restricted_fill(Vector2(hint_pos.x+k-1,hint_pos.y-1)):
-												if hint_piece.color==array[hint_pos.x+k][hint_pos.y-1].color and hint_piece.color==array[hint_pos.x+k-1][hint_pos.y-1].color:
+											if array[hint_pos.x+k][hint_pos.y-1]!=null:
+												if hint_piece.color==array[hint_pos.x+k][hint_pos.y-1].color:
 														pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y-1])
+										else:
+											if array[hint_pos.x-k][hint_pos.y-1]!=null and array[hint_pos.x-k+1][hint_pos.y-1]!=null:
+												if !restricted_fill(Vector2(hint_pos.x-k,hint_pos.y-1)) and !restricted_fill(Vector2(hint_pos.x-k+1,hint_pos.y-1)):
+													if hint_piece.color==array[hint_pos.x-k][hint_pos.y-1].color and hint_piece.color==array[hint_pos.x-k+1][hint_pos.y-1].color:
+															pieces_that_match_with_hint.append(array[hint_pos.x-k][hint_pos.y-1])
+											if array[hint_pos.x+k][hint_pos.y-1]!=null and array[hint_pos.x+k-1][hint_pos.y-1]!=null:
+												if !restricted_fill(Vector2(hint_pos.x+k,hint_pos.y-1)) and !restricted_fill(Vector2(hint_pos.x+k-1,hint_pos.y-1)):
+													if hint_piece.color==array[hint_pos.x+k][hint_pos.y-1].color and hint_piece.color==array[hint_pos.x+k-1][hint_pos.y-1].color:
+															pieces_that_match_with_hint.append(array[hint_pos.x+k][hint_pos.y-1])
 							if query:
 								print("down-leftright")
-			for k in pieces_that_match_with_hint.size():
-				var hint_piece2=pieces_that_match_with_hint[k]
-				hint_piece2.wiggle2()
+		for k in pieces_that_match_with_hint.size():
+			var hint_piece2=pieces_that_match_with_hint[k]
+			hint_piece2.wiggle2()
 			
 		hint_holder[0].clear()
 		hint_holder[1].clear()
@@ -3653,11 +4053,15 @@ func _on_swap_timer_timeout():
 	emit_signal("swap_timer_done")
 
 func declare_game_over():
-	emit_signal("game_over")
+	GameDataManager.current_level=level
+	Transition.change_scene_to_file("res://scenes/ui_scenes/game_lose.tscn","fade_blue")
 	state=wait
 	print("game_over")
 
+signal game_won2
 func _on_goal_holder_game_won():
+	GameDataManager.current_level=level
+	Transition.change_scene_to_file("res://scenes/ui_scenes/game_won.tscn","fade_blue")
 	state=win
 	print("game_won")
 
@@ -3667,10 +4071,6 @@ func _on_shuffle_timer_timeout():
 
 func _on_hint_timer_timeout():
 	generate_hint()
-	await get_tree().create_timer(3).timeout
-	if state==move:
-		$hint_timer.start()
-	pass
 
 func _on_destroy_timer_timeout():
 	get_bomb_pieces()
@@ -3909,4 +4309,3 @@ func _on_marm_2_pressed():
 
 func _on_marm_3_pressed():
 	marmalade_health=3
-

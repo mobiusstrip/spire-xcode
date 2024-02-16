@@ -32,7 +32,8 @@ func text_setter():
 
 
 func take_damage(damage):
-	health -=damage
+	if health!=null:
+		health -=damage
 	#can add damage effect here
 	
 @export var health_1:Texture2D

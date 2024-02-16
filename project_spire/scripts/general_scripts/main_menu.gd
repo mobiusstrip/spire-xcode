@@ -4,13 +4,13 @@ func _ready():
 	SoundManager.play_tracked_music("main_menu")
 	$Label.visible=true
 	$play_button.visible=false
-	$loading_button.visible=true]
+	$loading_button.visible=true
 	$Timer.start()
 	
 func _on_play_button_pressed():
 	SoundManager.play_fixed_sound("main_menu_button_pressed")
 	SoundManager.stop_tracked_music()
-	Transition.change_scene_to_file("res://scenes/level_select_scenes/level_select.tscn","fade_beige")
+	Transition.change_scene_to_file("res://scenes/level_select_scenes/level_select.tscn","fade_blue")
 
 func _on_settings_button_pressed():
 	SoundManager.play_fixed_sound("button_pressed")

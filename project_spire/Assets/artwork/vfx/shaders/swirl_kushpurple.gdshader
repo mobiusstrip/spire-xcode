@@ -44,7 +44,7 @@ void fragment()
     
     float c = waterHighlight(p, time, foaminess);
     
-    vec3 water_color = vec3(.41, .34, .79);
+    vec3 water_color = vec3(0.415686, 0.662745, 0.866667);
 	
 	color.rgb = vec3(c);
     color.rgb = clamp(color.rgb + water_color, 0,1);

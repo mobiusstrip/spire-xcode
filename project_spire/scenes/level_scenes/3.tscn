@@ -1,12 +1,12 @@
 [gd_scene load_steps=14 format=3 uid="uid://cdo60awuxsyvi"]
 
 [ext_resource type="PackedScene" uid="uid://cy2jws7k6i5wp" path="res://scenes/level_template.tscn" id="1"]
-[ext_resource type="Shader" path="res://Assets/artwork/vfx/shaders/swirl_ccblue.gdshader" id="2"]
+[ext_resource type="Shader" path="res://Assets/artwork/vfx/shaders/swirl_kushpurple.gdshader" id="2_lh6rd"]
 [ext_resource type="Script" path="res://scripts/level_editor_scripts/level_3.gd" id="3_o2my0"]
 
 [sub_resource type="ShaderMaterial" id="1"]
 resource_local_to_scene = true
-shader = ExtResource("2")
+shader = ExtResource("2_lh6rd")
 shader_parameter/water_x = 1.0
 shader_parameter/water_y = 1.0
 shader_parameter/water_z = 1.0
@@ -89,10 +89,10 @@ material = SubResource("CanvasItemMaterial_obnx2")
 process_material = SubResource("ParticleProcessMaterial_kvy3u")
 
 [node name="goal_1" parent="goal_holder" index="0"]
-max_needed = 13
+max_needed = 11
 goal_string = "concrete"
 
-[node name="score_goal" parent="." index="8"]
+[node name="score_goal" parent="." index="9"]
 score_needed = 0
 max_score_star = 0
 
@@ -111,3 +111,18 @@ process_material = SubResource("ParticleProcessMaterial_kvy3u")
 
 [node name="green_explosion" parent="game_won/explosions" index="4"]
 process_material = SubResource("ParticleProcessMaterial_3o1xn")
+
+[node name="quit_button" parent="game_lose/gameover_menu" index="0"]
+offset_left = 292.0
+offset_top = 1168.0
+offset_right = 446.0
+offset_bottom = 1322.0
+
+[node name="retry_button" parent="game_lose/gameover_menu" index="1"]
+offset_left = 724.0
+offset_right = 878.0
+
+[node name="collapse_timer" parent="." index="12"]
+wait_time = 0.3
+
+[connection signal="bounce" from="grid" to="UI/top_ui/goal_container/goal_prefab" method="_on_grid_bounce"]

@@ -1,11 +1,11 @@
 [gd_scene load_steps=30 format=3 uid="uid://dwvr4cynhhknl"]
 
-[ext_resource type="Texture2D" uid="uid://c6o1k8vo65yro" path="res://Assets/artwork/main_menu/dbright_settings.png" id="2"]
 [ext_resource type="Shader" path="res://Assets/artwork/vfx/shaders/swirl_orange.gdshader" id="2_jcawo"]
-[ext_resource type="Texture2D" uid="uid://b7vy5ewkv1m2s" path="res://Assets/artwork/main_menu/settings_pressed.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://drodrysc61olk" path="res://Assets/artwork/main_menu/title.png" id="4"]
 [ext_resource type="Script" path="res://scripts/general_scripts/main_menu.gd" id="5"]
+[ext_resource type="Texture2D" uid="uid://c2243lrhmfji3" path="res://Assets/artwork/ui/main_ui/dbright_settings.png" id="6_sdbrw"]
 [ext_resource type="Texture2D" uid="uid://bburbf1hthgrl" path="res://Assets/artwork/main_menu/main_button.png" id="7_2lvyi"]
+[ext_resource type="Texture2D" uid="uid://3l1wq6hkeag0" path="res://Assets/artwork/ui/main_ui/top_ui_level_select/settings_pressed.png" id="7_x1iiv"]
 [ext_resource type="Texture2D" uid="uid://dmgr2oxfya3h2" path="res://Assets/artwork/main_menu/main_button_pressed.png" id="8_37fwl"]
 [ext_resource type="Shader" path="res://Assets/artwork/vfx/shaders/black_sun.gdshader" id="9_fi4at"]
 [ext_resource type="Script" path="res://scripts/general_scripts/settings.gd" id="11"]
@@ -31,7 +31,7 @@ shader_parameter/water_z = null
 
 [sub_resource type="LabelSettings" id="LabelSettings_nrd6p"]
 font = ExtResource("11_tl3j1")
-font_size = 320
+font_size = 230
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bim87"]
 
@@ -73,11 +73,11 @@ texture = ExtResource("33")
 centered = false
 
 [node name="Label2" type="Label" parent="."]
-offset_left = 267.0
-offset_top = 505.0
-offset_right = 896.0
-offset_bottom = 936.0
-text = "Spire"
+offset_left = 148.0
+offset_top = 516.0
+offset_right = 990.0
+offset_bottom = 827.0
+text = "Spirelight"
 label_settings = SubResource("LabelSettings_nrd6p")
 
 [node name="title" type="TextureRect" parent="."]
@@ -92,12 +92,12 @@ stretch_mode = 2
 
 [node name="settings_button" type="TextureButton" parent="."]
 custom_minimum_size = Vector2(95, 95)
-offset_left = 1059.0
-offset_top = 2415.0
-offset_right = 1154.0
-offset_bottom = 2510.0
-texture_normal = ExtResource("2")
-texture_pressed = ExtResource("3")
+offset_left = 111.0
+offset_top = 2297.0
+offset_right = 206.0
+offset_bottom = 2392.0
+texture_normal = ExtResource("6_sdbrw")
+texture_pressed = ExtResource("7_x1iiv")
 stretch_mode = 5
 
 [node name="play_button" type="TextureButton" parent="."]
@@ -147,10 +147,10 @@ stretch_mode = 5
 
 [node name="exit_button" type="TextureButton" parent="settings"]
 custom_minimum_size = Vector2(100, 100)
-offset_left = 50.0
-offset_top = 50.0
-offset_right = 169.0
-offset_bottom = 170.0
+offset_left = 530.0
+offset_top = 1996.0
+offset_right = 649.0
+offset_bottom = 2116.0
 texture_normal = ExtResource("17_s2amr")
 texture_pressed = ExtResource("18_qjj8e")
 stretch_mode = 5

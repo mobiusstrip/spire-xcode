@@ -6,6 +6,10 @@ var y_starts=[1469,1536,1334,1671,1739,1806,1875]
 #set these values
 #set goal holder values
 #copy paste level editor prints and signal_count
+
+var level=7
+#yellow=0 , pink=1 , orange=2 , purple=3 ,green=4 ,blue=5 ,
+var weights = [0, 0, 0, 0, 0, 2]
 var current_counter_value=25
 var width=7
 var height=7
@@ -28,6 +32,8 @@ var x_start = x_starts[width-3]
 var y_start = y_starts[height-3]
 
 func _ready():
+	get_parent().get_node("grid").level=level
+	get_parent().get_node("grid").weights=weights
 	get_parent().get_node("grid").marmalade_spaces=marmalade_spaces
 	get_parent().get_node("grid").marmalade_healths=marmalade_healths
 	GameDataManager.modify_dict(0,"free_switch_booster_unlocked",true)
@@ -49,14 +55,14 @@ func _ready():
 	get_parent().get_node("grid").current_counter_value=current_counter_value
 	
 	
-var signal_count=14 #DONT FORGET SIGNAL COUNT & COMMENT FIRST LINE IF THERE ARE OTHERS
+var signal_count=16 #DONT FORGET SIGNAL COUNT & COMMENT FIRST LINE IF THERE ARE OTHERS
 func level_editor():
 	emit_signal("spawn_debug",1,6,"blue","regular")
-	emit_signal("spawn_debug",-0,5,"blue","regular")
-	emit_signal("spawn_debug",-0,3,"blue","regular")
+	emit_signal("spawn_debug",0,5,"blue","regular")
+	emit_signal("spawn_debug",0,3,"blue","regular")
 	emit_signal("spawn_debug",0,1,"blue","regular")
-	emit_signal("spawn_debug",1,-0,"blue","regular")
-	emit_signal("spawn_debug",5,-0,"blue","regular")
+	emit_signal("spawn_debug",1,0,"blue","regular")
+	emit_signal("spawn_debug",5,0,"blue","regular")
 	emit_signal("spawn_debug",6,1,"blue","regular")
 	emit_signal("spawn_debug",6,3,"blue","regular")
 	emit_signal("spawn_debug",6,5,"blue","regular")
@@ -65,4 +71,6 @@ func level_editor():
 	emit_signal("spawn_debug",3,3,"pink","regular")
 	emit_signal("spawn_debug",2,2,"pink","regular")
 	emit_signal("spawn_debug",3,1,"pink","regular")
+	emit_signal("spawn_debug",3,0,"pink","regular")
+	emit_signal("spawn_debug",3,2,"blue","regular")
 	

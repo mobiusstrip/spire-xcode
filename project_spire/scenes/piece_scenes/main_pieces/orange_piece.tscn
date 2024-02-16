@@ -1,16 +1,16 @@
 [gd_scene load_steps=16 format=3 uid="uid://bl0dllpolit5t"]
 
 [ext_resource type="Texture2D" uid="uid://bc3lr74j1o10" path="res://Assets/artwork/pieces/adjacent/adjacent_orange.png" id="2_vdjmj"]
-[ext_resource type="Texture2D" uid="uid://bdef0f3phwbi1" path="res://Assets/artwork/pieces/column/column_orange.png" id="3_cqjfn"]
+[ext_resource type="Texture2D" uid="uid://lq35hmp02x8c" path="res://Assets/artwork/pieces/column/column_orange.png" id="3_cqjfn"]
 [ext_resource type="Texture2D" uid="uid://csbunvejcd2mv" path="res://Assets/artwork/pieces/regular/regular_orange.png" id="4_mjkxm"]
-[ext_resource type="Texture2D" uid="uid://b5yvfs4k4dymt" path="res://Assets/artwork/pieces/row/row_orange.png" id="5_2umhv"]
+[ext_resource type="Texture2D" uid="uid://w0bwlo53ryay" path="res://Assets/artwork/pieces/row/row_orange.png" id="5_2umhv"]
 [ext_resource type="Script" path="res://scripts/general_scripts/piece.gd" id="6"]
-[ext_resource type="Texture2D" uid="uid://cli7mtvr655p" path="res://Assets/artwork/pieces/shiny_adjacent/shiny_adjacent_orange.png" id="6_prmep"]
+[ext_resource type="Texture2D" uid="uid://bht5hebjef7gq" path="res://Assets/artwork/pieces/shiny_adjacent/shiny_adjacent_orange.png" id="6_prmep"]
 [ext_resource type="Texture2D" uid="uid://b0n1f53o1mq68" path="res://Assets/artwork/obstacles/rainbow.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://b2hp5h42nfa0p" path="res://Assets/artwork/pieces/shiny_column/shiny_column_orange.png" id="7_4lf03"]
+[ext_resource type="Texture2D" uid="uid://bj35h2im0ruis" path="res://Assets/artwork/pieces/shiny_column/shiny_column_orange.png" id="7_4lf03"]
 [ext_resource type="Texture2D" uid="uid://dep88bg1dljsj" path="res://Assets/artwork/obstacles/sinker.png" id="8"]
 [ext_resource type="Texture2D" uid="uid://cw8ylursf1r81" path="res://Assets/artwork/pieces/shiny_regular/shiny_orange.png" id="8_0gxvw"]
-[ext_resource type="Texture2D" uid="uid://7r5eus2p7ji4" path="res://Assets/artwork/pieces/shiny_row/shiny_row_orange.png" id="9_h5k8l"]
+[ext_resource type="Texture2D" uid="uid://10m74j1wv6km" path="res://Assets/artwork/pieces/shiny_row/shiny_row_orange.png" id="9_h5k8l"]
 [ext_resource type="Texture2D" uid="uid://ddg602tot5aj4" path="res://Assets/artwork/obstacles/fish/orange_fish.png" id="10_dvpqd"]
 
 [sub_resource type="Animation" id="1"]
@@ -51,7 +51,7 @@ _data = {
 }
 
 [node name="orange_piece" type="Node2D"]
-scale = Vector2(1.2, 1.2)
+scale = Vector2(1.25, 1.25)
 script = ExtResource("6")
 color = "orange"
 adjacent_texture = ExtResource("2_vdjmj")

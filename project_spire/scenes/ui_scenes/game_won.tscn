@@ -1,0 +1,208 @@
+[gd_scene load_steps=23 format=3 uid="uid://cuanvadcfk6f3"]
+
+[ext_resource type="Script" path="res://scripts/general_scripts/game_won.gd" id="1_0a8er"]
+[ext_resource type="Texture2D" uid="uid://csh1kamwprchm" path="res://Assets/artwork/ui/win_state_ui/level_complete_screen.png" id="2_67vac"]
+[ext_resource type="Texture2D" uid="uid://c7kmm17gr4an0" path="res://Assets/artwork/ui/win_state_ui/buttons_regular/retry_button.png" id="3_0ojg4"]
+[ext_resource type="Texture2D" uid="uid://wjdri223ix1y" path="res://Assets/artwork/ui/win_state_ui/buttons_pressed/retry_button_pressed.png" id="4_yktg3"]
+[ext_resource type="Texture2D" uid="uid://coakwbqcyk1d3" path="res://Assets/artwork/ui/win_state_ui/buttons_regular/continue_buttton.png" id="5_75j3l"]
+[ext_resource type="Texture2D" uid="uid://cgpyaaedwvalm" path="res://Assets/artwork/ui/win_state_ui/buttons_pressed/continue_button_pressed.png" id="6_jsxku"]
+[ext_resource type="FontFile" uid="uid://dft0xoqlwfk0m" path="res://Assets/artwork/fonts/MrsSheppards-Regular.ttf" id="7_e0fba"]
+[ext_resource type="Texture2D" uid="uid://ct7vce6nsarxv" path="res://Assets/artwork/ui/win_state_ui/endgame_stars/silver_endgame_star.png" id="8_3e1po"]
+[ext_resource type="Texture2D" uid="uid://bhlcgrjmkjtt1" path="res://Assets/artwork/ui/win_state_ui/endgame_stars/gold_endgame_star.png" id="9_xitb1"]
+[ext_resource type="Texture2D" uid="uid://cknmbyv6k32yv" path="res://Assets/artwork/ui/win_state_ui/endgame_stars/rainbow_endgame_star.png" id="10_wqbtr"]
+[ext_resource type="Texture2D" uid="uid://ce0h4o37begad" path="res://Assets/artwork/vfx/particle_effects/256/floaty_64.png" id="11_fqjwe"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_5de0o"]
+font = ExtResource("7_e0fba")
+font_size = 100
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_j15bm"]
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 7
+particles_anim_v_frames = 7
+particles_anim_loop = false
+
+[sub_resource type="Gradient" id="Gradient_ne8hv"]
+offsets = PackedFloat32Array(0.0245902, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_s4dd8"]
+gradient = SubResource("Gradient_ne8hv")
+
+[sub_resource type="Curve" id="Curve_qkilj"]
+_data = [Vector2(0, 1), 0.0, -1.05557, 0, 0, Vector2(1, 0), -1.10411, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_v6gt3"]
+curve = SubResource("Curve_qkilj")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_odf38"]
+resource_local_to_scene = true
+lifetime_randomness = 0.5
+particle_flag_disable_z = true
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 250.0
+initial_velocity_max = 750.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 4.0
+scale_max = 7.0
+scale_curve = SubResource("CurveTexture_v6gt3")
+color_ramp = SubResource("GradientTexture1D_s4dd8")
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_v4rgc"]
+resource_local_to_scene = true
+resource_name = "rainbow"
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 7
+particles_anim_v_frames = 7
+particles_anim_loop = false
+
+[sub_resource type="Gradient" id="Gradient_8dgnf"]
+offsets = PackedFloat32Array(0, 0.192623, 0.483607, 0.713115, 1)
+colors = PackedColorArray(0.952941, 0, 0, 1, 0.960784, 0.368627, 0, 1, 0, 1, 0, 1, 0, 0, 0.819608, 1, 0.772549, 0.00392157, 0.945098, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_cqvec"]
+gradient = SubResource("Gradient_8dgnf")
+width = 512
+use_hdr = true
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_aobad"]
+resource_local_to_scene = true
+lifetime_randomness = 0.5
+particle_flag_disable_z = true
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 250.0
+initial_velocity_max = 750.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 4.0
+scale_max = 7.0
+scale_curve = SubResource("CurveTexture_v6gt3")
+color_ramp = SubResource("GradientTexture1D_cqvec")
+
+[node name="game_won" type="Node2D"]
+script = ExtResource("1_0a8er")
+
+[node name="complete_menu" type="TextureRect" parent="."]
+offset_right = 1172.0
+offset_bottom = 2534.0
+texture = ExtResource("2_67vac")
+stretch_mode = 2
+
+[node name="retry_button" type="TextureButton" parent="complete_menu"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 0
+offset_left = 291.0
+offset_top = 1224.0
+offset_right = 446.0
+offset_bottom = 1378.0
+texture_normal = ExtResource("3_0ojg4")
+texture_pressed = ExtResource("4_yktg3")
+
+[node name="continue_button" type="TextureButton" parent="complete_menu"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 0
+offset_left = 723.0
+offset_top = 1224.0
+offset_right = 878.0
+offset_bottom = 1378.0
+texture_normal = ExtResource("5_75j3l")
+texture_pressed = ExtResource("6_jsxku")
+
+[node name="score_label" type="Label" parent="complete_menu"]
+layout_mode = 0
+offset_left = 445.0
+offset_top = 1080.0
+offset_right = 725.0
+offset_bottom = 1217.0
+text = "0000"
+label_settings = SubResource("LabelSettings_5de0o")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="silver_star" type="Sprite2D" parent="complete_menu"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(405, 945)
+texture = ExtResource("8_3e1po")
+
+[node name="gold_star" type="Sprite2D" parent="complete_menu"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(586, 945)
+texture = ExtResource("9_xitb1")
+
+[node name="rainbow_star" type="Sprite2D" parent="complete_menu"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(766, 945)
+scale = Vector2(2, 2)
+texture = ExtResource("10_wqbtr")
+
+[node name="explosions" type="Node2D" parent="."]
+position = Vector2(149, 1756)
+
+[node name="silver_explosion" type="GPUParticles2D" parent="explosions"]
+modulate = Color(0.509804, 0.509804, 0.509804, 1)
+material = SubResource("CanvasItemMaterial_j15bm")
+emitting = false
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_odf38")
+texture = ExtResource("11_fqjwe")
+one_shot = true
+explosiveness = 1.0
+local_coords = true
+
+[node name="gold_explosion" type="GPUParticles2D" parent="explosions"]
+modulate = Color(1, 0.843137, 0, 1)
+material = SubResource("CanvasItemMaterial_j15bm")
+position = Vector2(-156, -1692)
+emitting = false
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_odf38")
+texture = ExtResource("11_fqjwe")
+one_shot = true
+explosiveness = 1.0
+local_coords = true
+
+[node name="platinum_explosion" type="GPUParticles2D" parent="explosions"]
+modulate = Color(0.25098, 0.596078, 0.854902, 1)
+material = SubResource("CanvasItemMaterial_j15bm")
+position = Vector2(-159, -1692)
+emitting = false
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_odf38")
+texture = ExtResource("11_fqjwe")
+one_shot = true
+explosiveness = 1.0
+local_coords = true
+
+[node name="rainbow_explosion" type="GPUParticles2D" parent="explosions"]
+material = SubResource("CanvasItemMaterial_v4rgc")
+position = Vector2(-157, -1692)
+emitting = false
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_aobad")
+texture = ExtResource("11_fqjwe")
+one_shot = true
+explosiveness = 1.0
+local_coords = true
+
+[node name="green_explosion" type="GPUParticles2D" parent="explosions"]
+modulate = Color(0, 0.87451, 0.0745098, 1)
+material = SubResource("CanvasItemMaterial_j15bm")
+position = Vector2(-160, -1693)
+emitting = false
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_odf38")
+texture = ExtResource("11_fqjwe")
+one_shot = true
+explosiveness = 1.0
+local_coords = true
+
+[connection signal="pressed" from="complete_menu/retry_button" to="." method="_on_retry_button_pressed"]
+[connection signal="pressed" from="complete_menu/continue_button" to="." method="_on_continue_button_pressed"]

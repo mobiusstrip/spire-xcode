@@ -42,7 +42,9 @@ void fragment()
 	vec2 p = mod(uv_square*TAU*TILING_FACTOR, TAU)-250.0;
     
     float c = waterHighlight(p, time, foaminess);
-    vec3 water_color = vec3(0.41, .34, 0.79);
+	
+	//vec3(0, 0.5, 0.5); 
+    vec3 water_color = vec3(0.415686, 0.662745, 0.866667);
 	color.rgb = vec3(c);
     color.rgb = clamp(color.rgb + water_color, 0,1);
     

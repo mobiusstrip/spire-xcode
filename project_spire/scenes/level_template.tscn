@@ -1,19 +1,17 @@
-[gd_scene load_steps=235 format=3 uid="uid://cy2jws7k6i5wp"]
+[gd_scene load_steps=196 format=3 uid="uid://cy2jws7k6i5wp"]
 
 [ext_resource type="Script" path="res://scripts/level_template.gd" id="1_vc0pq"]
-[ext_resource type="Shader" path="res://Assets/artwork/vfx/shaders/swirl_kushpurple.gdshader" id="3_h2q72"]
+[ext_resource type="Texture2D" uid="uid://bkugrtc0ey8nl" path="res://Assets/artwork/bg/jelly/game_bg_02.webp" id="3_a04vq"]
+[ext_resource type="Shader" path="res://Assets/artwork/vfx/shaders/swirl_ccblue.gdshader" id="3_kr54g"]
 [ext_resource type="PackedScene" uid="uid://cncj37yboccsb" path="res://scenes/ui_scenes/goal.tscn" id="5"]
 [ext_resource type="Script" path="res://scripts/level_editor_scripts/level_editor.gd" id="5_8vyf2"]
 [ext_resource type="Script" path="res://scripts/general_scripts/ui.gd" id="7"]
 [ext_resource type="Script" path="res://scripts/general_scripts/camera.gd" id="9"]
 [ext_resource type="Script" path="res://scripts/general_scripts/goal_holder.gd" id="10"]
-[ext_resource type="Texture2D" uid="uid://srmt73dn6sfs" path="res://Assets/artwork/ui/main_ui/game_background.png" id="11"]
 [ext_resource type="Script" path="res://scripts/general_scripts/grid.gd" id="13"]
 [ext_resource type="Script" path="res://scripts/general_scripts/score_goal.gd" id="14"]
 [ext_resource type="Texture2D" uid="uid://ddvsspo3mxsjg" path="res://Assets/artwork/ui/main_ui/boosters/booster_regular/yellow_booster.png" id="15"]
-[ext_resource type="Texture2D" uid="uid://bjtm00se4q1u5" path="res://Assets/artwork/ui/main_ui/top_ui.png" id="16"]
 [ext_resource type="FontFile" uid="uid://dft0xoqlwfk0m" path="res://Assets/artwork/fonts/MrsSheppards-Regular.ttf" id="16_de1df"]
-[ext_resource type="Texture2D" uid="uid://bqgucxk2cdlj0" path="res://Assets/artwork/ui/main_ui/bottom_ui.png" id="17"]
 [ext_resource type="Texture2D" uid="uid://c2ac5n054xp2d" path="res://Assets/artwork/ui/main_ui/score_bar_empty.png" id="19"]
 [ext_resource type="Texture2D" uid="uid://dbi3gmvw7dmj6" path="res://Assets/artwork/ui/main_ui/score_bar_fill.png" id="20"]
 [ext_resource type="Texture2D" uid="uid://b53cmt1yp727i" path="res://Assets/artwork/ui/main_ui/boosters/boosters_pressed/blue_booster_pressed.png" id="21"]
@@ -37,78 +35,54 @@
 [ext_resource type="Texture2D" uid="uid://1t6t7it0w2v2" path="res://Assets/artwork/ui/store/red_booster_store.png" id="36"]
 [ext_resource type="Texture2D" uid="uid://dyfqqwndswroa" path="res://Assets/artwork/ui/store/booster_store_buttons/pink_booster_store_pressed.png.png" id="36_j0o0x"]
 [ext_resource type="Texture2D" uid="uid://cnyyai28tq25y" path="res://Assets/artwork/ui/store/yellow_booster_store.png" id="37"]
+[ext_resource type="Texture2D" uid="uid://dudokuqk0o1am" path="res://Assets/artwork/ui/main_ui/top_ui_white.png" id="37_begti"]
 [ext_resource type="Texture2D" uid="uid://dx7kqdykfigs0" path="res://Assets/artwork/ui/store/booster_store_button.png" id="38"]
 [ext_resource type="Texture2D" uid="uid://cf2jwccp8d8d1" path="res://Assets/artwork/ui/booster_activate/blue_booster_screen.png" id="38_t5pwt"]
 [ext_resource type="Texture2D" uid="uid://cuuq3qt2hvw1h" path="res://Assets/artwork/ui/store/pressed_booster_store_button.png" id="39"]
 [ext_resource type="Texture2D" uid="uid://djslmhepduic2" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons/blue_use_booster_button.png" id="41_gexv8"]
 [ext_resource type="Texture2D" uid="uid://t6784xhiw4hh" path="res://Assets/artwork/ui/booster_activate/green_booster_screen.png" id="41_q3c8d"]
+[ext_resource type="Texture2D" uid="uid://dkl30viplw8y0" path="res://Assets/artwork/ui/main_ui/bottom_ui_white.png" id="42_bocdl"]
 [ext_resource type="Texture2D" uid="uid://dk1plt4whh2mv" path="res://Assets/artwork/ui/booster_activate/yellow_booster_screen.png" id="42_nur1d"]
 [ext_resource type="Texture2D" uid="uid://bhiv2xpsv146h" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons_pressed/blue_use_booster_button_pressed.png" id="42_x5tsg"]
 [ext_resource type="Texture2D" uid="uid://dyf1ej20myhwe" path="res://Assets/artwork/ui/booster_activate/red_booster_screen.png" id="43_dnsc4"]
 [ext_resource type="Texture2D" uid="uid://cjy1rf1q4mpya" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons/green_use_booster_button.png" id="44_fuyeg"]
 [ext_resource type="Texture2D" uid="uid://rrorvk8navs3" path="res://Assets/artwork/ui/booster_activate/pink_booster_screen.png" id="44_vavpc"]
 [ext_resource type="Texture2D" uid="uid://c67iy12l2rpt5" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons_pressed/green_use_booster_button_pressed.png" id="45_7irtf"]
-[ext_resource type="Script" path="res://scripts/general_scripts/game_over.gd" id="47_0l7cc"]
 [ext_resource type="Texture2D" uid="uid://fk7hhbhjhjxm" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons/yellow_use_booster_button.png" id="47_ryfs2"]
 [ext_resource type="Texture2D" uid="uid://dgaqbtlb545xa" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons_pressed/yellow_use_booster_button_pressed.png" id="48_wclts"]
 [ext_resource type="Texture2D" uid="uid://gucuq5mek0ll" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons/red_use_booster_button.png" id="50_opce8"]
 [ext_resource type="Texture2D" uid="uid://dus5a77ybgnwa" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons_pressed/red_use_booster_button_pressed.png" id="51_wj1ms"]
 [ext_resource type="Texture2D" uid="uid://b0xbtvq0nib38" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons/pink_use_booster_button.png" id="53_kdsgh"]
-[ext_resource type="Script" path="res://scripts/general_scripts/game_won.gd" id="54_fwk1c"]
 [ext_resource type="Texture2D" uid="uid://b0w0fi5ukid8k" path="res://Assets/artwork/ui/main_ui/top_ui_level_select/top_ui_exit.png" id="54_j5asf"]
 [ext_resource type="Texture2D" uid="uid://ck8cpkby1tbjq" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons_pressed/pink_use_booster_button_pressed.png" id="54_snoul"]
 [ext_resource type="Texture2D" uid="uid://ctkij7jd2xumi" path="res://Assets/artwork/ui/main_ui/top_ui_level_select/exit_pressed.png" id="55_28ev3"]
-[ext_resource type="Texture2D" uid="uid://coakwbqcyk1d3" path="res://Assets/artwork/ui/win_state_ui/buttons_regular/continue_buttton.png" id="56_8gvxi"]
 [ext_resource type="Script" path="res://scripts/general_scripts/shuffle_scene.gd" id="58_2gkjj"]
 [ext_resource type="Texture2D" uid="uid://sy7gc48bo5sy" path="res://Assets/artwork/ui/win_state_ui/shuffle_banner.png" id="59_p6dm4"]
-[ext_resource type="Texture2D" uid="uid://csh1kamwprchm" path="res://Assets/artwork/ui/win_state_ui/level_complete_screen.png" id="62_qytqa"]
-[ext_resource type="Texture2D" uid="uid://d04obdifouy3s" path="res://Assets/artwork/settings/regular/music_regular.png" id="62_w03fa"]
-[ext_resource type="Texture2D" uid="uid://84wxgw7so0ek" path="res://Assets/artwork/settings/pressed/music_pressed.png" id="63_jxs6a"]
-[ext_resource type="Texture2D" uid="uid://cgpyaaedwvalm" path="res://Assets/artwork/ui/win_state_ui/buttons_pressed/continue_button_pressed.png" id="63_up6d2"]
-[ext_resource type="Texture2D" uid="uid://ct7vce6nsarxv" path="res://Assets/artwork/ui/win_state_ui/endgame_stars/silver_endgame_star.png" id="64_k24ap"]
 [ext_resource type="Texture2D" uid="uid://di2yagt3funh" path="res://Assets/artwork/settings/regular/exit_regular.png" id="64_tn6ai"]
-[ext_resource type="Texture2D" uid="uid://bhlcgrjmkjtt1" path="res://Assets/artwork/ui/win_state_ui/endgame_stars/gold_endgame_star.png" id="65_7mpix"]
-[ext_resource type="Texture2D" uid="uid://by62ulfgptqrm" path="res://Assets/artwork/ui/win_state_ui/banner.png" id="65_d1n50"]
 [ext_resource type="Texture2D" uid="uid://sijy83g61clp" path="res://Assets/artwork/settings/pressed/exit_pressed.png" id="65_fb6ga"]
-[ext_resource type="Texture2D" uid="uid://dxcdgyemeexw0" path="res://Assets/artwork/ui/in_level_settings/in_level_quit_confirmation.png" id="65_hvpcr"]
-[ext_resource type="Texture2D" uid="uid://dg3eghvl8y2va" path="res://Assets/artwork/ui/win_state_ui/game_over_screen.png" id="66_8kskt"]
-[ext_resource type="Texture2D" uid="uid://b7s07qjjltpps" path="res://Assets/artwork/settings/regular/sound_regular.png" id="66_30cek"]
-[ext_resource type="Texture2D" uid="uid://hhbhuxc7j2lu" path="res://Assets/artwork/ui/main_ui/top_ui_level_select/top_ui_leave.png" id="66_utp2s"]
-[ext_resource type="Texture2D" uid="uid://cxxrikqkn64us" path="res://Assets/artwork/ui/in_level_settings/heartlose.png" id="67_bb4uj"]
-[ext_resource type="Texture2D" uid="uid://bnl7l8v3xshms" path="res://Assets/artwork/ui/win_state_ui/buttons_regular/exit_button.png" id="67_jancp"]
-[ext_resource type="Texture2D" uid="uid://dg27wfqlop2f6" path="res://Assets/artwork/ui/main_ui/top_ui_level_select/leave_pressed.png" id="67_o6cbc"]
-[ext_resource type="Texture2D" uid="uid://beylo8rrntaga" path="res://Assets/artwork/settings/pressed/sound_pressed.png" id="67_ocgto"]
-[ext_resource type="Texture2D" uid="uid://cknmbyv6k32yv" path="res://Assets/artwork/ui/win_state_ui/endgame_stars/rainbow_endgame_star.png" id="67_r4pjn"]
 [ext_resource type="Texture2D" uid="uid://0880wkb50w34" path="res://Assets/artwork/ui/main_ui/top_ui_lives_pressed.png" id="68_4mxi5"]
-[ext_resource type="Texture2D" uid="uid://crmre6drugaph" path="res://Assets/artwork/settings/regular/vibration_regular.png" id="68_12nq1"]
-[ext_resource type="Texture2D" uid="uid://dbsf83dyufa4j" path="res://Assets/artwork/ui/win_state_ui/buttons_pressed/exit_button_pressed.png" id="68_c50r7"]
 [ext_resource type="Texture2D" uid="uid://bn3gpf8q03q3f" path="res://Assets/artwork/ui/store/map_store_button_for_shard.png" id="68_lx5kr"]
-[ext_resource type="Texture2D" uid="uid://c7kmm17gr4an0" path="res://Assets/artwork/ui/win_state_ui/buttons_regular/retry_button.png" id="69_8jckf"]
-[ext_resource type="Texture2D" uid="uid://i7poayhloeka" path="res://Assets/artwork/settings/pressed/vibration_pressed.png" id="69_ftjgy"]
 [ext_resource type="Texture2D" uid="uid://big6i6qumrfk7" path="res://Assets/artwork/ui/store/moves_store.png" id="70_7m8gu"]
-[ext_resource type="Texture2D" uid="uid://wjdri223ix1y" path="res://Assets/artwork/ui/win_state_ui/buttons_pressed/retry_button_pressed.png" id="70_siop1"]
 [ext_resource type="Texture2D" uid="uid://begxc8ji0utk1" path="res://Assets/artwork/ui/store/store_buy_button.png" id="70_yl8qw"]
 [ext_resource type="Texture2D" uid="uid://cabmtvi0bbibx" path="res://Assets/artwork/ui/store/map_store_button_pressed_for_shard.png" id="71_2eife"]
 [ext_resource type="Texture2D" uid="uid://ce0h4o37begad" path="res://Assets/artwork/vfx/particle_effects/256/floaty_64.png" id="76_pgigr"]
-[ext_resource type="Texture2D" uid="uid://vmplsige2l2c" path="res://Assets/artwork/ui/main_ui/settings.png" id="78_dm30q"]
+[ext_resource type="Texture2D" uid="uid://c2243lrhmfji3" path="res://Assets/artwork/ui/main_ui/dbright_settings.png" id="78_ctdsm"]
 [ext_resource type="Texture2D" uid="uid://ksllmj3vy5q1" path="res://Assets/artwork/ui/store/shard_store.png" id="79_18vl4"]
-[ext_resource type="Texture2D" uid="uid://o68gll83haic" path="res://Assets/artwork/ui/main_ui/settings-bright.png" id="79_klpdm"]
+[ext_resource type="Texture2D" uid="uid://dt5pa3rly5tks" path="res://Assets/artwork/ui/main_ui/setting_light.png" id="79_crlt1"]
 [ext_resource type="Texture2D" uid="uid://c5j1iq0a6ylkg" path="res://Assets/artwork/ui/store/lives_store.png" id="80_s1paa"]
 [ext_resource type="Texture2D" uid="uid://bnb360a54ewlw" path="res://Assets/artwork/ui/store/map_store_button_pressed.png" id="89_2x6bk"]
 [ext_resource type="Texture2D" uid="uid://cepw6yqbqs733" path="res://Assets/artwork/animation/animation_sprites/confetti.png" id="90_jovdt"]
 [ext_resource type="Texture2D" uid="uid://bpc6cgwf5p501" path="res://Assets/artwork/obstacles/ice.png" id="99_btslc"]
-[ext_resource type="Texture2D" uid="uid://2a1wocdmya2v" path="res://Assets/artwork/pieces/regular/regular_blue.png" id="99_mxcwe"]
+[ext_resource type="Texture2D" uid="uid://cqve5oghax62x" path="res://Assets/artwork/pieces/regular/regular_blue.png" id="99_mxcwe"]
 [ext_resource type="Texture2D" uid="uid://cx536oxtdkm5" path="res://Assets/artwork/animation/bomb_spawn_textures/green_bomb_spawn.png" id="100_f6tnb"]
-[ext_resource type="Texture2D" uid="uid://pjcv4by67fi8" path="res://Assets/artwork/pieces/regular/regular_green.png" id="101_cjs4h"]
+[ext_resource type="Texture2D" uid="uid://b18li0vmiee21" path="res://Assets/artwork/pieces/regular/regular_green.png" id="101_cjs4h"]
 [ext_resource type="Texture2D" uid="uid://crlkyh5r050ij" path="res://Assets/artwork/obstacles/ice2.png" id="101_i8tar"]
 [ext_resource type="Texture2D" uid="uid://duvgoc73k6q5q" path="res://Assets/artwork/obstacles/ice3.png" id="102_kvs14"]
-[ext_resource type="Texture2D" uid="uid://csbunvejcd2mv" path="res://Assets/artwork/pieces/regular/regular_orange.png" id="103_158q2"]
+[ext_resource type="Texture2D" uid="uid://cqs1gbun8idwc" path="res://Assets/artwork/pieces/regular/regular_orange.png" id="103_158q2"]
 [ext_resource type="Texture2D" uid="uid://bvy6vt4vnl803" path="res://Assets/artwork/obstacles/ice4.png" id="103_bqgji"]
-[ext_resource type="Texture2D" uid="uid://khkkd5px6c6h" path="res://Assets/artwork/pieces/regular/regular_pink.png" id="105_op6uk"]
-[ext_resource type="Texture2D" uid="uid://cy8v4fvp06p51" path="res://Assets/artwork/pieces/regular/regular_purple.png" id="107_2iedk"]
-[ext_resource type="Script" path="res://scripts/general_scripts/in_level_settings.gd" id="107_ud43a"]
-[ext_resource type="Texture2D" uid="uid://ds64txytpl8mv" path="res://Assets/artwork/ui/in_level_settings/in_level_settings.png" id="108_gxnc4"]
-[ext_resource type="Texture2D" uid="uid://x7jhvblx76vi" path="res://Assets/artwork/pieces/regular/regular_yellow.png" id="109_fs8di"]
+[ext_resource type="Texture2D" uid="uid://dyytblrf2addn" path="res://Assets/artwork/pieces/regular/regular_pink.png" id="105_op6uk"]
+[ext_resource type="Texture2D" uid="uid://c3oiqnr46h3mm" path="res://Assets/artwork/pieces/regular/regular_purple.png" id="107_2iedk"]
+[ext_resource type="Texture2D" uid="uid://cak0oy53qm03k" path="res://Assets/artwork/pieces/regular/regular_yellow.png" id="109_fs8di"]
 [ext_resource type="Texture2D" uid="uid://cemjspjtbsleu" path="res://Assets/artwork/obstacles/marmalade1.png" id="114_ldyhl"]
 [ext_resource type="Texture2D" uid="uid://o2i2kj7ni1nk" path="res://Assets/artwork/obstacles/concrete.png" id="115_1wkgc"]
 [ext_resource type="Texture2D" uid="uid://cyqqkyl8qqvwa" path="res://Assets/artwork/obstacles/marmalade2.png" id="115_ltbkf"]
@@ -117,9 +91,8 @@
 [ext_resource type="Texture2D" uid="uid://b0r73xxb8ct71" path="res://Assets/artwork/obstacles/concrete3.png" id="117_j288r"]
 [ext_resource type="Texture2D" uid="uid://fhmqwah8hphn" path="res://Assets/artwork/obstacles/concrete4.png" id="118_71cou"]
 
-[sub_resource type="ShaderMaterial" id="2"]
-resource_local_to_scene = true
-shader = ExtResource("3_h2q72")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uihpj"]
+shader = ExtResource("3_kr54g")
 shader_parameter/water_x = null
 shader_parameter/water_y = null
 shader_parameter/water_z = null
@@ -185,17 +158,53 @@ font_size = 30
 [sub_resource type="LabelSettings" id="LabelSettings_oafxc"]
 font = ExtResource("16_de1df")
 font_size = 55
-font_color = Color(0.498039, 0.427451, 0.878431, 1)
+font_color = Color(0.415686, 0.662745, 0.866667, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_hwast"]
 font = ExtResource("16_de1df")
-font_size = 32
-font_color = Color(0.423529, 0.376471, 0.768627, 1)
+font_size = 28
+font_color = Color(0.376471, 0.643137, 0.858824, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_hg8rj"]
 font = ExtResource("16_de1df")
 font_size = 64
-font_color = Color(0.431373, 0.376471, 0.796078, 1)
+font_color = Color(0.273703, 0.543297, 0.75505, 1)
+
+[sub_resource type="Animation" id="Animation_63ksk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("goal_container:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_nxm6p"]
+resource_name = "ui_bounce"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("goal_container:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.3, 1.3), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kfcsa"]
+_data = {
+"RESET": SubResource("Animation_63ksk"),
+"ui_bounce": SubResource("Animation_nxm6p")
+}
 
 [sub_resource type="LabelSettings" id="LabelSettings_2h8hc"]
 resource_name = "booster_label"
@@ -739,377 +748,6 @@ font_size = 32
 font = ExtResource("16_de1df")
 font_size = 32
 
-[sub_resource type="LabelSettings" id="LabelSettings_xrtiv"]
-font = ExtResource("16_de1df")
-font_size = 100
-
-[sub_resource type="Animation" id="Animation_4351j"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("complete_menu:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("complete_menu/rainbow_star:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(2, 2)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("complete_menu/silver_star:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("complete_menu/rainbow_star:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("complete_menu/silver_star:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("complete_menu/gold_star:scale")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("complete_menu/gold_star:modulate")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_oddgn"]
-resource_name = "game_won"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("complete_menu:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_5hj1m"]
-resource_name = "gold"
-length = 1.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("complete_menu/gold_star:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.3, 0.6, 0.7, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(2, 2), Vector2(1, 1), Vector2(1.5, 1.5), Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("complete_menu/silver_star:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.4, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(2, 2), Vector2(1, 1), Vector2(1.5, 1.5), Vector2(1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("complete_menu/gold_star:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0.3, 0.6),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("complete_menu/silver_star:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0.498039), Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_62da2"]
-resource_name = "rainbow"
-length = 1.7
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("complete_menu/rainbow_star:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.6, 0.9, 1, 1.1),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(2, 2), Vector2(1, 1), Vector2(1.5, 1.5), Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("complete_menu/silver_star:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.4, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(2, 2), Vector2(1, 1), Vector2(1.5, 1.5), Vector2(1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("complete_menu/rainbow_star:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0.6, 0.9),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("complete_menu/silver_star:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0.498039), Color(1, 1, 1, 1)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("complete_menu/gold_star:scale")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0.3, 0.6, 0.7, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(2, 2), Vector2(1, 1), Vector2(1.5, 1.5), Vector2(1, 1)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("complete_menu/gold_star:modulate")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0.3, 0.6),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_wcxrn"]
-resource_name = "silver"
-length = 0.7
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("complete_menu/silver_star:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0.498039), Color(1, 1, 1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("complete_menu/silver_star:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.4, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(2, 2), Vector2(1, 1), Vector2(1.5, 1.5), Vector2(1, 1)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_petgh"]
-_data = {
-"RESET": SubResource("Animation_4351j"),
-"game_won": SubResource("Animation_oddgn"),
-"gold": SubResource("Animation_5hj1m"),
-"rainbow": SubResource("Animation_62da2"),
-"silver": SubResource("Animation_wcxrn")
-}
-
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_g1q13"]
-blend_mode = 1
-particles_animation = true
-particles_anim_h_frames = 7
-particles_anim_v_frames = 7
-particles_anim_loop = false
-
-[sub_resource type="Gradient" id="Gradient_fiipp"]
-offsets = PackedFloat32Array(0.0245902, 1)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_vq07t"]
-gradient = SubResource("Gradient_fiipp")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1yq4g"]
-resource_local_to_scene = true
-lifetime_randomness = 0.5
-particle_flag_disable_z = true
-direction = Vector3(0, 0, 0)
-spread = 180.0
-gravity = Vector3(0, 0, 0)
-initial_velocity_min = 250.0
-initial_velocity_max = 750.0
-orbit_velocity_min = 0.0
-orbit_velocity_max = 0.0
-scale_min = 4.0
-scale_max = 7.0
-scale_curve = SubResource("CurveTexture_shbi4")
-color_ramp = SubResource("GradientTexture1D_vq07t")
-
-[sub_resource type="LabelSettings" id="LabelSettings_kbm6y"]
-font = ExtResource("16_de1df")
-font_size = 60
-
-[sub_resource type="LabelSettings" id="LabelSettings_a230p"]
-font = ExtResource("16_de1df")
-font_size = 100
-
-[sub_resource type="Animation" id="5"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("banner:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, -394)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("gameover_menu:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="6"]
-resource_name = "game_over"
-length = 2.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("banner:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 1, 1.2, 1.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(0, -394), Vector2(0, 1100), Vector2(0, 990), Vector2(0, 1033), Vector2(0, 1033), Vector2(0, 1000), Vector2(0, 2612)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("gameover_menu:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(1.4, 2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_qkk5b"]
-_data = {
-"RESET": SubResource("5"),
-"game_over": SubResource("6")
-}
-
 [sub_resource type="Animation" id="1"]
 length = 0.001
 tracks/0/type = "value"
@@ -1197,11 +835,11 @@ position = Vector2(585, 1266)
 script = ExtResource("9")
 
 [node name="bg" type="TextureRect" parent="."]
-material = SubResource("2")
+material = SubResource("ShaderMaterial_uihpj")
 offset_right = 1172.0
 offset_bottom = 2534.0
 scale = Vector2(0.995484, 1)
-texture = ExtResource("11")
+texture = ExtResource("3_a04vq")
 
 [node name="grid_bg" type="Node2D" parent="."]
 
@@ -1213,7 +851,6 @@ rotation = -0.000628801
 script = ExtResource("13")
 
 [node name="shuffle_timer" type="Timer" parent="grid"]
-wait_time = 1.5
 one_shot = true
 
 [node name="hint_timer" type="Timer" parent="grid"]
@@ -1225,8 +862,6 @@ wait_time = 4.0
 one_shot = true
 
 [node name="UI" type="TextureRect" parent="."]
-offset_top = 13.0
-offset_bottom = 13.0
 script = ExtResource("7")
 goal_prefab = ExtResource("22")
 
@@ -1797,7 +1432,7 @@ offset_left = 8.0
 offset_top = -72.0
 offset_right = 1179.0
 offset_bottom = 382.0
-texture = ExtResource("16")
+texture = ExtResource("37_begti")
 stretch_mode = 4
 
 [node name="top_ui_lives_button" type="TextureButton" parent="UI/top_ui"]
@@ -1853,16 +1488,34 @@ label_settings = SubResource("LabelSettings_hg8rj")
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="level_label" type="Label" parent="UI/top_ui"]
+custom_minimum_size = Vector2(260, 65)
+layout_mode = 0
+offset_left = 900.0
+offset_top = 316.0
+offset_right = 1160.0
+offset_bottom = 406.0
+text = "1"
+label_settings = SubResource("LabelSettings_hg8rj")
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="goal_container" type="HBoxContainer" parent="UI/top_ui"]
 layout_mode = 0
 offset_left = 364.0
 offset_top = 309.0
 offset_right = 788.0
 offset_bottom = 444.0
+pivot_offset = Vector2(212, 67)
 alignment = 1
 
 [node name="goal_prefab" parent="UI/top_ui/goal_container" instance=ExtResource("22")]
 layout_mode = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/top_ui"]
+libraries = {
+"": SubResource("AnimationLibrary_kfcsa")
+}
 
 [node name="bottom_ui" type="TextureRect" parent="UI"]
 layout_mode = 0
@@ -1879,7 +1532,7 @@ offset_left = -16.0
 offset_top = -36.0
 offset_right = 861.0
 offset_bottom = 194.0
-texture = ExtResource("17")
+texture = ExtResource("42_bocdl")
 
 [node name="blue_booster" type="TextureButton" parent="UI/bottom_ui"]
 layout_mode = 0
@@ -2091,104 +1744,6 @@ position = Vector2(585, 1266)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_flmv5")
 animation = &"confetti"
-
-[node name="in_level_settings" type="Node2D" parent="UI"]
-visible = false
-scale = Vector2(1.00176, 0.999415)
-script = ExtResource("107_ud43a")
-
-[node name="in_level_settings_background" type="TextureRect" parent="UI/in_level_settings"]
-offset_right = 1170.0
-offset_bottom = 2536.0
-texture = ExtResource("108_gxnc4")
-
-[node name="music_button" type="TextureButton" parent="UI/in_level_settings"]
-custom_minimum_size = Vector2(100, 100)
-offset_left = 255.0
-offset_top = 916.976
-offset_right = 375.0
-offset_bottom = 1036.98
-toggle_mode = true
-texture_normal = ExtResource("62_w03fa")
-texture_pressed = ExtResource("63_jxs6a")
-stretch_mode = 5
-
-[node name="exit_button" type="TextureButton" parent="UI/in_level_settings"]
-custom_minimum_size = Vector2(100, 100)
-offset_left = 517.0
-offset_top = 1978.0
-offset_right = 636.0
-offset_bottom = 2098.0
-texture_normal = ExtResource("64_tn6ai")
-texture_pressed = ExtResource("65_fb6ga")
-stretch_mode = 5
-
-[node name="sound_button" type="TextureButton" parent="UI/in_level_settings"]
-custom_minimum_size = Vector2(100, 100)
-offset_left = 526.0
-offset_top = 913.978
-offset_right = 646.0
-offset_bottom = 1033.98
-toggle_mode = true
-texture_normal = ExtResource("66_30cek")
-texture_pressed = ExtResource("67_ocgto")
-stretch_mode = 5
-
-[node name="vibration_button" type="TextureButton" parent="UI/in_level_settings"]
-custom_minimum_size = Vector2(100, 100)
-offset_left = 798.0
-offset_top = 914.978
-offset_right = 918.0
-offset_bottom = 1034.98
-toggle_mode = true
-texture_normal = ExtResource("68_12nq1")
-texture_pressed = ExtResource("69_ftjgy")
-stretch_mode = 5
-
-[node name="leave_button" type="TextureButton" parent="UI/in_level_settings"]
-offset_left = 536.057
-offset_top = 1282.75
-offset_right = 634.057
-offset_bottom = 1388.75
-texture_normal = ExtResource("66_utp2s")
-texture_pressed = ExtResource("67_o6cbc")
-
-[node name="heartlose" type="Sprite2D" parent="UI/in_level_settings"]
-position = Vector2(598.946, 1279.75)
-texture = ExtResource("67_bb4uj")
-
-[node name="quit_confirm" type="Node2D" parent="UI"]
-visible = false
-scale = Vector2(1.00176, 0.999415)
-
-[node name="quit_confirm_bg" type="TextureRect" parent="UI/quit_confirm"]
-offset_right = 1170.0
-offset_bottom = 2536.0
-texture = ExtResource("65_hvpcr")
-
-[node name="confim_cancel_button" type="TextureButton" parent="UI/quit_confirm"]
-custom_minimum_size = Vector2(100, 100)
-offset_left = 311.452
-offset_top = 1089.64
-offset_right = 416.452
-offset_bottom = 1195.64
-texture_normal = ExtResource("54_j5asf")
-texture_pressed = ExtResource("65_fb6ga")
-stretch_mode = 5
-
-[node name="confirm_leave_button" type="TextureButton" parent="UI/quit_confirm"]
-custom_minimum_size = Vector2(100, 100)
-offset_left = 787.614
-offset_top = 1090.64
-offset_right = 887.614
-offset_bottom = 1196.64
-texture_normal = ExtResource("66_utp2s")
-texture_pressed = ExtResource("67_o6cbc")
-stretch_mode = 5
-
-[node name="heartlose" type="Sprite2D" parent="UI/quit_confirm"]
-position = Vector2(853.498, 1087.64)
-texture = ExtResource("67_bb4uj")
 
 [node name="lives_store" type="Sprite2D" parent="UI"]
 visible = false
@@ -2496,244 +2051,8 @@ offset_bottom = 2442.0
 pivot_offset = Vector2(0, 90)
 size_flags_horizontal = 5
 size_flags_vertical = 5
-texture_normal = ExtResource("78_dm30q")
-texture_pressed = ExtResource("79_klpdm")
-
-[node name="goal_holder" type="Node" parent="."]
-script = ExtResource("10")
-
-[node name="goal_1" parent="goal_holder" instance=ExtResource("5")]
-max_needed = 50
-goal_string = "ice"
-
-[node name="score_goal" type="Node" parent="."]
-script = ExtResource("14")
-score_needed = 5000
-max_score_star = 5000
-
-[node name="collapse_timer" type="Timer" parent="."]
-wait_time = 0.35
-one_shot = true
-
-[node name="swap_timer" type="Timer" parent="."]
-wait_time = 0.2
-one_shot = true
-
-[node name="refill_timer" type="Timer" parent="."]
-wait_time = 0.05
-one_shot = true
-
-[node name="ui_layer" type="CanvasLayer" parent="."]
-layer = -1
-
-[node name="destroy_timer" type="Timer" parent="."]
-wait_time = 0.1
-one_shot = true
-
-[node name="booster_tween" type="Timer" parent="."]
-wait_time = 10.0
-autostart = true
-
-[node name="game_won" type="Node2D" parent="."]
-process_mode = 3
-visible = false
-script = ExtResource("54_fwk1c")
-
-[node name="complete_menu" type="TextureRect" parent="game_won"]
-modulate = Color(1, 1, 1, 0)
-offset_right = 1172.0
-offset_bottom = 2534.0
-texture = ExtResource("62_qytqa")
-stretch_mode = 2
-
-[node name="retry_button" type="TextureButton" parent="game_won/complete_menu"]
-custom_minimum_size = Vector2(120, 120)
-layout_mode = 0
-offset_left = 291.0
-offset_top = 1224.0
-offset_right = 446.0
-offset_bottom = 1378.0
-texture_normal = ExtResource("69_8jckf")
-texture_pressed = ExtResource("70_siop1")
-
-[node name="continue_button" type="TextureButton" parent="game_won/complete_menu"]
-custom_minimum_size = Vector2(120, 120)
-layout_mode = 0
-offset_left = 723.0
-offset_top = 1224.0
-offset_right = 878.0
-offset_bottom = 1378.0
-texture_normal = ExtResource("56_8gvxi")
-texture_pressed = ExtResource("63_up6d2")
-
-[node name="score_label" type="Label" parent="game_won/complete_menu"]
-layout_mode = 0
-offset_left = 445.0
-offset_top = 1080.0
-offset_right = 725.0
-offset_bottom = 1217.0
-text = "0000"
-label_settings = SubResource("LabelSettings_xrtiv")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="silver_star" type="Sprite2D" parent="game_won/complete_menu"]
-modulate = Color(1, 1, 1, 0)
-position = Vector2(405, 945)
-texture = ExtResource("64_k24ap")
-
-[node name="gold_star" type="Sprite2D" parent="game_won/complete_menu"]
-modulate = Color(1, 1, 1, 0)
-position = Vector2(586, 945)
-texture = ExtResource("65_7mpix")
-
-[node name="rainbow_star" type="Sprite2D" parent="game_won/complete_menu"]
-modulate = Color(1, 1, 1, 0)
-position = Vector2(766, 945)
-scale = Vector2(2, 2)
-texture = ExtResource("67_r4pjn")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="game_won"]
-libraries = {
-"": SubResource("AnimationLibrary_petgh")
-}
-
-[node name="wait_timer" type="Timer" parent="game_won"]
-wait_time = 3.0
-one_shot = true
-
-[node name="explosions" type="Node2D" parent="game_won"]
-
-[node name="silver_explosion" type="GPUParticles2D" parent="game_won/explosions"]
-modulate = Color(0.509804, 0.509804, 0.509804, 1)
-material = SubResource("CanvasItemMaterial_g1q13")
-position = Vector2(1304, 1)
-emitting = false
-amount = 50
-process_material = SubResource("ParticleProcessMaterial_1yq4g")
-texture = ExtResource("76_pgigr")
-one_shot = true
-explosiveness = 1.0
-local_coords = true
-
-[node name="gold_explosion" type="GPUParticles2D" parent="game_won/explosions"]
-modulate = Color(1, 0.843137, 0, 1)
-material = SubResource("CanvasItemMaterial_g1q13")
-position = Vector2(1305, 2)
-emitting = false
-amount = 50
-process_material = SubResource("ParticleProcessMaterial_1yq4g")
-texture = ExtResource("76_pgigr")
-one_shot = true
-explosiveness = 1.0
-local_coords = true
-
-[node name="platinum_explosion" type="GPUParticles2D" parent="game_won/explosions"]
-modulate = Color(0.25098, 0.596078, 0.854902, 1)
-material = SubResource("CanvasItemMaterial_g1q13")
-position = Vector2(1302, 2)
-emitting = false
-amount = 50
-process_material = SubResource("ParticleProcessMaterial_1yq4g")
-texture = ExtResource("76_pgigr")
-one_shot = true
-explosiveness = 1.0
-local_coords = true
-
-[node name="rainbow_explosion" type="GPUParticles2D" parent="game_won/explosions"]
-material = SubResource("CanvasItemMaterial_xkesv")
-position = Vector2(1304, 2)
-emitting = false
-amount = 50
-process_material = SubResource("ParticleProcessMaterial_c2w2w")
-texture = ExtResource("76_pgigr")
-one_shot = true
-explosiveness = 1.0
-local_coords = true
-
-[node name="green_explosion" type="GPUParticles2D" parent="game_won/explosions"]
-modulate = Color(0, 0.87451, 0.0745098, 1)
-material = SubResource("CanvasItemMaterial_g1q13")
-position = Vector2(1301, 1)
-emitting = false
-amount = 50
-process_material = SubResource("ParticleProcessMaterial_1yq4g")
-texture = ExtResource("76_pgigr")
-one_shot = true
-explosiveness = 1.0
-local_coords = true
-
-[node name="game_lose" type="Node2D" parent="."]
-process_mode = 3
-visible = false
-script = ExtResource("47_0l7cc")
-
-[node name="banner" type="TextureRect" parent="game_lose"]
-offset_top = -394.0
-offset_right = 1180.0
-offset_bottom = -59.0012
-texture = ExtResource("65_d1n50")
-
-[node name="oom" type="Label" parent="game_lose/banner"]
-layout_mode = 0
-offset_left = 444.0
-offset_top = 80.0
-offset_right = 741.0
-offset_bottom = 161.0
-text = "Out of moves!"
-label_settings = SubResource("LabelSettings_kbm6y")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="gameover_menu" type="TextureRect" parent="game_lose"]
-modulate = Color(1, 1, 1, 0)
-offset_right = 1172.0
-offset_bottom = 2534.0
-texture = ExtResource("66_8kskt")
-
-[node name="quit_button" type="TextureButton" parent="game_lose/gameover_menu"]
-custom_minimum_size = Vector2(120, 120)
-layout_mode = 0
-offset_left = 293.0
-offset_top = 1167.0
-offset_right = 447.0
-offset_bottom = 1321.0
-texture_normal = ExtResource("67_jancp")
-texture_pressed = ExtResource("68_c50r7")
-
-[node name="retry_button" type="TextureButton" parent="game_lose/gameover_menu"]
-layout_mode = 0
-offset_left = 725.0
-offset_top = 1167.0
-offset_right = 879.0
-offset_bottom = 1321.0
-texture_normal = ExtResource("69_8jckf")
-texture_pressed = ExtResource("70_siop1")
-
-[node name="score_label" type="Label" parent="game_lose/gameover_menu"]
-layout_mode = 0
-offset_left = 445.0
-offset_top = 888.0
-offset_right = 725.0
-offset_bottom = 1025.0
-text = "0000"
-label_settings = SubResource("LabelSettings_a230p")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="silver_star" type="Sprite2D" parent="game_lose/gameover_menu"]
-position = Vector2(405, 958)
-
-[node name="gold_star" type="Sprite2D" parent="game_lose/gameover_menu"]
-position = Vector2(586, 958)
-
-[node name="platinum_star" type="Sprite2D" parent="game_lose/gameover_menu"]
-position = Vector2(766, 958)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="game_lose"]
-libraries = {
-"": SubResource("AnimationLibrary_qkk5b")
-}
+texture_normal = ExtResource("78_ctdsm")
+texture_pressed = ExtResource("79_crlt1")
 
 [node name="shuffle" type="Node2D" parent="."]
 process_mode = 3
@@ -2741,6 +2060,7 @@ script = ExtResource("58_2gkjj")
 
 [node name="shuffle_banner" type="TextureRect" parent="shuffle"]
 modulate = Color(1, 1, 1, 0)
+z_index = 1
 offset_top = -500.0
 offset_right = 1180.0
 offset_bottom = -164.999
@@ -2750,6 +2070,37 @@ texture = ExtResource("59_p6dm4")
 libraries = {
 "": SubResource("AnimationLibrary_ij3r6")
 }
+
+[node name="goal_holder" type="Node" parent="."]
+script = ExtResource("10")
+
+[node name="goal_1" parent="goal_holder" instance=ExtResource("5")]
+max_needed = 60
+goal_string = "yellow"
+
+[node name="score_goal" type="Node" parent="."]
+script = ExtResource("14")
+score_needed = 5000
+max_score_star = 5000
+
+[node name="collapse_timer" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
+
+[node name="swap_timer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[node name="ui_layer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="destroy_timer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
+[node name="booster_tween" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
 
 [node name="debug_color" type="Node2D" parent="."]
 visible = false
@@ -2910,6 +2261,7 @@ texture_normal = ExtResource("116_b7v0h")
 texture_pressed = ExtResource("100_f6tnb")
 
 [connection signal="spawn_debug" from="level_editor" to="grid" method="_on_level_editor_spawn_debug"]
+[connection signal="bounce" from="grid" to="UI" method="_on_grid_bounce"]
 [connection signal="break_concrete" from="grid" to="UI" method="_on_grid_break_concrete"]
 [connection signal="break_concrete" from="grid" to="goal_holder" method="_on_grid_break_concrete"]
 [connection signal="break_ice" from="grid" to="UI" method="_on_grid_break_ice"]
@@ -2923,19 +2275,13 @@ texture_pressed = ExtResource("100_f6tnb")
 [connection signal="check_goal" from="grid" to="UI" method="_on_grid_check_goal"]
 [connection signal="check_goal" from="grid" to="goal_holder" method="_on_grid_check_goal"]
 [connection signal="deadlocked" from="grid" to="shuffle" method="_on_grid_deadlocked"]
-[connection signal="game_over" from="grid" to="game_lose" method="_on_grid_game_over"]
 [connection signal="update_counter" from="grid" to="UI" method="_on_grid_update_counter"]
 [connection signal="update_current_score" from="grid" to="score_goal" method="_on_grid_update_current_score"]
 [connection signal="update_score" from="grid" to="UI" method="_on_grid_update_score"]
-[connection signal="update_score" from="grid" to="game_won" method="_on_grid_update_score"]
-[connection signal="update_score" from="grid" to="game_lose" method="_on_grid_update_score"]
 [connection signal="timeout" from="grid/shuffle_timer" to="grid" method="_on_shuffle_timer_timeout"]
 [connection signal="timeout" from="grid/hint_timer" to="grid" method="_on_hint_timer_timeout"]
 [connection signal="timeout" from="grid/slime_timer" to="grid" method="_on_slime_timer_timeout"]
 [connection signal="booster_bought" from="UI" to="grid" method="_on_ui_booster_bought"]
-[connection signal="star_1_unlocked" from="UI" to="game_won" method="_on_ui_star_1_unlocked"]
-[connection signal="star_2_unlocked" from="UI" to="game_won" method="_on_ui_star_2_unlocked"]
-[connection signal="star_3_unlocked" from="UI" to="game_won" method="_on_ui_star_3_unlocked"]
 [connection signal="pressed" from="UI/booster_screens/blue_booster_screen/blue_booster_screen_exit_button" to="UI" method="_on_blue_booster_screen_exit_button_pressed"]
 [connection signal="pressed" from="UI/booster_screens/blue_booster_screen/blue_booster_use_button" to="grid" method="_on_blue_booster_use_button_pressed"]
 [connection signal="pressed" from="UI/booster_screens/blue_booster_screen/blue_booster_use_button" to="UI" method="_on_blue_booster_use_button_pressed"]
@@ -2978,13 +2324,6 @@ texture_pressed = ExtResource("100_f6tnb")
 [connection signal="pressed" from="UI/bottom_ui/red_booster" to="UI" method="_on_red_booster_pressed"]
 [connection signal="pressed" from="UI/bottom_ui/pink_booster" to="UI" method="_on_pink_booster_pressed"]
 [connection signal="animation_finished" from="UI/confetti_sprites" to="UI" method="_on_confetti_sprites_animation_finished"]
-[connection signal="pressed" from="UI/in_level_settings/music_button" to="UI/in_level_settings" method="_on_music_button_pressed"]
-[connection signal="pressed" from="UI/in_level_settings/exit_button" to="UI/in_level_settings" method="_on_exit_button_pressed"]
-[connection signal="pressed" from="UI/in_level_settings/sound_button" to="UI/in_level_settings" method="_on_sound_button_pressed"]
-[connection signal="pressed" from="UI/in_level_settings/vibration_button" to="UI/in_level_settings" method="_on_vibration_button_pressed"]
-[connection signal="pressed" from="UI/in_level_settings/leave_button" to="UI/in_level_settings" method="_on_leave_button_pressed"]
-[connection signal="pressed" from="UI/quit_confirm/confim_cancel_button" to="UI/in_level_settings" method="_on_confim_cancel_button_pressed"]
-[connection signal="pressed" from="UI/quit_confirm/confirm_leave_button" to="UI/in_level_settings" method="_on_confirm_leave_button_pressed"]
 [connection signal="pressed" from="UI/lives_store/lives_store_exit_button" to="UI" method="_on_lives_store_exit_button_pressed"]
 [connection signal="pressed" from="UI/lives_store/lives_store_1life_buy_button" to="UI" method="_on_lives_store_1_life_buy_button_pressed"]
 [connection signal="pressed" from="UI/lives_store/lives_store_5life_buy_button" to="UI" method="_on_lives_store_5_life_buy_button_pressed"]
@@ -3001,19 +2340,13 @@ texture_pressed = ExtResource("100_f6tnb")
 [connection signal="pressed" from="setting" to="UI" method="_on_setting_pressed"]
 [connection signal="create_goal" from="goal_holder" to="UI" method="_on_goal_holder_create_goal"]
 [connection signal="game_won" from="goal_holder" to="grid" method="_on_goal_holder_game_won"]
-[connection signal="game_won" from="goal_holder" to="game_won" method="_on_goal_holder_game_won"]
+[connection signal="goal_animation" from="goal_holder/goal_1" to="grid" method="_on_goal_1_goal_animation"]
 [connection signal="score_met" from="score_goal" to="goal_holder" method="_on_score_goal_score_met"]
 [connection signal="setup_score_needed" from="score_goal" to="UI" method="_on_score_goal_setup_score_needed"]
 [connection signal="timeout" from="collapse_timer" to="grid" method="_on_collapse_timer_timeout"]
 [connection signal="timeout" from="swap_timer" to="grid" method="_on_swap_timer_timeout"]
-[connection signal="timeout" from="refill_timer" to="grid" method="_on_refill_timer_timeout"]
 [connection signal="timeout" from="destroy_timer" to="grid" method="_on_destroy_timer_timeout"]
 [connection signal="timeout" from="booster_tween" to="UI" method="_on_booster_tween_timeout"]
-[connection signal="pressed" from="game_won/complete_menu/retry_button" to="game_won" method="_on_retry_button_pressed"]
-[connection signal="pressed" from="game_won/complete_menu/continue_button" to="game_won" method="_on_continue_button_pressed"]
-[connection signal="animation_finished" from="game_won/AnimationPlayer" to="game_won" method="_on_animation_player_animation_finished"]
-[connection signal="pressed" from="game_lose/gameover_menu/quit_button" to="game_lose" method="_on_quit_button_pressed"]
-[connection signal="pressed" from="game_lose/gameover_menu/retry_button" to="game_lose" method="_on_retry_button_pressed"]
 [connection signal="pressed" from="debug_color/ice_one" to="grid" method="_on_ice_one_pressed"]
 [connection signal="pressed" from="debug_color/ice_two" to="grid" method="_on_ice_two_pressed"]
 [connection signal="pressed" from="debug_color/ice_three" to="grid" method="_on_ice_three_pressed"]

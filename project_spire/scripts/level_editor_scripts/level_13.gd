@@ -6,6 +6,10 @@ var y_starts=[1469,1536,1334,1671,1739,1806,1875]
 #set these values
 #set goal holder values
 #copy paste level editor prints and signal_count
+
+var level=13
+#yellow=0 , pink=1 , orange=2 , purple=3 ,green=4 ,blue=5 ,
+var weights = [3, 0, 0, 0, 0, 0]
 var current_counter_value=18
 var width=9
 var height=8
@@ -16,10 +20,10 @@ var score_goal_enabled=false
 var ice_spaces=[Vector2(2,6), Vector2(3,6), Vector2(4,6), Vector2(5,6), Vector2(6,6), Vector2(6,5), Vector2(5,5), Vector2(4,5), Vector2(3,5), Vector2(2,5), Vector2(2,4), Vector2(3,4), Vector2(4,4), Vector2(5,4), Vector2(6,4), Vector2(6,3), Vector2(5,3), Vector2(4,3), Vector2(3,3), Vector2(2,3), Vector2(2,2), Vector2(3,2), Vector2(4,2), Vector2(5,2), Vector2(6,2), Vector2(6,1), Vector2(5,1), Vector2(4,1), Vector2(3,1), Vector2(2,1), Vector2(2,0), Vector2(3,0), Vector2(4,0), Vector2(5,0), Vector2(6,0)]
 var ice_healths=[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
 var lock_spaces=[]
-var concrete_spaces=[Vector2(2,0), Vector2(4,0), Vector2(6,0), Vector2(6,1), Vector2(5,1), Vector2(4,1), Vector2(3,1), Vector2(2,1), Vector2(2,2), Vector2(4,2), Vector2(5,2), Vector2(6,2), Vector2(6,3), Vector2(5,3), Vector2(4,3), Vector2(3,3), Vector2(2,3), Vector2(2,4), Vector2(3,4), Vector2(4,4), Vector2(5,4), Vector2(6,4), Vector2(6,5), Vector2(5,5), Vector2(4,5), Vector2(3,5), Vector2(2,5), Vector2(2,6), Vector2(4,6), Vector2(6,6)]
+var concrete_spaces=[Vector2(3,2), Vector2(2,0), Vector2(4,0), Vector2(6,0), Vector2(6,1), Vector2(5,1), Vector2(4,1), Vector2(3,1), Vector2(2,1), Vector2(2,2), Vector2(4,2), Vector2(5,2), Vector2(6,2), Vector2(6,3), Vector2(5,3), Vector2(4,3), Vector2(2,3), Vector2(2,4), Vector2(3,4), Vector2(4,4), Vector2(5,4), Vector2(6,4), Vector2(6,5), Vector2(5,5), Vector2(4,5), Vector2(3,5), Vector2(2,5), Vector2(2,6), Vector2(4,6), Vector2(6,6)]
 var concrete_healths=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 var slime_spaces=[]
-var empty_spaces=[Vector2(0,0), Vector2(1,0), Vector2(1,1), Vector2(0,1), Vector2(0,2), Vector2(1,2), Vector2(1,3), Vector2(1,4), Vector2(0,4), Vector2(0,5), Vector2(1,5), Vector2(1,6), Vector2(1,7), Vector2(2,7), Vector2(3,7), Vector2(4,7), Vector2(5,7), Vector2(6,7), Vector2(7,7), Vector2(8,7), Vector2(8,6), Vector2(7,6), Vector2(7,5), Vector2(8,5), Vector2(7,4), Vector2(8,4), Vector2(7,3), Vector2(8,3), Vector2(7,2), Vector2(7,1), Vector2(8,1), Vector2(7,0)]
+var empty_spaces=[Vector2(0,0), Vector2(1,0), Vector2(1,1), Vector2(0,1), Vector2(0,2), Vector2(1,2), Vector2(1,3), Vector2(1,4), Vector2(0,4), Vector2(0,5), Vector2(1,5), Vector2(1,6), Vector2(1,7), Vector2(2,7), Vector2(3,7), Vector2(4,7), Vector2(5,7), Vector2(6,7), Vector2(7,7), Vector2(8,7), Vector2(8,6), Vector2(7,6), Vector2(7,5), Vector2(8,5), Vector2(7,4), Vector2(8,4), Vector2(7,3), Vector2(8,2), Vector2(7,2), Vector2(7,1), Vector2(8,1), Vector2(7,0)]
 var marmalade_spaces=[]
 var marmalade_healths=[]
 var sinker_amount=0
@@ -28,6 +32,8 @@ var x_start = x_starts[width-3]
 var y_start = y_starts[height-3]
 
 func _ready():
+	get_parent().get_node("grid").level=level
+	get_parent().get_node("grid").weights=weights
 	get_parent().get_node("grid").marmalade_spaces=marmalade_spaces
 	get_parent().get_node("grid").marmalade_healths=marmalade_healths
 	get_parent().get_node("grid").sinker_amount=sinker_amount
@@ -53,8 +59,8 @@ func level_editor():
 	emit_signal("spawn_debug",0,7,"orange","column")
 	emit_signal("spawn_debug",-0,6,"green","row")
 	emit_signal("spawn_debug",-0,3,"green","row")
-	emit_signal("spawn_debug",3,2,"orange","column")
-	emit_signal("spawn_debug",8,2,"orange","column")
+	emit_signal("spawn_debug",3,3,"orange","column")
+	emit_signal("spawn_debug",8,3,"orange","column")
 	emit_signal("spawn_debug",8,-0,"green","row")
 	emit_signal("spawn_debug",5,-0,"green","column")
 	emit_signal("spawn_debug",3,-0,"orange","regular")

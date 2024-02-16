@@ -98,7 +98,7 @@ position = Vector2(0, 0)
 texture = null
 
 [node name="goal_1" parent="goal_holder" index="0"]
-max_needed = 40
+max_needed = 45
 goal_string = "blue"
 
 [node name="silver_explosion" parent="game_won/explosions" index="0"]

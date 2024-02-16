@@ -82,36 +82,50 @@ func _make_visible():
 @onready var this_sprite=$Sprite2D
 
 func wiggle(direction):
+	
+	if is_special!=true:
+		this_sprite.texture=shiny_texture
+	else:
+		if is_column_bomb:
+			this_sprite.texture=shiny_column_texture
+		if is_row_bomb:
+			this_sprite.texture=shiny_row_texture
+		if is_adjacent_bomb:
+			this_sprite.texture=shiny_adjacent_texture
+		if is_color_bomb:
+			this_sprite.texture=color_bomb_texture
+	
+	
 	var tween=get_tree().create_tween()
 	tween.set_trans(Tween.TRANS_BACK)
 	tween.set_ease(Tween.EASE_OUT)
 	
 	if direction=="up":
-		this_sprite.texture=shiny_texture
+#		this_sprite.texture=shiny_texture
 		tween.tween_property(this_sprite,"position",Vector2.UP*10,1).as_relative()
 		tween.tween_property(
 		this_sprite, "position",Vector2.DOWN*10,1).as_relative()
 		await tween.finished
 
 	if direction=="down":
-		this_sprite.texture=shiny_texture
+#		this_sprite.texture=shiny_texture
 		tween.tween_property(this_sprite, "position",Vector2.DOWN*10,1).as_relative()
 		tween.tween_property(
 		this_sprite, "position",Vector2.UP*10,1).as_relative()
 		await tween.finished
 
 	if direction=="left":
-		this_sprite.texture=shiny_texture
+#		this_sprite.texture=shiny_texture
 		tween.tween_property(this_sprite, "position",Vector2.LEFT*10,1).as_relative()
 		tween.tween_property(this_sprite,"position",Vector2.RIGHT*10,1).as_relative()
 		await tween.finished
 
 	if direction=="right":
-		this_sprite.texture=shiny_texture
+#		this_sprite.texture=shiny_texture
 		tween.tween_property(this_sprite,"position",Vector2.RIGHT*10,1).as_relative()
 		tween.tween_property(this_sprite, "position",Vector2.LEFT*10,1).as_relative()
 		await tween.finished
-	
+
 	if is_special!=true:
 		this_sprite.texture=piece_texture
 	else:
@@ -129,15 +143,10 @@ func wiggle2():
 	var tween=get_tree().create_tween()
 	tween.set_trans(Tween.TRANS_BACK)
 	tween.set_ease(Tween.EASE_OUT)
-	this_sprite.texture=shiny_texture
-	tween.tween_property(
-	this_sprite, "position",Vector2.UP*10,1).as_relative()
-	tween.tween_property(
-	this_sprite, "position",Vector2.DOWN*10,1).as_relative()
-	await tween.finished
 	
+#	this_sprite.texture=shiny_texture
 	if is_special!=true:
-		this_sprite.texture=piece_texture
+		this_sprite.texture=shiny_texture
 	else:
 		if is_column_bomb:
 			this_sprite.texture=shiny_column_texture
@@ -147,8 +156,42 @@ func wiggle2():
 			this_sprite.texture=shiny_adjacent_texture
 		if is_color_bomb:
 			this_sprite.texture=color_bomb_texture
-		if is_fish:
-			this_sprite.texture=fish_texture
+	
+	
+	tween.tween_property(
+	this_sprite, "position",Vector2.UP*10,1).as_relative()
+	tween.tween_property(
+	this_sprite, "position",Vector2.DOWN*10,1).as_relative()
+	await tween.finished
+
+
+	if is_special!=true:
+		this_sprite.texture=piece_texture
+	else:
+		if is_column_bomb:
+			this_sprite.texture=column_texture
+		if is_row_bomb:
+			this_sprite.texture=row_texture
+		if is_adjacent_bomb:
+			this_sprite.texture=adjacent_texture
+		if is_color_bomb:
+			this_sprite.texture=color_bomb_texture
+			
+			
+			
+#	if is_special!=true:
+#		this_sprite.texture=piece_texture
+#	else:
+#		if is_column_bomb:
+#			this_sprite.texture=shiny_column_texture
+#		if is_row_bomb:
+#			this_sprite.texture=shiny_row_texture
+#		if is_adjacent_bomb:
+#			this_sprite.texture=shiny_adjacent_texture
+#		if is_color_bomb:
+#			this_sprite.texture=color_bomb_texture
+#		if is_fish:
+#			this_sprite.texture=fish_texture
 
 func grow():
 	$AnimationPlayer.play("grow")
