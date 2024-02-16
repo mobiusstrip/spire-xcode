@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://bm8p4lvxbevd3"]
+
+[ext_resource type="PackedScene" uid="uid://cgsbd1ojbc6xa" path="res://scenes/special_piece_scenes/ice.tscn" id="1_b08xg"]
+[ext_resource type="Texture2D" uid="uid://ba0hj7ews5cn5" path="res://Assets/artwork/obstacles/swirl.png" id="2_68tr3"]
+
+[node name="swirl" instance=ExtResource("1_b08xg")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_68tr3")

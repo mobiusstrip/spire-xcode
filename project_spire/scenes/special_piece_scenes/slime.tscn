@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://dec1ybjm6e0o8"]
+
+[ext_resource type="PackedScene" uid="uid://cspltq5pexma5" path="res://scenes/special_piece_scenes/concrete.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://dxinactis0ppr" path="res://Assets/artwork/obstacles/alt_slime.png" id="2_buxqk"]
+
+[node name="slime" instance=ExtResource("2")]
+
+[node name="Sprite2D" parent="." index="0"]
+modulate = Color(1, 1, 1, 1)
+texture = ExtResource("2_buxqk")

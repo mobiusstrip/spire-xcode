@@ -1,0 +1,98 @@
+[gd_scene load_steps=12 format=3 uid="uid://ccrk62ya7c4op"]
+
+[ext_resource type="Texture2D" uid="uid://brnlg26gj7ae0" path="res://Assets/artwork/grids/purple_grid_a.png" id="1_gdpls"]
+[ext_resource type="Texture2D" uid="uid://dljvrjmn2lec1" path="res://Assets/artwork/pieces/regular/regular_pink.png" id="2_44ejp"]
+[ext_resource type="Texture2D" uid="uid://c26kcfohhmdwg" path="res://Assets/artwork/vfx/particle_effects/64/spotlight_8.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://dktk5fsj2iq30" path="res://Assets/artwork/vfx/particle_effects/1/spotlight_5.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://ce0h4o37begad" path="res://Assets/artwork/vfx/particle_effects/256/floaty_64.png" id="7"]
+
+[sub_resource type="CanvasItemMaterial" id="26"]
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 7
+particles_anim_v_frames = 7
+particles_anim_loop = false
+
+[sub_resource type="ParticleProcessMaterial" id="27"]
+emission_shape = 1
+emission_sphere_radius = 60.0
+particle_flag_disable_z = true
+spread = 180.0
+gravity = Vector3(0, -100, 0)
+initial_velocity_min = 20.0
+initial_velocity_max = 20.0
+angular_velocity_min = 180.0
+angular_velocity_max = 180.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 0.2
+scale_max = 0.2
+anim_speed_max = 1.0
+
+[sub_resource type="CanvasItemMaterial" id="28"]
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="ParticleProcessMaterial" id="29"]
+emission_shape = 1
+emission_sphere_radius = 60.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+gravity = Vector3(0, -100, 0)
+initial_velocity_min = 20.0
+initial_velocity_max = 20.0
+angular_velocity_min = 180.0
+angular_velocity_max = 180.0
+scale_min = 0.5
+scale_max = 0.5
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ym7hj"]
+blend_mode = 1
+
+[sub_resource type="ParticleProcessMaterial" id="31"]
+gravity = Vector3(0, 0, 0)
+scale_min = 0.01
+scale_max = 0.01
+
+[node name="particle_effects" type="Node2D"]
+
+[node name="grid" type="TextureRect" parent="."]
+visible = false
+offset_left = -98.0
+offset_top = -90.0
+offset_right = 100.0
+offset_bottom = 119.0
+texture = ExtResource("1_gdpls")
+
+[node name="piece" type="TextureRect" parent="."]
+visible = false
+offset_left = -50.0
+offset_top = -43.0
+offset_right = 50.0
+offset_bottom = 57.0
+texture = ExtResource("2_44ejp")
+
+[node name="flakes" type="GPUParticles2D" parent="."]
+material = SubResource("26")
+process_material = SubResource("27")
+texture = ExtResource("7")
+interpolate = false
+fract_delta = false
+local_coords = true
+draw_order = 0
+
+[node name="sparkles" type="GPUParticles2D" parent="."]
+material = SubResource("28")
+process_material = SubResource("29")
+texture = ExtResource("3")
+fract_delta = false
+
+[node name="match" type="GPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_ym7hj")
+amount = 1
+process_material = SubResource("31")
+texture = ExtResource("4")
+lifetime = 0.1

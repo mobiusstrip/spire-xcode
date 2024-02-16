@@ -1,0 +1,113 @@
+[gd_scene load_steps=14 format=3 uid="uid://cdo60awuxsyvi"]
+
+[ext_resource type="PackedScene" uid="uid://cy2jws7k6i5wp" path="res://scenes/level_template.tscn" id="1"]
+[ext_resource type="Shader" path="res://Assets/artwork/vfx/shaders/swirl_ccblue.gdshader" id="2"]
+[ext_resource type="Script" path="res://scripts/level_editor_scripts/level_3.gd" id="3_o2my0"]
+
+[sub_resource type="ShaderMaterial" id="1"]
+resource_local_to_scene = true
+shader = ExtResource("2")
+shader_parameter/water_x = 1.0
+shader_parameter/water_y = 1.0
+shader_parameter/water_z = 1.0
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_obnx2"]
+resource_local_to_scene = true
+resource_name = "rainbow"
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 7
+particles_anim_v_frames = 7
+particles_anim_loop = false
+
+[sub_resource type="Gradient" id="Gradient_s7y4i"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.192623, 0.42623, 0.668033, 0.815574, 1)
+colors = PackedColorArray(0.952941, 0, 0, 1, 0.960784, 0.368627, 0, 1, 0.972549, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0.819608, 1, 0.772549, 0.00392157, 0.945098, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_revqi"]
+gradient = SubResource("Gradient_s7y4i")
+width = 512
+use_hdr = true
+
+[sub_resource type="Curve" id="Curve_t34qi"]
+_data = [Vector2(0, 1), 0.0, -1.05557, 0, 0, Vector2(1, 0), -1.10411, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_shbi4"]
+curve = SubResource("Curve_t34qi")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kvy3u"]
+resource_local_to_scene = true
+lifetime_randomness = 0.5
+particle_flag_disable_z = true
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 250.0
+initial_velocity_max = 750.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 4.0
+scale_max = 7.0
+scale_curve = SubResource("CurveTexture_shbi4")
+color_ramp = SubResource("GradientTexture1D_revqi")
+
+[sub_resource type="Gradient" id="Gradient_fiipp"]
+offsets = PackedFloat32Array(0.0245902, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_vq07t"]
+gradient = SubResource("Gradient_fiipp")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3o1xn"]
+resource_local_to_scene = true
+lifetime_randomness = 0.5
+particle_flag_disable_z = true
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 250.0
+initial_velocity_max = 750.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 4.0
+scale_max = 7.0
+scale_curve = SubResource("CurveTexture_shbi4")
+color_ramp = SubResource("GradientTexture1D_vq07t")
+
+[node name="3" instance=ExtResource("1")]
+
+[node name="bg" parent="." index="1"]
+material = SubResource("1")
+
+[node name="level_editor" parent="." index="3"]
+script = ExtResource("3_o2my0")
+
+[node name="rainbow_explosion" parent="UI/bottom_ui" index="6"]
+material = SubResource("CanvasItemMaterial_obnx2")
+process_material = SubResource("ParticleProcessMaterial_kvy3u")
+
+[node name="goal_1" parent="goal_holder" index="0"]
+max_needed = 13
+goal_string = "concrete"
+
+[node name="score_goal" parent="." index="8"]
+score_needed = 0
+max_score_star = 0
+
+[node name="silver_explosion" parent="game_won/explosions" index="0"]
+process_material = SubResource("ParticleProcessMaterial_3o1xn")
+
+[node name="gold_explosion" parent="game_won/explosions" index="1"]
+process_material = SubResource("ParticleProcessMaterial_3o1xn")
+
+[node name="platinum_explosion" parent="game_won/explosions" index="2"]
+process_material = SubResource("ParticleProcessMaterial_3o1xn")
+
+[node name="rainbow_explosion" parent="game_won/explosions" index="3"]
+material = SubResource("CanvasItemMaterial_obnx2")
+process_material = SubResource("ParticleProcessMaterial_kvy3u")
+
+[node name="green_explosion" parent="game_won/explosions" index="4"]
+process_material = SubResource("ParticleProcessMaterial_3o1xn")

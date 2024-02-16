@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cxfds5djufjd1"
+path="res://.godot/imported/piece_move (5).wav-e1ed95844af1e74c65a15bddb509a81c.sample"
+
+[deps]
+
+source_file="res://Assets/artwork/sfx/old/move/piece_move (5).wav"
+dest_files=["res://.godot/imported/piece_move (5).wav-e1ed95844af1e74c65a15bddb509a81c.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

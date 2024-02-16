@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://cgsbd1ojbc6xa"]
+
+[ext_resource type="Script" path="res://scripts/general_scripts/ice.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://bpc6cgwf5p501" path="res://Assets/artwork/obstacles/ice.png" id="2_l0md3"]
+[ext_resource type="Texture2D" uid="uid://duvgoc73k6q5q" path="res://Assets/artwork/obstacles/ice3.png" id="4_tmdaj"]
+[ext_resource type="Texture2D" uid="uid://bvy6vt4vnl803" path="res://Assets/artwork/obstacles/ice4.png" id="5_iltys"]
+
+[node name="ice" type="Node2D"]
+modulate = Color(1, 1, 1, 0.784314)
+scale = Vector2(0.9, 0.9)
+script = ExtResource("1")
+health_1 = ExtResource("4_tmdaj")
+health_2 = ExtResource("5_iltys")
+health_3 = ExtResource("4_tmdaj")
+health_4 = ExtResource("5_iltys")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_l0md3")

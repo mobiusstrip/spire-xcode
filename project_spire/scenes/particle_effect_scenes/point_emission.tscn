@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://b07kdnb4p2fhb"]
+
+[ext_resource type="Texture2D" uid="uid://ce0h4o37begad" path="res://Assets/artwork/vfx/particle_effects/256/floaty_64.png" id="1"]
+
+[sub_resource type="CanvasItemMaterial" id="1"]
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 7
+particles_anim_v_frames = 7
+particles_anim_loop = false
+
+[sub_resource type="ParticleProcessMaterial" id="6"]
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, -10, 0)
+spread = 0.0
+gravity = Vector3(0, 10, -10)
+
+[node name="point_emission" type="Node2D"]
+position = Vector2(624, 1306)
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+material = SubResource("1")
+position = Vector2(-184, -1347)
+amount = 50
+process_material = SubResource("6")
+texture = ExtResource("1")

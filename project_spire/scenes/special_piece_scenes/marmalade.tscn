@@ -1,0 +1,14 @@
+[gd_scene load_steps=5 format=3 uid="uid://cdjkghc7ufxxw"]
+
+[ext_resource type="PackedScene" uid="uid://cspltq5pexma5" path="res://scenes/special_piece_scenes/concrete.tscn" id="1_wj6ms"]
+[ext_resource type="Texture2D" uid="uid://cemjspjtbsleu" path="res://Assets/artwork/obstacles/marmalade1.png" id="2_0j0c6"]
+[ext_resource type="Texture2D" uid="uid://cyqqkyl8qqvwa" path="res://Assets/artwork/obstacles/marmalade2.png" id="3_nogsb"]
+[ext_resource type="Texture2D" uid="uid://dfbffwam173q4" path="res://Assets/artwork/obstacles/marmalade3.png" id="4_112a6"]
+
+[node name="marmalade" instance=ExtResource("1_wj6ms")]
+health_1 = ExtResource("2_0j0c6")
+health_2 = ExtResource("3_nogsb")
+health_3 = ExtResource("4_112a6")
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_0j0c6")

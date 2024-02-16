@@ -1,0 +1,59 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Assets/artwork/vfx/shaders/swirl_kushpurple.gdshader" type="Shader" id=1]
+[ext_resource path="res://Assets/artwork/ui/main_ui/game_background.png" type="Texture2D" id=2]
+[ext_resource path="res://Assets/artwork/ui/store/blue_booster_store.png" type="Texture2D" id=3]
+[ext_resource path="res://Assets/artwork/ui/store/pink_booster_store.png" type="Texture2D" id=4]
+[ext_resource path="res://Assets/artwork/ui/store/red_booster_store.png" type="Texture2D" id=5]
+[ext_resource path="res://Assets/artwork/ui/store/yellow_booster_store.png" type="Texture2D" id=6]
+[ext_resource path="res://Assets/artwork/ui/store/green_booster_store.png" type="Texture2D" id=7]
+
+[sub_resource type="ShaderMaterial" id=1]
+resource_local_to_scene = true
+shader = ExtResource( 1 )
+shader_param/water_x = 1.0
+shader_param/water_y = 1.0
+shader_param/water_z = 1.0
+
+[node name="booster_store" type="Node2D"]
+
+[node name="bg" type="TextureRect" parent="."]
+material = SubResource( 1 )
+offset_right = 1172.0
+offset_bottom = 2534.0
+scale = Vector2( 0.995484, 1 )
+pivot_offset = Vector2( -1691.64, 360 )
+texture = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="booster3_store" type="Sprite2D" parent="."]
+visible = false
+position = Vector2( 151, 711 )
+texture = ExtResource( 6 )
+centered = false
+
+[node name="booster1_store" type="Sprite2D" parent="."]
+visible = false
+position = Vector2( 151, 711 )
+texture = ExtResource( 3 )
+centered = false
+
+[node name="booster2_store" type="Sprite2D" parent="."]
+visible = false
+position = Vector2( 151, 711 )
+texture = ExtResource( 7 )
+centered = false
+
+[node name="booster5_store" type="Sprite2D" parent="."]
+visible = false
+position = Vector2( 151, 711 )
+texture = ExtResource( 4 )
+centered = false
+
+[node name="booster4_store" type="Sprite2D" parent="."]
+visible = false
+position = Vector2( 151, 711 )
+texture = ExtResource( 5 )
+centered = false

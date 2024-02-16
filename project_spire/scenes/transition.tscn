@@ -1,0 +1,127 @@
+[gd_scene load_steps=9 format=3 uid="uid://ddtxi41mc7bad"]
+
+[ext_resource type="Script" path="res://scripts/general_scripts/transition.gd" id="1"]
+
+[sub_resource type="Animation" id="1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.129412, 0.784314, 0.784314, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_562ud"]
+resource_name = "fade_beige"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.129412, 0.784314, 0.784314, 0), Color(0.910451, 0.834442, 0.768544, 1)]
+}
+
+[sub_resource type="Animation" id="3"]
+resource_name = "fade_blue"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.129412, 0.784314, 0.784314, 0), Color(0.128815, 0.785156, 0.785156, 1)]
+}
+
+[sub_resource type="Animation" id="2"]
+resource_name = "fade_purple"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.129412, 0.784314, 0.784314, 0), Color(0.603922, 0.533333, 0.901961, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_rgfcx"]
+resource_name = "fade_red"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.129412, 0.784314, 0.784314, 0), Color(0.929412, 0.168627, 0.356863, 1)]
+}
+
+[sub_resource type="Animation" id="4"]
+resource_name = "fade_yellow"
+length = 0.5
+step = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.129412, 0.784314, 0.784314, 0), Color(0.992157, 0.917647, 0.415686, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_q84uv"]
+_data = {
+"RESET": SubResource("1"),
+"fade_beige": SubResource("Animation_562ud"),
+"fade_blue": SubResource("3"),
+"fade_purple": SubResource("2"),
+"fade_red": SubResource("Animation_rgfcx"),
+"fade_yellow": SubResource("4")
+}
+
+[node name="transition" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.129412, 0.784314, 0.784314, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_q84uv")
+}
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

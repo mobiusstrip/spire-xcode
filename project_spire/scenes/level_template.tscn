@@ -1,0 +1,3033 @@
+[gd_scene load_steps=235 format=3 uid="uid://cy2jws7k6i5wp"]
+
+[ext_resource type="Script" path="res://scripts/level_template.gd" id="1_vc0pq"]
+[ext_resource type="Shader" path="res://Assets/artwork/vfx/shaders/swirl_kushpurple.gdshader" id="3_h2q72"]
+[ext_resource type="PackedScene" uid="uid://cncj37yboccsb" path="res://scenes/ui_scenes/goal.tscn" id="5"]
+[ext_resource type="Script" path="res://scripts/level_editor_scripts/level_editor.gd" id="5_8vyf2"]
+[ext_resource type="Script" path="res://scripts/general_scripts/ui.gd" id="7"]
+[ext_resource type="Script" path="res://scripts/general_scripts/camera.gd" id="9"]
+[ext_resource type="Script" path="res://scripts/general_scripts/goal_holder.gd" id="10"]
+[ext_resource type="Texture2D" uid="uid://srmt73dn6sfs" path="res://Assets/artwork/ui/main_ui/game_background.png" id="11"]
+[ext_resource type="Script" path="res://scripts/general_scripts/grid.gd" id="13"]
+[ext_resource type="Script" path="res://scripts/general_scripts/score_goal.gd" id="14"]
+[ext_resource type="Texture2D" uid="uid://ddvsspo3mxsjg" path="res://Assets/artwork/ui/main_ui/boosters/booster_regular/yellow_booster.png" id="15"]
+[ext_resource type="Texture2D" uid="uid://bjtm00se4q1u5" path="res://Assets/artwork/ui/main_ui/top_ui.png" id="16"]
+[ext_resource type="FontFile" uid="uid://dft0xoqlwfk0m" path="res://Assets/artwork/fonts/MrsSheppards-Regular.ttf" id="16_de1df"]
+[ext_resource type="Texture2D" uid="uid://bqgucxk2cdlj0" path="res://Assets/artwork/ui/main_ui/bottom_ui.png" id="17"]
+[ext_resource type="Texture2D" uid="uid://c2ac5n054xp2d" path="res://Assets/artwork/ui/main_ui/score_bar_empty.png" id="19"]
+[ext_resource type="Texture2D" uid="uid://dbi3gmvw7dmj6" path="res://Assets/artwork/ui/main_ui/score_bar_fill.png" id="20"]
+[ext_resource type="Texture2D" uid="uid://b53cmt1yp727i" path="res://Assets/artwork/ui/main_ui/boosters/boosters_pressed/blue_booster_pressed.png" id="21"]
+[ext_resource type="PackedScene" uid="uid://cnvu156kdfkv7" path="res://scenes/ui_scenes/goal_prefab.tscn" id="22"]
+[ext_resource type="Script" path="res://scripts/general_scripts/bottom_ui.gd" id="23"]
+[ext_resource type="Texture2D" uid="uid://cexsswkpvge83" path="res://Assets/artwork/ui/main_ui/boosters/booster_regular/pink_booster.png" id="25"]
+[ext_resource type="Texture2D" uid="uid://t3ndlan00pev" path="res://Assets/artwork/ui/main_ui/boosters/booster_regular/blue_booster.png" id="26"]
+[ext_resource type="Texture2D" uid="uid://c6qx7a16vvkih" path="res://Assets/artwork/ui/main_ui/boosters/booster_regular/red_booster.png" id="27"]
+[ext_resource type="Texture2D" uid="uid://b8bicpvoam7is" path="res://Assets/artwork/ui/main_ui/boosters/booster_regular/green_booster.png" id="28"]
+[ext_resource type="Texture2D" uid="uid://yaw8jfqy0lbb" path="res://Assets/artwork/ui/store/booster_store_buttons/blue_booster_store_pressed.png.png" id="28_jaj7x"]
+[ext_resource type="Texture2D" uid="uid://dou36empxf60w" path="res://Assets/artwork/ui/main_ui/boosters/boosters_pressed/yellow_booster_pressed.png" id="29"]
+[ext_resource type="Texture2D" uid="uid://vne0gpov3kbf" path="res://Assets/artwork/ui/main_ui/boosters/boosters_pressed/pink_booster_pressed.png" id="30"]
+[ext_resource type="Texture2D" uid="uid://dmk64gku1sn2w" path="res://Assets/artwork/ui/store/booster_store_buttons/green_booster_store_pressed.png.png" id="30_4uf2n"]
+[ext_resource type="Texture2D" uid="uid://b30mtrusoxphv" path="res://Assets/artwork/ui/main_ui/boosters/boosters_pressed/red_booster_pressed.png" id="31"]
+[ext_resource type="Texture2D" uid="uid://d1kcomyj1spgf" path="res://Assets/artwork/ui/main_ui/boosters/boosters_pressed/green_booster_pressed.png" id="32"]
+[ext_resource type="Texture2D" uid="uid://d2qhwkpd8t6wg" path="res://Assets/artwork/ui/store/booster_store_buttons/yellow_booster_store_pressed.png" id="32_fqixa"]
+[ext_resource type="Texture2D" uid="uid://hxe1rdn8wuqs" path="res://Assets/artwork/ui/store/green_booster_store.png" id="33"]
+[ext_resource type="Texture2D" uid="uid://yya5guewxb6j" path="res://Assets/artwork/ui/store/pink_booster_store.png" id="34"]
+[ext_resource type="Texture2D" uid="uid://bec8hejas6wfs" path="res://Assets/artwork/ui/store/booster_store_buttons/red_booster_store_pressed.png.png" id="34_l4srb"]
+[ext_resource type="Texture2D" uid="uid://bift0ia6muoph" path="res://Assets/artwork/ui/store/blue_booster_store.png" id="35"]
+[ext_resource type="Texture2D" uid="uid://1t6t7it0w2v2" path="res://Assets/artwork/ui/store/red_booster_store.png" id="36"]
+[ext_resource type="Texture2D" uid="uid://dyfqqwndswroa" path="res://Assets/artwork/ui/store/booster_store_buttons/pink_booster_store_pressed.png.png" id="36_j0o0x"]
+[ext_resource type="Texture2D" uid="uid://cnyyai28tq25y" path="res://Assets/artwork/ui/store/yellow_booster_store.png" id="37"]
+[ext_resource type="Texture2D" uid="uid://dx7kqdykfigs0" path="res://Assets/artwork/ui/store/booster_store_button.png" id="38"]
+[ext_resource type="Texture2D" uid="uid://cf2jwccp8d8d1" path="res://Assets/artwork/ui/booster_activate/blue_booster_screen.png" id="38_t5pwt"]
+[ext_resource type="Texture2D" uid="uid://cuuq3qt2hvw1h" path="res://Assets/artwork/ui/store/pressed_booster_store_button.png" id="39"]
+[ext_resource type="Texture2D" uid="uid://djslmhepduic2" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons/blue_use_booster_button.png" id="41_gexv8"]
+[ext_resource type="Texture2D" uid="uid://t6784xhiw4hh" path="res://Assets/artwork/ui/booster_activate/green_booster_screen.png" id="41_q3c8d"]
+[ext_resource type="Texture2D" uid="uid://dk1plt4whh2mv" path="res://Assets/artwork/ui/booster_activate/yellow_booster_screen.png" id="42_nur1d"]
+[ext_resource type="Texture2D" uid="uid://bhiv2xpsv146h" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons_pressed/blue_use_booster_button_pressed.png" id="42_x5tsg"]
+[ext_resource type="Texture2D" uid="uid://dyf1ej20myhwe" path="res://Assets/artwork/ui/booster_activate/red_booster_screen.png" id="43_dnsc4"]
+[ext_resource type="Texture2D" uid="uid://cjy1rf1q4mpya" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons/green_use_booster_button.png" id="44_fuyeg"]
+[ext_resource type="Texture2D" uid="uid://rrorvk8navs3" path="res://Assets/artwork/ui/booster_activate/pink_booster_screen.png" id="44_vavpc"]
+[ext_resource type="Texture2D" uid="uid://c67iy12l2rpt5" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons_pressed/green_use_booster_button_pressed.png" id="45_7irtf"]
+[ext_resource type="Script" path="res://scripts/general_scripts/game_over.gd" id="47_0l7cc"]
+[ext_resource type="Texture2D" uid="uid://fk7hhbhjhjxm" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons/yellow_use_booster_button.png" id="47_ryfs2"]
+[ext_resource type="Texture2D" uid="uid://dgaqbtlb545xa" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons_pressed/yellow_use_booster_button_pressed.png" id="48_wclts"]
+[ext_resource type="Texture2D" uid="uid://gucuq5mek0ll" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons/red_use_booster_button.png" id="50_opce8"]
+[ext_resource type="Texture2D" uid="uid://dus5a77ybgnwa" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons_pressed/red_use_booster_button_pressed.png" id="51_wj1ms"]
+[ext_resource type="Texture2D" uid="uid://b0xbtvq0nib38" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons/pink_use_booster_button.png" id="53_kdsgh"]
+[ext_resource type="Script" path="res://scripts/general_scripts/game_won.gd" id="54_fwk1c"]
+[ext_resource type="Texture2D" uid="uid://b0w0fi5ukid8k" path="res://Assets/artwork/ui/main_ui/top_ui_level_select/top_ui_exit.png" id="54_j5asf"]
+[ext_resource type="Texture2D" uid="uid://ck8cpkby1tbjq" path="res://Assets/artwork/ui/booster_activate/booster_use_buttons_pressed/pink_use_booster_button_pressed.png" id="54_snoul"]
+[ext_resource type="Texture2D" uid="uid://ctkij7jd2xumi" path="res://Assets/artwork/ui/main_ui/top_ui_level_select/exit_pressed.png" id="55_28ev3"]
+[ext_resource type="Texture2D" uid="uid://coakwbqcyk1d3" path="res://Assets/artwork/ui/win_state_ui/buttons_regular/continue_buttton.png" id="56_8gvxi"]
+[ext_resource type="Script" path="res://scripts/general_scripts/shuffle_scene.gd" id="58_2gkjj"]
+[ext_resource type="Texture2D" uid="uid://sy7gc48bo5sy" path="res://Assets/artwork/ui/win_state_ui/shuffle_banner.png" id="59_p6dm4"]
+[ext_resource type="Texture2D" uid="uid://csh1kamwprchm" path="res://Assets/artwork/ui/win_state_ui/level_complete_screen.png" id="62_qytqa"]
+[ext_resource type="Texture2D" uid="uid://d04obdifouy3s" path="res://Assets/artwork/settings/regular/music_regular.png" id="62_w03fa"]
+[ext_resource type="Texture2D" uid="uid://84wxgw7so0ek" path="res://Assets/artwork/settings/pressed/music_pressed.png" id="63_jxs6a"]
+[ext_resource type="Texture2D" uid="uid://cgpyaaedwvalm" path="res://Assets/artwork/ui/win_state_ui/buttons_pressed/continue_button_pressed.png" id="63_up6d2"]
+[ext_resource type="Texture2D" uid="uid://ct7vce6nsarxv" path="res://Assets/artwork/ui/win_state_ui/endgame_stars/silver_endgame_star.png" id="64_k24ap"]
+[ext_resource type="Texture2D" uid="uid://di2yagt3funh" path="res://Assets/artwork/settings/regular/exit_regular.png" id="64_tn6ai"]
+[ext_resource type="Texture2D" uid="uid://bhlcgrjmkjtt1" path="res://Assets/artwork/ui/win_state_ui/endgame_stars/gold_endgame_star.png" id="65_7mpix"]
+[ext_resource type="Texture2D" uid="uid://by62ulfgptqrm" path="res://Assets/artwork/ui/win_state_ui/banner.png" id="65_d1n50"]
+[ext_resource type="Texture2D" uid="uid://sijy83g61clp" path="res://Assets/artwork/settings/pressed/exit_pressed.png" id="65_fb6ga"]
+[ext_resource type="Texture2D" uid="uid://dxcdgyemeexw0" path="res://Assets/artwork/ui/in_level_settings/in_level_quit_confirmation.png" id="65_hvpcr"]
+[ext_resource type="Texture2D" uid="uid://dg3eghvl8y2va" path="res://Assets/artwork/ui/win_state_ui/game_over_screen.png" id="66_8kskt"]
+[ext_resource type="Texture2D" uid="uid://b7s07qjjltpps" path="res://Assets/artwork/settings/regular/sound_regular.png" id="66_30cek"]
+[ext_resource type="Texture2D" uid="uid://hhbhuxc7j2lu" path="res://Assets/artwork/ui/main_ui/top_ui_level_select/top_ui_leave.png" id="66_utp2s"]
+[ext_resource type="Texture2D" uid="uid://cxxrikqkn64us" path="res://Assets/artwork/ui/in_level_settings/heartlose.png" id="67_bb4uj"]
+[ext_resource type="Texture2D" uid="uid://bnl7l8v3xshms" path="res://Assets/artwork/ui/win_state_ui/buttons_regular/exit_button.png" id="67_jancp"]
+[ext_resource type="Texture2D" uid="uid://dg27wfqlop2f6" path="res://Assets/artwork/ui/main_ui/top_ui_level_select/leave_pressed.png" id="67_o6cbc"]
+[ext_resource type="Texture2D" uid="uid://beylo8rrntaga" path="res://Assets/artwork/settings/pressed/sound_pressed.png" id="67_ocgto"]
+[ext_resource type="Texture2D" uid="uid://cknmbyv6k32yv" path="res://Assets/artwork/ui/win_state_ui/endgame_stars/rainbow_endgame_star.png" id="67_r4pjn"]
+[ext_resource type="Texture2D" uid="uid://0880wkb50w34" path="res://Assets/artwork/ui/main_ui/top_ui_lives_pressed.png" id="68_4mxi5"]
+[ext_resource type="Texture2D" uid="uid://crmre6drugaph" path="res://Assets/artwork/settings/regular/vibration_regular.png" id="68_12nq1"]
+[ext_resource type="Texture2D" uid="uid://dbsf83dyufa4j" path="res://Assets/artwork/ui/win_state_ui/buttons_pressed/exit_button_pressed.png" id="68_c50r7"]
+[ext_resource type="Texture2D" uid="uid://bn3gpf8q03q3f" path="res://Assets/artwork/ui/store/map_store_button_for_shard.png" id="68_lx5kr"]
+[ext_resource type="Texture2D" uid="uid://c7kmm17gr4an0" path="res://Assets/artwork/ui/win_state_ui/buttons_regular/retry_button.png" id="69_8jckf"]
+[ext_resource type="Texture2D" uid="uid://i7poayhloeka" path="res://Assets/artwork/settings/pressed/vibration_pressed.png" id="69_ftjgy"]
+[ext_resource type="Texture2D" uid="uid://big6i6qumrfk7" path="res://Assets/artwork/ui/store/moves_store.png" id="70_7m8gu"]
+[ext_resource type="Texture2D" uid="uid://wjdri223ix1y" path="res://Assets/artwork/ui/win_state_ui/buttons_pressed/retry_button_pressed.png" id="70_siop1"]
+[ext_resource type="Texture2D" uid="uid://begxc8ji0utk1" path="res://Assets/artwork/ui/store/store_buy_button.png" id="70_yl8qw"]
+[ext_resource type="Texture2D" uid="uid://cabmtvi0bbibx" path="res://Assets/artwork/ui/store/map_store_button_pressed_for_shard.png" id="71_2eife"]
+[ext_resource type="Texture2D" uid="uid://ce0h4o37begad" path="res://Assets/artwork/vfx/particle_effects/256/floaty_64.png" id="76_pgigr"]
+[ext_resource type="Texture2D" uid="uid://vmplsige2l2c" path="res://Assets/artwork/ui/main_ui/settings.png" id="78_dm30q"]
+[ext_resource type="Texture2D" uid="uid://ksllmj3vy5q1" path="res://Assets/artwork/ui/store/shard_store.png" id="79_18vl4"]
+[ext_resource type="Texture2D" uid="uid://o68gll83haic" path="res://Assets/artwork/ui/main_ui/settings-bright.png" id="79_klpdm"]
+[ext_resource type="Texture2D" uid="uid://c5j1iq0a6ylkg" path="res://Assets/artwork/ui/store/lives_store.png" id="80_s1paa"]
+[ext_resource type="Texture2D" uid="uid://bnb360a54ewlw" path="res://Assets/artwork/ui/store/map_store_button_pressed.png" id="89_2x6bk"]
+[ext_resource type="Texture2D" uid="uid://cepw6yqbqs733" path="res://Assets/artwork/animation/animation_sprites/confetti.png" id="90_jovdt"]
+[ext_resource type="Texture2D" uid="uid://bpc6cgwf5p501" path="res://Assets/artwork/obstacles/ice.png" id="99_btslc"]
+[ext_resource type="Texture2D" uid="uid://2a1wocdmya2v" path="res://Assets/artwork/pieces/regular/regular_blue.png" id="99_mxcwe"]
+[ext_resource type="Texture2D" uid="uid://cx536oxtdkm5" path="res://Assets/artwork/animation/bomb_spawn_textures/green_bomb_spawn.png" id="100_f6tnb"]
+[ext_resource type="Texture2D" uid="uid://pjcv4by67fi8" path="res://Assets/artwork/pieces/regular/regular_green.png" id="101_cjs4h"]
+[ext_resource type="Texture2D" uid="uid://crlkyh5r050ij" path="res://Assets/artwork/obstacles/ice2.png" id="101_i8tar"]
+[ext_resource type="Texture2D" uid="uid://duvgoc73k6q5q" path="res://Assets/artwork/obstacles/ice3.png" id="102_kvs14"]
+[ext_resource type="Texture2D" uid="uid://csbunvejcd2mv" path="res://Assets/artwork/pieces/regular/regular_orange.png" id="103_158q2"]
+[ext_resource type="Texture2D" uid="uid://bvy6vt4vnl803" path="res://Assets/artwork/obstacles/ice4.png" id="103_bqgji"]
+[ext_resource type="Texture2D" uid="uid://khkkd5px6c6h" path="res://Assets/artwork/pieces/regular/regular_pink.png" id="105_op6uk"]
+[ext_resource type="Texture2D" uid="uid://cy8v4fvp06p51" path="res://Assets/artwork/pieces/regular/regular_purple.png" id="107_2iedk"]
+[ext_resource type="Script" path="res://scripts/general_scripts/in_level_settings.gd" id="107_ud43a"]
+[ext_resource type="Texture2D" uid="uid://ds64txytpl8mv" path="res://Assets/artwork/ui/in_level_settings/in_level_settings.png" id="108_gxnc4"]
+[ext_resource type="Texture2D" uid="uid://x7jhvblx76vi" path="res://Assets/artwork/pieces/regular/regular_yellow.png" id="109_fs8di"]
+[ext_resource type="Texture2D" uid="uid://cemjspjtbsleu" path="res://Assets/artwork/obstacles/marmalade1.png" id="114_ldyhl"]
+[ext_resource type="Texture2D" uid="uid://o2i2kj7ni1nk" path="res://Assets/artwork/obstacles/concrete.png" id="115_1wkgc"]
+[ext_resource type="Texture2D" uid="uid://cyqqkyl8qqvwa" path="res://Assets/artwork/obstacles/marmalade2.png" id="115_ltbkf"]
+[ext_resource type="Texture2D" uid="uid://dfbffwam173q4" path="res://Assets/artwork/obstacles/marmalade3.png" id="116_b7v0h"]
+[ext_resource type="Texture2D" uid="uid://cb3ucs6ssjkxj" path="res://Assets/artwork/obstacles/concrete2.png" id="116_hjmol"]
+[ext_resource type="Texture2D" uid="uid://b0r73xxb8ct71" path="res://Assets/artwork/obstacles/concrete3.png" id="117_j288r"]
+[ext_resource type="Texture2D" uid="uid://fhmqwah8hphn" path="res://Assets/artwork/obstacles/concrete4.png" id="118_71cou"]
+
+[sub_resource type="ShaderMaterial" id="2"]
+resource_local_to_scene = true
+shader = ExtResource("3_h2q72")
+shader_parameter/water_x = null
+shader_parameter/water_y = null
+shader_parameter/water_z = null
+
+[sub_resource type="LabelSettings" id="LabelSettings_cmb0n"]
+font = ExtResource("16_de1df")
+font_size = 30
+font_color = Color(0.27451, 0.776471, 0.776471, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_24cb3"]
+font = ExtResource("16_de1df")
+font_size = 30
+font_color = Color(0.00392157, 0.737255, 0.419608, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_13ln6"]
+font = ExtResource("16_de1df")
+font_size = 30
+font_color = Color(0.976471, 0.572549, 0.498039, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_bo5k8"]
+font = ExtResource("16_de1df")
+font_size = 50
+font_color = Color(0.976471, 0.572549, 0.498039, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_gac7i"]
+font = ExtResource("16_de1df")
+font_size = 30
+font_color = Color(0.968627, 0.419608, 0.415686, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_kf2rp"]
+font = ExtResource("16_de1df")
+font_size = 30
+font_color = Color(0.952941, 0.65098, 0.705882, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_fe1e1"]
+font = ExtResource("16_de1df")
+font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_67jx3"]
+font = ExtResource("16_de1df")
+font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_36my5"]
+font = ExtResource("16_de1df")
+font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_sh6qt"]
+font = ExtResource("16_de1df")
+font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_18uft"]
+font = ExtResource("16_de1df")
+font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_bp5n7"]
+font = ExtResource("16_de1df")
+font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_hyodl"]
+font = ExtResource("16_de1df")
+font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_oafxc"]
+font = ExtResource("16_de1df")
+font_size = 55
+font_color = Color(0.498039, 0.427451, 0.878431, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_hwast"]
+font = ExtResource("16_de1df")
+font_size = 32
+font_color = Color(0.423529, 0.376471, 0.768627, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_hg8rj"]
+font = ExtResource("16_de1df")
+font_size = 64
+font_color = Color(0.431373, 0.376471, 0.796078, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_2h8hc"]
+resource_name = "booster_label"
+font = ExtResource("16_de1df")
+font_size = 30
+font_color = Color(0.27451, 0.776471, 0.776471, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_gvhni"]
+font = ExtResource("16_de1df")
+font_size = 60
+
+[sub_resource type="LabelSettings" id="LabelSettings_mig6o"]
+font = ExtResource("16_de1df")
+font_size = 30
+font_color = Color(0.27451, 0.776471, 0.776471, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_xtlbj"]
+font = ExtResource("16_de1df")
+font_size = 30
+font_color = Color(0.27451, 0.776471, 0.776471, 1)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_xkesv"]
+resource_local_to_scene = true
+resource_name = "rainbow"
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 7
+particles_anim_v_frames = 7
+particles_anim_loop = false
+
+[sub_resource type="Gradient" id="Gradient_s7y4i"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.192623, 0.42623, 0.668033, 0.815574, 1)
+colors = PackedColorArray(0.952941, 0, 0, 1, 0.960784, 0.368627, 0, 1, 0.972549, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0.819608, 1, 0.772549, 0.00392157, 0.945098, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_revqi"]
+gradient = SubResource("Gradient_s7y4i")
+width = 512
+use_hdr = true
+
+[sub_resource type="Curve" id="Curve_t34qi"]
+_data = [Vector2(0, 1), 0.0, -1.05557, 0, 0, Vector2(1, 0), -1.10411, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_shbi4"]
+curve = SubResource("Curve_t34qi")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_c2w2w"]
+resource_local_to_scene = true
+lifetime_randomness = 0.5
+particle_flag_disable_z = true
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 250.0
+initial_velocity_max = 750.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 4.0
+scale_max = 7.0
+scale_curve = SubResource("CurveTexture_shbi4")
+color_ramp = SubResource("GradientTexture1D_revqi")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aqdpx"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(0, 0, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ogyr7"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(512, 0, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t3xj8"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(1024, 0, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ebn05"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(1536, 0, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jbwhp"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(2048, 0, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7knl8"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(2560, 0, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mpmcg"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(3072, 0, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_le3uy"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(3584, 0, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yx5g1"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(0, 512, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hs8nt"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(512, 512, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kernh"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(1024, 512, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jvj2j"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(1536, 512, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_288pm"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(2048, 512, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_derbl"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(2560, 512, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iiely"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(3072, 512, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_47qlk"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(3584, 512, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o1mmf"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(0, 1024, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_faedq"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(512, 1024, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u7aqc"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(1024, 1024, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_68mti"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(1536, 1024, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o38ci"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(2048, 1024, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_osj6b"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(2560, 1024, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u6d6c"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(3072, 1024, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ari35"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(3584, 1024, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nx5p4"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(0, 1536, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5riu6"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(512, 1536, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tto2b"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(1024, 1536, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ghpd"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(1536, 1536, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_va0tc"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(2048, 1536, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q14kk"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(2560, 1536, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ibadx"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(3072, 1536, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cd8d3"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(3584, 1536, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nuogo"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(0, 2048, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d3d0f"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(512, 2048, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qka1k"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(1024, 2048, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ftgnp"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(1536, 2048, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q8el4"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(2048, 2048, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7sae0"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(2560, 2048, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2a1hd"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(3072, 2048, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wvycn"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(3584, 2048, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_llk3s"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(0, 2560, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qb8rl"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(512, 2560, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7kmbh"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(1024, 2560, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cgamu"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(1536, 2560, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nebd3"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(2048, 2560, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_66daf"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(2560, 2560, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oegl3"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(3072, 2560, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_718sx"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(3584, 2560, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kvhj3"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(0, 3072, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fcs5p"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(512, 3072, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e4jb7"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(1024, 3072, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lf6vg"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(1536, 3072, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_861xu"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(2048, 3072, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b2tkx"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(2560, 3072, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_smc54"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(3072, 3072, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kde2s"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(3584, 3072, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xd68h"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(0, 3584, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2pe44"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(512, 3584, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_witp7"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(1024, 3584, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vqpgn"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(1536, 3584, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vivks"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(2048, 3584, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8jbqw"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(2560, 3584, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j3jw2"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(3072, 3584, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yqv32"]
+atlas = ExtResource("90_jovdt")
+region = Rect2(3584, 3584, 512, 512)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_flmv5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aqdpx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ogyr7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t3xj8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ebn05")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jbwhp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7knl8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mpmcg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_le3uy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yx5g1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hs8nt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kernh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jvj2j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_288pm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_derbl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iiely")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_47qlk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o1mmf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_faedq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u7aqc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_68mti")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o38ci")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_osj6b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u6d6c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ari35")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nx5p4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5riu6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tto2b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0ghpd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_va0tc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q14kk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ibadx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cd8d3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nuogo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d3d0f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qka1k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ftgnp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q8el4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7sae0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2a1hd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wvycn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_llk3s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qb8rl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7kmbh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cgamu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nebd3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_66daf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oegl3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_718sx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kvhj3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fcs5p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e4jb7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lf6vg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_861xu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b2tkx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_smc54")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kde2s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xd68h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2pe44")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_witp7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vqpgn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vivks")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8jbqw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j3jw2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yqv32")
+}],
+"loop": false,
+"name": &"confetti",
+"speed": 30.0
+}]
+
+[sub_resource type="LabelSettings" id="LabelSettings_5yq1b"]
+font = ExtResource("16_de1df")
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_k3qvb"]
+font = ExtResource("16_de1df")
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_twf0n"]
+font = ExtResource("16_de1df")
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_b8v7q"]
+font = ExtResource("16_de1df")
+font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_vsul1"]
+font = ExtResource("16_de1df")
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_a276m"]
+font = ExtResource("16_de1df")
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_xrtiv"]
+font = ExtResource("16_de1df")
+font_size = 100
+
+[sub_resource type="Animation" id="Animation_4351j"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("complete_menu:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("complete_menu/rainbow_star:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, 2)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("complete_menu/silver_star:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("complete_menu/rainbow_star:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("complete_menu/silver_star:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("complete_menu/gold_star:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("complete_menu/gold_star:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_oddgn"]
+resource_name = "game_won"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("complete_menu:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_5hj1m"]
+resource_name = "gold"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("complete_menu/gold_star:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.3, 0.6, 0.7, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(1, 1), Vector2(1.5, 1.5), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("complete_menu/silver_star:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(1, 1), Vector2(1.5, 1.5), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("complete_menu/gold_star:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("complete_menu/silver_star:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.498039), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_62da2"]
+resource_name = "rainbow"
+length = 1.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("complete_menu/rainbow_star:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.6, 0.9, 1, 1.1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(1, 1), Vector2(1.5, 1.5), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("complete_menu/silver_star:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(1, 1), Vector2(1.5, 1.5), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("complete_menu/rainbow_star:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.6, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("complete_menu/silver_star:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.498039), Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("complete_menu/gold_star:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.3, 0.6, 0.7, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(1, 1), Vector2(1.5, 1.5), Vector2(1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("complete_menu/gold_star:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_wcxrn"]
+resource_name = "silver"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("complete_menu/silver_star:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.498039), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("complete_menu/silver_star:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(1, 1), Vector2(1.5, 1.5), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_petgh"]
+_data = {
+"RESET": SubResource("Animation_4351j"),
+"game_won": SubResource("Animation_oddgn"),
+"gold": SubResource("Animation_5hj1m"),
+"rainbow": SubResource("Animation_62da2"),
+"silver": SubResource("Animation_wcxrn")
+}
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_g1q13"]
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 7
+particles_anim_v_frames = 7
+particles_anim_loop = false
+
+[sub_resource type="Gradient" id="Gradient_fiipp"]
+offsets = PackedFloat32Array(0.0245902, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_vq07t"]
+gradient = SubResource("Gradient_fiipp")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1yq4g"]
+resource_local_to_scene = true
+lifetime_randomness = 0.5
+particle_flag_disable_z = true
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 250.0
+initial_velocity_max = 750.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 4.0
+scale_max = 7.0
+scale_curve = SubResource("CurveTexture_shbi4")
+color_ramp = SubResource("GradientTexture1D_vq07t")
+
+[sub_resource type="LabelSettings" id="LabelSettings_kbm6y"]
+font = ExtResource("16_de1df")
+font_size = 60
+
+[sub_resource type="LabelSettings" id="LabelSettings_a230p"]
+font = ExtResource("16_de1df")
+font_size = 100
+
+[sub_resource type="Animation" id="5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("banner:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -394)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("gameover_menu:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="6"]
+resource_name = "game_over"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("banner:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 1, 1.2, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, -394), Vector2(0, 1100), Vector2(0, 990), Vector2(0, 1033), Vector2(0, 1033), Vector2(0, 1000), Vector2(0, 2612)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("gameover_menu:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1.4, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qkk5b"]
+_data = {
+"RESET": SubResource("5"),
+"game_over": SubResource("6")
+}
+
+[sub_resource type="Animation" id="1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("shuffle_banner:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -500)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("shuffle_banner:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ufpe1"]
+resource_name = "shuffle_board"
+step = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("shuffle_banner:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, -500), Vector2(0, 1033), Vector2(0, 1033), Vector2(0, 2600)]
+}
+
+[sub_resource type="Animation" id="Animation_7cblp"]
+resource_name = "shuffle_board_2"
+length = 0.75
+step = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("shuffle_banner:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("shuffle_banner:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 1033)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ij3r6"]
+_data = {
+"RESET": SubResource("1"),
+"shuffle_board": SubResource("Animation_ufpe1"),
+"shuffle_board_2": SubResource("Animation_7cblp")
+}
+
+[node name="level_template" type="Node2D"]
+script = ExtResource("1_vc0pq")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(585, 1266)
+script = ExtResource("9")
+
+[node name="bg" type="TextureRect" parent="."]
+material = SubResource("2")
+offset_right = 1172.0
+offset_bottom = 2534.0
+scale = Vector2(0.995484, 1)
+texture = ExtResource("11")
+
+[node name="grid_bg" type="Node2D" parent="."]
+
+[node name="level_editor" type="Node2D" parent="."]
+script = ExtResource("5_8vyf2")
+
+[node name="grid" type="Node2D" parent="."]
+rotation = -0.000628801
+script = ExtResource("13")
+
+[node name="shuffle_timer" type="Timer" parent="grid"]
+wait_time = 1.5
+one_shot = true
+
+[node name="hint_timer" type="Timer" parent="grid"]
+wait_time = 3.0
+one_shot = true
+
+[node name="slime_timer" type="Timer" parent="grid"]
+wait_time = 4.0
+one_shot = true
+
+[node name="UI" type="TextureRect" parent="."]
+offset_top = 13.0
+offset_bottom = 13.0
+script = ExtResource("7")
+goal_prefab = ExtResource("22")
+
+[node name="booster_screens" type="TextureRect" parent="UI"]
+layout_mode = 0
+offset_right = 1170.0
+offset_bottom = 2533.0
+
+[node name="blue_booster_screen" type="TextureRect" parent="UI/booster_screens"]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("38_t5pwt")
+
+[node name="blue_booster_screen_exit_button" type="TextureButton" parent="UI/booster_screens/blue_booster_screen"]
+layout_mode = 0
+offset_left = 886.0
+offset_top = 671.0
+offset_right = 1067.0
+offset_bottom = 852.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("38")
+texture_pressed = ExtResource("39")
+
+[node name="blue_booster_screen_inv" type="Label" parent="UI/booster_screens/blue_booster_screen"]
+layout_mode = 0
+offset_left = 611.0
+offset_top = 1006.0
+offset_right = 682.0
+offset_bottom = 1087.0
+pivot_offset = Vector2(19, 114)
+text = "19"
+label_settings = SubResource("LabelSettings_cmb0n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="blue_booster_use_button" type="TextureButton" parent="UI/booster_screens/blue_booster_screen"]
+layout_mode = 0
+offset_left = 571.0
+offset_top = 1470.0
+offset_right = 780.0
+offset_bottom = 1532.0
+texture_normal = ExtResource("41_gexv8")
+texture_pressed = ExtResource("42_x5tsg")
+
+[node name="green_booster_screen" type="TextureRect" parent="UI/booster_screens"]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("41_q3c8d")
+
+[node name="green_booster_screen_exit_button" type="TextureButton" parent="UI/booster_screens/green_booster_screen"]
+layout_mode = 0
+offset_left = 886.0
+offset_top = 671.0
+offset_right = 1067.0
+offset_bottom = 852.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("38")
+texture_pressed = ExtResource("39")
+
+[node name="green_booster_screen_inv" type="Label" parent="UI/booster_screens/green_booster_screen"]
+layout_mode = 0
+offset_left = 612.0
+offset_top = 1004.0
+offset_right = 683.0
+offset_bottom = 1085.0
+pivot_offset = Vector2(19, 114)
+text = "19"
+label_settings = SubResource("LabelSettings_24cb3")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="green_booster_use_button" type="TextureButton" parent="UI/booster_screens/green_booster_screen"]
+layout_mode = 0
+offset_left = 568.0
+offset_top = 1468.0
+offset_right = 778.0
+offset_bottom = 1535.0
+texture_normal = ExtResource("44_fuyeg")
+texture_pressed = ExtResource("45_7irtf")
+
+[node name="yellow_booster_screen" type="TextureRect" parent="UI/booster_screens"]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("42_nur1d")
+
+[node name="yellow_booster_screen_exit_button" type="TextureButton" parent="UI/booster_screens/yellow_booster_screen"]
+layout_mode = 0
+offset_left = 886.0
+offset_top = 671.0
+offset_right = 1067.0
+offset_bottom = 852.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("38")
+texture_pressed = ExtResource("39")
+
+[node name="yellow_booster_screen_inv" type="Label" parent="UI/booster_screens/yellow_booster_screen"]
+layout_mode = 0
+offset_left = 613.0
+offset_top = 1008.0
+offset_right = 684.0
+offset_bottom = 1089.0
+pivot_offset = Vector2(19, 114)
+text = "19"
+label_settings = SubResource("LabelSettings_13ln6")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="yellow_booster_use_button" type="TextureButton" parent="UI/booster_screens/yellow_booster_screen"]
+layout_mode = 0
+offset_left = 569.0
+offset_top = 1470.0
+offset_right = 779.0
+offset_bottom = 1537.0
+texture_normal = ExtResource("47_ryfs2")
+texture_pressed = ExtResource("48_wclts")
+
+[node name="Label" type="Label" parent="UI/booster_screens/yellow_booster_screen"]
+layout_mode = 0
+offset_left = 638.0
+offset_top = 1471.0
+offset_right = 718.0
+offset_bottom = 1555.0
+text = "Use"
+label_settings = SubResource("LabelSettings_bo5k8")
+
+[node name="red_booster_screen" type="TextureRect" parent="UI/booster_screens"]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("43_dnsc4")
+
+[node name="red_booster_screen_exit_button" type="TextureButton" parent="UI/booster_screens/red_booster_screen"]
+layout_mode = 0
+offset_left = 886.0
+offset_top = 671.0
+offset_right = 1067.0
+offset_bottom = 852.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("38")
+texture_pressed = ExtResource("39")
+
+[node name="red_booster_screen_inv" type="Label" parent="UI/booster_screens/red_booster_screen"]
+layout_mode = 0
+offset_left = 611.0
+offset_top = 1004.0
+offset_right = 682.0
+offset_bottom = 1085.0
+pivot_offset = Vector2(19, 114)
+text = "19"
+label_settings = SubResource("LabelSettings_gac7i")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="red_booster_use_button" type="TextureButton" parent="UI/booster_screens/red_booster_screen"]
+layout_mode = 0
+offset_left = 568.0
+offset_top = 1468.0
+offset_right = 778.0
+offset_bottom = 1535.0
+texture_normal = ExtResource("50_opce8")
+texture_pressed = ExtResource("51_wj1ms")
+
+[node name="pink_booster_screen" type="TextureRect" parent="UI/booster_screens"]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("44_vavpc")
+
+[node name="pink_booster_screen_exit_button" type="TextureButton" parent="UI/booster_screens/pink_booster_screen"]
+layout_mode = 0
+offset_left = 886.0
+offset_top = 671.0
+offset_right = 1067.0
+offset_bottom = 852.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("38")
+texture_pressed = ExtResource("39")
+
+[node name="pink_booster_screen_inv" type="Label" parent="UI/booster_screens/pink_booster_screen"]
+layout_mode = 0
+offset_left = 611.0
+offset_top = 1004.0
+offset_right = 682.0
+offset_bottom = 1085.0
+pivot_offset = Vector2(19, 114)
+text = "19"
+label_settings = SubResource("LabelSettings_kf2rp")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="pink_booster_use_button" type="TextureButton" parent="UI/booster_screens/pink_booster_screen"]
+layout_mode = 0
+offset_left = 568.0
+offset_top = 1467.0
+offset_right = 778.0
+offset_bottom = 1534.0
+texture_normal = ExtResource("53_kdsgh")
+texture_pressed = ExtResource("54_snoul")
+
+[node name="booster_stores" type="Sprite2D" parent="UI"]
+
+[node name="blue_booster_store" type="Sprite2D" parent="UI/booster_stores"]
+visible = false
+texture = ExtResource("35")
+centered = false
+
+[node name="booster_store_exit_button" type="TextureButton" parent="UI/booster_stores/blue_booster_store"]
+offset_left = 886.0
+offset_top = 671.0
+offset_right = 1067.0
+offset_bottom = 852.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("38")
+texture_pressed = ExtResource("39")
+
+[node name="blue_booster_buy_button_3x" type="TextureButton" parent="UI/booster_stores/blue_booster_store"]
+offset_left = 571.0
+offset_top = 1276.0
+offset_right = 779.0
+offset_bottom = 1337.0
+texture_pressed = ExtResource("28_jaj7x")
+
+[node name="blue_booster_3x_price" type="Label" parent="UI/booster_stores/blue_booster_store/blue_booster_buy_button_3x"]
+layout_mode = 0
+offset_left = 110.0
+offset_top = -8.0
+offset_right = 181.0
+offset_bottom = 73.0
+pivot_offset = Vector2(19, 114)
+text = "19"
+label_settings = SubResource("LabelSettings_fe1e1")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="blue_booster_buy_button_10x" type="TextureButton" parent="UI/booster_stores/blue_booster_store"]
+offset_left = 569.0
+offset_top = 1463.0
+offset_right = 777.0
+offset_bottom = 1524.0
+texture_pressed = ExtResource("28_jaj7x")
+
+[node name="blue_booster_10x_price" type="Label" parent="UI/booster_stores/blue_booster_store/blue_booster_buy_button_10x"]
+layout_mode = 0
+offset_left = 110.0
+offset_top = -4.0
+offset_right = 181.0
+offset_bottom = 77.0
+pivot_offset = Vector2(19, 114)
+text = "59	"
+label_settings = SubResource("LabelSettings_67jx3")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="blue_booster_buy_button_20x" type="TextureButton" parent="UI/booster_stores/blue_booster_store"]
+offset_left = 569.0
+offset_top = 1647.0
+offset_right = 777.0
+offset_bottom = 1708.0
+texture_pressed = ExtResource("28_jaj7x")
+
+[node name="blue_booster_20x_price" type="Label" parent="UI/booster_stores/blue_booster_store/blue_booster_buy_button_20x"]
+layout_mode = 0
+offset_left = 110.0
+offset_top = -6.0
+offset_right = 186.0
+offset_bottom = 75.0
+pivot_offset = Vector2(19, 114)
+text = "109"
+label_settings = SubResource("LabelSettings_36my5")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="green_booster_store" type="Sprite2D" parent="UI/booster_stores"]
+visible = false
+texture = ExtResource("33")
+centered = false
+
+[node name="booster_store_exit_button" type="TextureButton" parent="UI/booster_stores/green_booster_store"]
+offset_left = 884.0
+offset_top = 666.0
+offset_right = 1065.0
+offset_bottom = 847.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("38")
+texture_pressed = ExtResource("39")
+
+[node name="green_booster_buy_button_3x" type="TextureButton" parent="UI/booster_stores/green_booster_store"]
+offset_left = 571.0
+offset_top = 1276.0
+offset_right = 779.0
+offset_bottom = 1337.0
+texture_pressed = ExtResource("30_4uf2n")
+
+[node name="green_booster_3x_price" type="Label" parent="UI/booster_stores/green_booster_store/green_booster_buy_button_3x"]
+layout_mode = 0
+offset_left = 105.0
+offset_top = -9.0
+offset_right = 176.0
+offset_bottom = 72.0
+pivot_offset = Vector2(19, 114)
+text = "19"
+label_settings = SubResource("LabelSettings_sh6qt")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="green_booster_buy_button_10x" type="TextureButton" parent="UI/booster_stores/green_booster_store"]
+offset_left = 569.0
+offset_top = 1463.0
+offset_right = 777.0
+offset_bottom = 1524.0
+texture_pressed = ExtResource("30_4uf2n")
+
+[node name="green_booster_10x_price" type="Label" parent="UI/booster_stores/green_booster_store/green_booster_buy_button_10x"]
+layout_mode = 0
+offset_left = 105.0
+offset_top = -5.0
+offset_right = 176.0
+offset_bottom = 76.0
+pivot_offset = Vector2(19, 114)
+text = "59	"
+label_settings = SubResource("LabelSettings_sh6qt")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="green_booster_buy_button_20x" type="TextureButton" parent="UI/booster_stores/green_booster_store"]
+offset_left = 569.0
+offset_top = 1647.0
+offset_right = 777.0
+offset_bottom = 1708.0
+texture_pressed = ExtResource("30_4uf2n")
+
+[node name="green_booster_20x_price" type="Label" parent="UI/booster_stores/green_booster_store/green_booster_buy_button_20x"]
+layout_mode = 0
+offset_left = 105.0
+offset_top = -7.0
+offset_right = 181.0
+offset_bottom = 74.0
+pivot_offset = Vector2(19, 114)
+text = "109"
+label_settings = SubResource("LabelSettings_sh6qt")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="yellow_booster_store" type="Sprite2D" parent="UI/booster_stores"]
+visible = false
+texture = ExtResource("37")
+centered = false
+
+[node name="booster_store_exit_button" type="TextureButton" parent="UI/booster_stores/yellow_booster_store"]
+offset_left = 883.0
+offset_top = 664.0
+offset_right = 1064.0
+offset_bottom = 845.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("38")
+texture_pressed = ExtResource("39")
+
+[node name="yellow_booster_buy_button_3x" type="TextureButton" parent="UI/booster_stores/yellow_booster_store"]
+offset_left = 571.0
+offset_top = 1276.0
+offset_right = 779.0
+offset_bottom = 1337.0
+texture_pressed = ExtResource("32_fqixa")
+
+[node name="yellow_booster_3x_price" type="Label" parent="UI/booster_stores/yellow_booster_store/yellow_booster_buy_button_3x"]
+layout_mode = 0
+offset_left = 113.0
+offset_top = -10.0
+offset_right = 184.0
+offset_bottom = 71.0
+pivot_offset = Vector2(19, 114)
+text = "19"
+label_settings = SubResource("LabelSettings_18uft")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="yellow_booster_buy_button_10x" type="TextureButton" parent="UI/booster_stores/yellow_booster_store"]
+offset_left = 569.0
+offset_top = 1463.0
+offset_right = 777.0
+offset_bottom = 1524.0
+texture_pressed = ExtResource("32_fqixa")
+
+[node name="yellow_booster_10x_price" type="Label" parent="UI/booster_stores/yellow_booster_store/yellow_booster_buy_button_10x"]
+layout_mode = 0
+offset_left = 113.0
+offset_top = -6.0
+offset_right = 184.0
+offset_bottom = 75.0
+pivot_offset = Vector2(19, 114)
+text = "59	"
+label_settings = SubResource("LabelSettings_18uft")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="yellow_booster_buy_button_20x" type="TextureButton" parent="UI/booster_stores/yellow_booster_store"]
+offset_left = 569.0
+offset_top = 1647.0
+offset_right = 777.0
+offset_bottom = 1708.0
+texture_pressed = ExtResource("32_fqixa")
+
+[node name="yellow_booster_20x_price" type="Label" parent="UI/booster_stores/yellow_booster_store/yellow_booster_buy_button_20x"]
+layout_mode = 0
+offset_left = 113.0
+offset_top = -8.0
+offset_right = 189.0
+offset_bottom = 73.0
+pivot_offset = Vector2(19, 114)
+text = "109"
+label_settings = SubResource("LabelSettings_18uft")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="red_booster_store" type="Sprite2D" parent="UI/booster_stores"]
+visible = false
+texture = ExtResource("36")
+centered = false
+
+[node name="booster_store_exit_button" type="TextureButton" parent="UI/booster_stores/red_booster_store"]
+offset_left = 887.0
+offset_top = 668.0
+offset_right = 1068.0
+offset_bottom = 849.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("38")
+texture_pressed = ExtResource("39")
+
+[node name="red_booster_buy_button_3x" type="TextureButton" parent="UI/booster_stores/red_booster_store"]
+offset_left = 571.0
+offset_top = 1276.0
+offset_right = 779.0
+offset_bottom = 1337.0
+texture_pressed = ExtResource("34_l4srb")
+
+[node name="red_booster_3x_price" type="Label" parent="UI/booster_stores/red_booster_store/red_booster_buy_button_3x"]
+layout_mode = 0
+offset_left = 103.0
+offset_top = -10.0
+offset_right = 174.0
+offset_bottom = 71.0
+pivot_offset = Vector2(19, 114)
+text = "19"
+label_settings = SubResource("LabelSettings_bp5n7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="red_booster_buy_button_10x" type="TextureButton" parent="UI/booster_stores/red_booster_store"]
+offset_left = 569.0
+offset_top = 1463.0
+offset_right = 777.0
+offset_bottom = 1524.0
+texture_pressed = ExtResource("34_l4srb")
+
+[node name="red_booster_10x_price" type="Label" parent="UI/booster_stores/red_booster_store/red_booster_buy_button_10x"]
+layout_mode = 0
+offset_left = 103.0
+offset_top = -6.0
+offset_right = 174.0
+offset_bottom = 75.0
+pivot_offset = Vector2(19, 114)
+text = "59	"
+label_settings = SubResource("LabelSettings_bp5n7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="red_booster_buy_button_20x" type="TextureButton" parent="UI/booster_stores/red_booster_store"]
+offset_left = 569.0
+offset_top = 1647.0
+offset_right = 777.0
+offset_bottom = 1708.0
+texture_pressed = ExtResource("34_l4srb")
+
+[node name="red_booster_20x_price" type="Label" parent="UI/booster_stores/red_booster_store/red_booster_buy_button_20x"]
+layout_mode = 0
+offset_left = 103.0
+offset_top = -8.0
+offset_right = 179.0
+offset_bottom = 73.0
+pivot_offset = Vector2(19, 114)
+text = "109"
+label_settings = SubResource("LabelSettings_bp5n7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="pink_booster_store" type="Sprite2D" parent="UI/booster_stores"]
+visible = false
+texture = ExtResource("34")
+centered = false
+
+[node name="booster_store_exit_button" type="TextureButton" parent="UI/booster_stores/pink_booster_store"]
+offset_left = 884.0
+offset_top = 666.0
+offset_right = 1065.0
+offset_bottom = 847.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("38")
+texture_pressed = ExtResource("39")
+
+[node name="pink_booster_buy_button_3x" type="TextureButton" parent="UI/booster_stores/pink_booster_store"]
+offset_left = 571.0
+offset_top = 1276.0
+offset_right = 779.0
+offset_bottom = 1337.0
+texture_pressed = ExtResource("36_j0o0x")
+
+[node name="pink_booster_3x_price" type="Label" parent="UI/booster_stores/pink_booster_store/pink_booster_buy_button_3x"]
+layout_mode = 0
+offset_left = 106.0
+offset_top = -8.0
+offset_right = 177.0
+offset_bottom = 73.0
+pivot_offset = Vector2(19, 114)
+text = "19"
+label_settings = SubResource("LabelSettings_hyodl")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="pink_booster_buy_button_10x" type="TextureButton" parent="UI/booster_stores/pink_booster_store"]
+offset_left = 569.0
+offset_top = 1463.0
+offset_right = 777.0
+offset_bottom = 1524.0
+texture_pressed = ExtResource("36_j0o0x")
+
+[node name="pink_booster_10x_price" type="Label" parent="UI/booster_stores/pink_booster_store/pink_booster_buy_button_10x"]
+layout_mode = 0
+offset_left = 106.0
+offset_top = -4.0
+offset_right = 177.0
+offset_bottom = 77.0
+pivot_offset = Vector2(19, 114)
+text = "59	"
+label_settings = SubResource("LabelSettings_hyodl")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="pink_booster_buy_button_20x" type="TextureButton" parent="UI/booster_stores/pink_booster_store"]
+offset_left = 569.0
+offset_top = 1647.0
+offset_right = 777.0
+offset_bottom = 1708.0
+texture_pressed = ExtResource("36_j0o0x")
+
+[node name="pink_booster_20x_price" type="Label" parent="UI/booster_stores/pink_booster_store/pink_booster_buy_button_20x"]
+layout_mode = 0
+offset_left = 106.0
+offset_top = -6.0
+offset_right = 182.0
+offset_bottom = 75.0
+pivot_offset = Vector2(19, 114)
+text = "109"
+label_settings = SubResource("LabelSettings_hyodl")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="top_ui" type="TextureRect" parent="UI"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = -72.0
+offset_right = 1179.0
+offset_bottom = 382.0
+texture = ExtResource("16")
+stretch_mode = 4
+
+[node name="top_ui_lives_button" type="TextureButton" parent="UI/top_ui"]
+layout_mode = 0
+offset_left = 464.0
+offset_top = 207.0
+offset_right = 714.0
+offset_bottom = 254.0
+texture_pressed = ExtResource("68_4mxi5")
+
+[node name="score_bar" type="TextureProgressBar" parent="UI/top_ui"]
+layout_mode = 0
+offset_left = 369.0
+offset_top = 252.0
+offset_right = 777.0
+offset_bottom = 306.0
+texture_under = ExtResource("19")
+texture_progress = ExtResource("20")
+
+[node name="score_label" type="Label" parent="UI/top_ui"]
+visible = false
+custom_minimum_size = Vector2(332, 65)
+layout_mode = 0
+offset_left = 64.0
+offset_top = 259.0
+offset_right = 396.0
+offset_bottom = 340.0
+text = "0000"
+label_settings = SubResource("LabelSettings_oafxc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="lives_label" type="Label" parent="UI/top_ui"]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 254.0
+offset_right = 125.0
+offset_bottom = 301.0
+text = "∞"
+label_settings = SubResource("LabelSettings_hwast")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="counter_label" type="Label" parent="UI/top_ui"]
+custom_minimum_size = Vector2(260, 65)
+layout_mode = 0
+offset_left = 2.0
+offset_top = 316.0
+offset_right = 262.0
+offset_bottom = 406.0
+text = "000	"
+label_settings = SubResource("LabelSettings_hg8rj")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="goal_container" type="HBoxContainer" parent="UI/top_ui"]
+layout_mode = 0
+offset_left = 364.0
+offset_top = 309.0
+offset_right = 788.0
+offset_bottom = 444.0
+alignment = 1
+
+[node name="goal_prefab" parent="UI/top_ui/goal_container" instance=ExtResource("22")]
+layout_mode = 2
+
+[node name="bottom_ui" type="TextureRect" parent="UI"]
+layout_mode = 0
+offset_left = 173.0
+offset_top = 2294.0
+offset_right = 1050.0
+offset_bottom = 2524.0
+stretch_mode = 2
+script = ExtResource("23")
+
+[node name="TextureRect" type="TextureRect" parent="UI/bottom_ui"]
+layout_mode = 0
+offset_left = -16.0
+offset_top = -36.0
+offset_right = 861.0
+offset_bottom = 194.0
+texture = ExtResource("17")
+
+[node name="blue_booster" type="TextureButton" parent="UI/bottom_ui"]
+layout_mode = 0
+offset_left = 49.0
+offset_top = 21.0
+offset_right = 214.0
+offset_bottom = 175.0
+scale = Vector2(0.8, 0.8)
+size_flags_horizontal = 5
+size_flags_vertical = 5
+texture_normal = ExtResource("26")
+texture_pressed = ExtResource("21")
+
+[node name="blue_booster_label" type="Label" parent="UI/bottom_ui/blue_booster"]
+layout_mode = 0
+offset_left = 98.75
+offset_top = 12.5002
+offset_right = 138.75
+offset_bottom = 56.5002
+text = "16	"
+label_settings = SubResource("LabelSettings_2h8hc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="blue_booster_unlock_label" type="Label" parent="UI/bottom_ui/blue_booster"]
+visible = false
+layout_mode = 0
+offset_left = -163.75
+offset_top = -112.5
+offset_right = 295.25
+offset_bottom = -28.5
+text = "Unlocks on level 55"
+label_settings = SubResource("LabelSettings_gvhni")
+vertical_alignment = 1
+
+[node name="green_booster" type="TextureButton" parent="UI/bottom_ui"]
+layout_mode = 0
+offset_left = 178.0
+offset_top = 21.0
+offset_right = 342.0
+offset_bottom = 175.0
+scale = Vector2(0.8, 0.8)
+size_flags_horizontal = 5
+size_flags_vertical = 5
+texture_normal = ExtResource("28")
+texture_pressed = ExtResource("32")
+
+[node name="green_booster_label" type="Label" parent="UI/bottom_ui/green_booster"]
+layout_mode = 0
+offset_left = 97.5
+offset_top = 12.5
+offset_right = 137.5
+offset_bottom = 56.5
+text = "16	"
+label_settings = SubResource("LabelSettings_mig6o")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="green_booster_unlock_label" type="Label" parent="UI/bottom_ui/green_booster"]
+visible = false
+layout_mode = 0
+offset_left = -153.75
+offset_top = -110.0
+offset_right = 304.25
+offset_bottom = -26.0
+text = "Unlocks on level 46"
+label_settings = SubResource("LabelSettings_gvhni")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="yellow_booster" type="TextureButton" parent="UI/bottom_ui"]
+layout_mode = 0
+offset_left = 337.0
+offset_top = 21.0
+offset_right = 502.0
+offset_bottom = 174.0
+scale = Vector2(0.8, 0.8)
+size_flags_horizontal = 5
+size_flags_vertical = 5
+texture_normal = ExtResource("15")
+texture_pressed = ExtResource("29")
+
+[node name="yellow_booster_label" type="Label" parent="UI/bottom_ui/yellow_booster"]
+layout_mode = 0
+offset_left = 98.75
+offset_top = 12.5002
+offset_right = 138.75
+offset_bottom = 49.5002
+text = "16	"
+label_settings = SubResource("LabelSettings_xtlbj")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="yellow_booster_unlock_label" type="Label" parent="UI/bottom_ui/yellow_booster"]
+visible = false
+layout_mode = 0
+offset_left = -143.75
+offset_top = -110.0
+offset_right = 294.25
+offset_bottom = -26.0
+text = "Unlocks on level 15"
+label_settings = SubResource("LabelSettings_gvhni")
+vertical_alignment = 1
+
+[node name="red_booster" type="TextureButton" parent="UI/bottom_ui"]
+layout_mode = 0
+offset_left = 496.0
+offset_top = 21.0
+offset_right = 661.0
+offset_bottom = 174.0
+scale = Vector2(0.8, 0.8)
+size_flags_horizontal = 5
+size_flags_vertical = 5
+texture_normal = ExtResource("27")
+texture_pressed = ExtResource("31")
+
+[node name="red_booster_label" type="Label" parent="UI/bottom_ui/red_booster"]
+layout_mode = 0
+offset_left = 101.427
+offset_top = 13.5
+offset_right = 141.427
+offset_bottom = 50.5
+text = "16	"
+label_settings = SubResource("LabelSettings_xtlbj")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="red_booster_unlock_label" type="Label" parent="UI/bottom_ui/red_booster"]
+visible = false
+layout_mode = 0
+offset_left = -137.5
+offset_top = -107.5
+offset_right = 271.5
+offset_bottom = -23.5
+text = "Unlocks on level 7"
+label_settings = SubResource("LabelSettings_gvhni")
+vertical_alignment = 1
+
+[node name="pink_booster" type="TextureButton" parent="UI/bottom_ui"]
+layout_mode = 0
+offset_left = 657.0
+offset_top = 21.0
+offset_right = 822.0
+offset_bottom = 174.0
+scale = Vector2(0.8, 0.8)
+size_flags_horizontal = 5
+size_flags_vertical = 5
+texture_normal = ExtResource("25")
+texture_pressed = ExtResource("30")
+
+[node name="pink_booster_label" type="Label" parent="UI/bottom_ui/pink_booster"]
+layout_mode = 0
+offset_left = 100.427
+offset_top = 12.5
+offset_right = 140.427
+offset_bottom = 49.5
+text = "16	"
+label_settings = SubResource("LabelSettings_xtlbj")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="pink_booster_unlock_label" type="Label" parent="UI/bottom_ui/pink_booster"]
+visible = false
+layout_mode = 0
+offset_left = -165.0
+offset_top = -111.25
+offset_right = 289.0
+offset_bottom = -27.25
+text = "Unlocks on level 34"
+label_settings = SubResource("LabelSettings_gvhni")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="rainbow_explosion" type="GPUParticles2D" parent="UI/bottom_ui"]
+material = SubResource("CanvasItemMaterial_xkesv")
+position = Vector2(400, -2170)
+emitting = false
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_c2w2w")
+texture = ExtResource("76_pgigr")
+one_shot = true
+explosiveness = 1.0
+local_coords = true
+
+[node name="star_1" type="TextureRect" parent="UI"]
+layout_mode = 0
+offset_left = 375.0
+offset_top = 162.0
+offset_right = 432.0
+offset_bottom = 216.0
+
+[node name="star_2" type="TextureRect" parent="UI"]
+layout_mode = 0
+offset_left = 594.0
+offset_top = 160.0
+offset_right = 651.0
+offset_bottom = 214.0
+
+[node name="star_3" type="TextureRect" parent="UI"]
+layout_mode = 0
+offset_left = 727.0
+offset_top = 160.0
+offset_right = 802.0
+offset_bottom = 214.0
+
+[node name="confetti_sprites" type="AnimatedSprite2D" parent="UI"]
+visible = false
+position = Vector2(585, 1266)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_flmv5")
+animation = &"confetti"
+
+[node name="in_level_settings" type="Node2D" parent="UI"]
+visible = false
+scale = Vector2(1.00176, 0.999415)
+script = ExtResource("107_ud43a")
+
+[node name="in_level_settings_background" type="TextureRect" parent="UI/in_level_settings"]
+offset_right = 1170.0
+offset_bottom = 2536.0
+texture = ExtResource("108_gxnc4")
+
+[node name="music_button" type="TextureButton" parent="UI/in_level_settings"]
+custom_minimum_size = Vector2(100, 100)
+offset_left = 255.0
+offset_top = 916.976
+offset_right = 375.0
+offset_bottom = 1036.98
+toggle_mode = true
+texture_normal = ExtResource("62_w03fa")
+texture_pressed = ExtResource("63_jxs6a")
+stretch_mode = 5
+
+[node name="exit_button" type="TextureButton" parent="UI/in_level_settings"]
+custom_minimum_size = Vector2(100, 100)
+offset_left = 517.0
+offset_top = 1978.0
+offset_right = 636.0
+offset_bottom = 2098.0
+texture_normal = ExtResource("64_tn6ai")
+texture_pressed = ExtResource("65_fb6ga")
+stretch_mode = 5
+
+[node name="sound_button" type="TextureButton" parent="UI/in_level_settings"]
+custom_minimum_size = Vector2(100, 100)
+offset_left = 526.0
+offset_top = 913.978
+offset_right = 646.0
+offset_bottom = 1033.98
+toggle_mode = true
+texture_normal = ExtResource("66_30cek")
+texture_pressed = ExtResource("67_ocgto")
+stretch_mode = 5
+
+[node name="vibration_button" type="TextureButton" parent="UI/in_level_settings"]
+custom_minimum_size = Vector2(100, 100)
+offset_left = 798.0
+offset_top = 914.978
+offset_right = 918.0
+offset_bottom = 1034.98
+toggle_mode = true
+texture_normal = ExtResource("68_12nq1")
+texture_pressed = ExtResource("69_ftjgy")
+stretch_mode = 5
+
+[node name="leave_button" type="TextureButton" parent="UI/in_level_settings"]
+offset_left = 536.057
+offset_top = 1282.75
+offset_right = 634.057
+offset_bottom = 1388.75
+texture_normal = ExtResource("66_utp2s")
+texture_pressed = ExtResource("67_o6cbc")
+
+[node name="heartlose" type="Sprite2D" parent="UI/in_level_settings"]
+position = Vector2(598.946, 1279.75)
+texture = ExtResource("67_bb4uj")
+
+[node name="quit_confirm" type="Node2D" parent="UI"]
+visible = false
+scale = Vector2(1.00176, 0.999415)
+
+[node name="quit_confirm_bg" type="TextureRect" parent="UI/quit_confirm"]
+offset_right = 1170.0
+offset_bottom = 2536.0
+texture = ExtResource("65_hvpcr")
+
+[node name="confim_cancel_button" type="TextureButton" parent="UI/quit_confirm"]
+custom_minimum_size = Vector2(100, 100)
+offset_left = 311.452
+offset_top = 1089.64
+offset_right = 416.452
+offset_bottom = 1195.64
+texture_normal = ExtResource("54_j5asf")
+texture_pressed = ExtResource("65_fb6ga")
+stretch_mode = 5
+
+[node name="confirm_leave_button" type="TextureButton" parent="UI/quit_confirm"]
+custom_minimum_size = Vector2(100, 100)
+offset_left = 787.614
+offset_top = 1090.64
+offset_right = 887.614
+offset_bottom = 1196.64
+texture_normal = ExtResource("66_utp2s")
+texture_pressed = ExtResource("67_o6cbc")
+stretch_mode = 5
+
+[node name="heartlose" type="Sprite2D" parent="UI/quit_confirm"]
+position = Vector2(853.498, 1087.64)
+texture = ExtResource("67_bb4uj")
+
+[node name="lives_store" type="Sprite2D" parent="UI"]
+visible = false
+texture = ExtResource("80_s1paa")
+centered = false
+
+[node name="lives_store_exit_button" type="TextureButton" parent="UI/lives_store"]
+offset_left = 942.0
+offset_top = 724.0
+offset_right = 1047.0
+offset_bottom = 830.0
+texture_normal = ExtResource("54_j5asf")
+texture_pressed = ExtResource("55_28ev3")
+
+[node name="lives_store_1life_buy_button" type="TextureButton" parent="UI/lives_store"]
+offset_left = 498.0
+offset_top = 1241.0
+offset_right = 669.0
+offset_bottom = 1293.0
+texture_normal = ExtResource("68_lx5kr")
+texture_pressed = ExtResource("89_2x6bk")
+
+[node name="life_price" type="Label" parent="UI/lives_store/lives_store_1life_buy_button"]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 4.0
+offset_right = 84.0
+offset_bottom = 51.0
+text = "4"
+label_settings = SubResource("LabelSettings_5yq1b")
+
+[node name="lives_store_5life_buy_button" type="TextureButton" parent="UI/lives_store"]
+offset_left = 498.0
+offset_top = 1423.0
+offset_right = 669.0
+offset_bottom = 1475.0
+texture_normal = ExtResource("68_lx5kr")
+texture_pressed = ExtResource("89_2x6bk")
+
+[node name="fivelife_price" type="Label" parent="UI/lives_store/lives_store_5life_buy_button"]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 4.0
+offset_right = 84.0
+offset_bottom = 51.0
+text = "12"
+label_settings = SubResource("LabelSettings_5yq1b")
+
+[node name="lives_store_6h_buy_button" type="TextureButton" parent="UI/lives_store"]
+offset_left = 498.0
+offset_top = 1600.0
+offset_right = 669.0
+offset_bottom = 1652.0
+texture_normal = ExtResource("68_lx5kr")
+texture_pressed = ExtResource("89_2x6bk")
+
+[node name="infinite_price" type="Label" parent="UI/lives_store/lives_store_6h_buy_button"]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 4.0
+offset_right = 84.0
+offset_bottom = 51.0
+text = "60"
+label_settings = SubResource("LabelSettings_5yq1b")
+
+[node name="moves_store" type="Sprite2D" parent="UI"]
+visible = false
+texture = ExtResource("70_7m8gu")
+centered = false
+
+[node name="buy_moves_button" type="TextureButton" parent="UI/moves_store"]
+offset_left = 494.0
+offset_top = 1396.0
+offset_right = 665.0
+offset_bottom = 1447.0
+texture_normal = ExtResource("68_lx5kr")
+texture_pressed = ExtResource("71_2eife")
+
+[node name="moves_price" type="Label" parent="UI/moves_store/buy_moves_button"]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 2.0
+offset_right = 85.0
+offset_bottom = 49.0
+text = "12"
+label_settings = SubResource("LabelSettings_k3qvb")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="moves_store_exit_button" type="TextureButton" parent="UI/moves_store"]
+offset_left = 940.0
+offset_top = 894.0
+offset_right = 1059.0
+offset_bottom = 1014.0
+texture_normal = ExtResource("64_tn6ai")
+texture_pressed = ExtResource("65_fb6ga")
+
+[node name="map_store" type="Sprite2D" parent="UI"]
+visible = false
+texture = ExtResource("79_18vl4")
+centered = false
+
+[node name="current_shards" type="Label" parent="UI/map_store"]
+offset_left = 525.0
+offset_top = 734.0
+offset_right = 624.0
+offset_bottom = 789.0
+text = "433"
+label_settings = SubResource("LabelSettings_twf0n")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="current_lives" type="Label" parent="UI/map_store"]
+offset_left = 535.0
+offset_top = 814.0
+offset_right = 611.0
+offset_bottom = 869.0
+text = "∞"
+label_settings = SubResource("LabelSettings_b8v7q")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="buy_button_10_shards" type="TextureButton" parent="UI/map_store"]
+offset_left = 647.0
+offset_top = 935.0
+offset_right = 818.0
+offset_bottom = 987.0
+texture_normal = ExtResource("70_yl8qw")
+texture_pressed = ExtResource("89_2x6bk")
+
+[node name="10_shards_price" type="Label" parent="UI/map_store/buy_button_10_shards"]
+layout_mode = 0
+offset_left = 14.0
+offset_right = 140.0
+offset_bottom = 55.0
+text = "1.99"
+label_settings = SubResource("LabelSettings_vsul1")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="currency" type="Label" parent="UI/map_store/buy_button_10_shards"]
+layout_mode = 0
+offset_left = 132.0
+offset_top = 4.0
+offset_right = 172.0
+offset_bottom = 51.0
+text = "$"
+label_settings = SubResource("LabelSettings_a276m")
+
+[node name="buy_button_50_shards" type="TextureButton" parent="UI/map_store"]
+offset_left = 647.0
+offset_top = 1083.0
+offset_right = 817.0
+offset_bottom = 1135.0
+texture_normal = ExtResource("70_yl8qw")
+texture_pressed = ExtResource("89_2x6bk")
+
+[node name="50_shards_price" type="Label" parent="UI/map_store/buy_button_50_shards"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 1.0
+offset_right = 140.0
+offset_bottom = 56.0
+text = "9.99"
+label_settings = SubResource("LabelSettings_vsul1")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="currency" type="Label" parent="UI/map_store/buy_button_50_shards"]
+layout_mode = 0
+offset_left = 132.0
+offset_top = 4.0
+offset_right = 172.0
+offset_bottom = 51.0
+text = "$"
+label_settings = SubResource("LabelSettings_a276m")
+
+[node name="buy_button_100_shards" type="TextureButton" parent="UI/map_store"]
+offset_left = 647.0
+offset_top = 1233.0
+offset_right = 817.0
+offset_bottom = 1285.0
+texture_normal = ExtResource("70_yl8qw")
+texture_pressed = ExtResource("89_2x6bk")
+
+[node name="100_shards_price" type="Label" parent="UI/map_store/buy_button_100_shards"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 1.0
+offset_right = 140.0
+offset_bottom = 56.0
+text = "19.99"
+label_settings = SubResource("LabelSettings_vsul1")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="currency" type="Label" parent="UI/map_store/buy_button_100_shards"]
+layout_mode = 0
+offset_left = 132.0
+offset_top = 4.0
+offset_right = 172.0
+offset_bottom = 51.0
+text = "$"
+label_settings = SubResource("LabelSettings_a276m")
+
+[node name="buy_button_250_shards" type="TextureButton" parent="UI/map_store"]
+offset_left = 647.0
+offset_top = 1382.0
+offset_right = 817.0
+offset_bottom = 1434.0
+texture_normal = ExtResource("70_yl8qw")
+texture_pressed = ExtResource("89_2x6bk")
+
+[node name="250_shards_price" type="Label" parent="UI/map_store/buy_button_250_shards"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = -1.0
+offset_right = 140.0
+offset_bottom = 54.0
+text = "39.99"
+label_settings = SubResource("LabelSettings_vsul1")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="currency" type="Label" parent="UI/map_store/buy_button_250_shards"]
+layout_mode = 0
+offset_left = 132.0
+offset_top = 4.0
+offset_right = 172.0
+offset_bottom = 51.0
+text = "$"
+label_settings = SubResource("LabelSettings_a276m")
+
+[node name="buy_button_500_shards" type="TextureButton" parent="UI/map_store"]
+offset_left = 647.0
+offset_top = 1528.0
+offset_right = 817.0
+offset_bottom = 1580.0
+texture_normal = ExtResource("70_yl8qw")
+texture_pressed = ExtResource("89_2x6bk")
+
+[node name="500_shards_price" type="Label" parent="UI/map_store/buy_button_500_shards"]
+layout_mode = 0
+offset_left = 14.0
+offset_right = 140.0
+offset_bottom = 55.0
+text = "59.99"
+label_settings = SubResource("LabelSettings_vsul1")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="currency" type="Label" parent="UI/map_store/buy_button_500_shards"]
+layout_mode = 0
+offset_left = 132.0
+offset_top = 4.0
+offset_right = 172.0
+offset_bottom = 51.0
+text = "$"
+label_settings = SubResource("LabelSettings_a276m")
+
+[node name="buy_button_1000_shards" type="TextureButton" parent="UI/map_store"]
+offset_left = 647.0
+offset_top = 1677.0
+offset_right = 817.0
+offset_bottom = 1729.0
+texture_normal = ExtResource("70_yl8qw")
+texture_pressed = ExtResource("89_2x6bk")
+
+[node name="1000_shards_price" type="Label" parent="UI/map_store/buy_button_1000_shards"]
+layout_mode = 0
+offset_left = 14.0
+offset_right = 140.0
+offset_bottom = 55.0
+text = "99.99"
+label_settings = SubResource("LabelSettings_vsul1")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="currency" type="Label" parent="UI/map_store/buy_button_1000_shards"]
+layout_mode = 0
+offset_left = 132.0
+offset_top = 4.0
+offset_right = 172.0
+offset_bottom = 51.0
+text = "$"
+label_settings = SubResource("LabelSettings_a276m")
+
+[node name="exit_map_store_button" type="TextureButton" parent="UI/map_store"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -23.5
+offset_top = 2000.0
+offset_right = 94.5
+offset_bottom = 2106.0
+grow_horizontal = 2
+texture_normal = ExtResource("54_j5asf")
+texture_pressed = ExtResource("55_28ev3")
+
+[node name="setting" type="TextureButton" parent="."]
+offset_left = 24.0
+offset_top = 2347.0
+offset_right = 119.0
+offset_bottom = 2442.0
+pivot_offset = Vector2(0, 90)
+size_flags_horizontal = 5
+size_flags_vertical = 5
+texture_normal = ExtResource("78_dm30q")
+texture_pressed = ExtResource("79_klpdm")
+
+[node name="goal_holder" type="Node" parent="."]
+script = ExtResource("10")
+
+[node name="goal_1" parent="goal_holder" instance=ExtResource("5")]
+max_needed = 50
+goal_string = "ice"
+
+[node name="score_goal" type="Node" parent="."]
+script = ExtResource("14")
+score_needed = 5000
+max_score_star = 5000
+
+[node name="collapse_timer" type="Timer" parent="."]
+wait_time = 0.35
+one_shot = true
+
+[node name="swap_timer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[node name="refill_timer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
+[node name="ui_layer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="destroy_timer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="booster_tween" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
+
+[node name="game_won" type="Node2D" parent="."]
+process_mode = 3
+visible = false
+script = ExtResource("54_fwk1c")
+
+[node name="complete_menu" type="TextureRect" parent="game_won"]
+modulate = Color(1, 1, 1, 0)
+offset_right = 1172.0
+offset_bottom = 2534.0
+texture = ExtResource("62_qytqa")
+stretch_mode = 2
+
+[node name="retry_button" type="TextureButton" parent="game_won/complete_menu"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 0
+offset_left = 291.0
+offset_top = 1224.0
+offset_right = 446.0
+offset_bottom = 1378.0
+texture_normal = ExtResource("69_8jckf")
+texture_pressed = ExtResource("70_siop1")
+
+[node name="continue_button" type="TextureButton" parent="game_won/complete_menu"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 0
+offset_left = 723.0
+offset_top = 1224.0
+offset_right = 878.0
+offset_bottom = 1378.0
+texture_normal = ExtResource("56_8gvxi")
+texture_pressed = ExtResource("63_up6d2")
+
+[node name="score_label" type="Label" parent="game_won/complete_menu"]
+layout_mode = 0
+offset_left = 445.0
+offset_top = 1080.0
+offset_right = 725.0
+offset_bottom = 1217.0
+text = "0000"
+label_settings = SubResource("LabelSettings_xrtiv")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="silver_star" type="Sprite2D" parent="game_won/complete_menu"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(405, 945)
+texture = ExtResource("64_k24ap")
+
+[node name="gold_star" type="Sprite2D" parent="game_won/complete_menu"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(586, 945)
+texture = ExtResource("65_7mpix")
+
+[node name="rainbow_star" type="Sprite2D" parent="game_won/complete_menu"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(766, 945)
+scale = Vector2(2, 2)
+texture = ExtResource("67_r4pjn")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="game_won"]
+libraries = {
+"": SubResource("AnimationLibrary_petgh")
+}
+
+[node name="wait_timer" type="Timer" parent="game_won"]
+wait_time = 3.0
+one_shot = true
+
+[node name="explosions" type="Node2D" parent="game_won"]
+
+[node name="silver_explosion" type="GPUParticles2D" parent="game_won/explosions"]
+modulate = Color(0.509804, 0.509804, 0.509804, 1)
+material = SubResource("CanvasItemMaterial_g1q13")
+position = Vector2(1304, 1)
+emitting = false
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_1yq4g")
+texture = ExtResource("76_pgigr")
+one_shot = true
+explosiveness = 1.0
+local_coords = true
+
+[node name="gold_explosion" type="GPUParticles2D" parent="game_won/explosions"]
+modulate = Color(1, 0.843137, 0, 1)
+material = SubResource("CanvasItemMaterial_g1q13")
+position = Vector2(1305, 2)
+emitting = false
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_1yq4g")
+texture = ExtResource("76_pgigr")
+one_shot = true
+explosiveness = 1.0
+local_coords = true
+
+[node name="platinum_explosion" type="GPUParticles2D" parent="game_won/explosions"]
+modulate = Color(0.25098, 0.596078, 0.854902, 1)
+material = SubResource("CanvasItemMaterial_g1q13")
+position = Vector2(1302, 2)
+emitting = false
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_1yq4g")
+texture = ExtResource("76_pgigr")
+one_shot = true
+explosiveness = 1.0
+local_coords = true
+
+[node name="rainbow_explosion" type="GPUParticles2D" parent="game_won/explosions"]
+material = SubResource("CanvasItemMaterial_xkesv")
+position = Vector2(1304, 2)
+emitting = false
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_c2w2w")
+texture = ExtResource("76_pgigr")
+one_shot = true
+explosiveness = 1.0
+local_coords = true
+
+[node name="green_explosion" type="GPUParticles2D" parent="game_won/explosions"]
+modulate = Color(0, 0.87451, 0.0745098, 1)
+material = SubResource("CanvasItemMaterial_g1q13")
+position = Vector2(1301, 1)
+emitting = false
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_1yq4g")
+texture = ExtResource("76_pgigr")
+one_shot = true
+explosiveness = 1.0
+local_coords = true
+
+[node name="game_lose" type="Node2D" parent="."]
+process_mode = 3
+visible = false
+script = ExtResource("47_0l7cc")
+
+[node name="banner" type="TextureRect" parent="game_lose"]
+offset_top = -394.0
+offset_right = 1180.0
+offset_bottom = -59.0012
+texture = ExtResource("65_d1n50")
+
+[node name="oom" type="Label" parent="game_lose/banner"]
+layout_mode = 0
+offset_left = 444.0
+offset_top = 80.0
+offset_right = 741.0
+offset_bottom = 161.0
+text = "Out of moves!"
+label_settings = SubResource("LabelSettings_kbm6y")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="gameover_menu" type="TextureRect" parent="game_lose"]
+modulate = Color(1, 1, 1, 0)
+offset_right = 1172.0
+offset_bottom = 2534.0
+texture = ExtResource("66_8kskt")
+
+[node name="quit_button" type="TextureButton" parent="game_lose/gameover_menu"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 0
+offset_left = 293.0
+offset_top = 1167.0
+offset_right = 447.0
+offset_bottom = 1321.0
+texture_normal = ExtResource("67_jancp")
+texture_pressed = ExtResource("68_c50r7")
+
+[node name="retry_button" type="TextureButton" parent="game_lose/gameover_menu"]
+layout_mode = 0
+offset_left = 725.0
+offset_top = 1167.0
+offset_right = 879.0
+offset_bottom = 1321.0
+texture_normal = ExtResource("69_8jckf")
+texture_pressed = ExtResource("70_siop1")
+
+[node name="score_label" type="Label" parent="game_lose/gameover_menu"]
+layout_mode = 0
+offset_left = 445.0
+offset_top = 888.0
+offset_right = 725.0
+offset_bottom = 1025.0
+text = "0000"
+label_settings = SubResource("LabelSettings_a230p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="silver_star" type="Sprite2D" parent="game_lose/gameover_menu"]
+position = Vector2(405, 958)
+
+[node name="gold_star" type="Sprite2D" parent="game_lose/gameover_menu"]
+position = Vector2(586, 958)
+
+[node name="platinum_star" type="Sprite2D" parent="game_lose/gameover_menu"]
+position = Vector2(766, 958)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="game_lose"]
+libraries = {
+"": SubResource("AnimationLibrary_qkk5b")
+}
+
+[node name="shuffle" type="Node2D" parent="."]
+process_mode = 3
+script = ExtResource("58_2gkjj")
+
+[node name="shuffle_banner" type="TextureRect" parent="shuffle"]
+modulate = Color(1, 1, 1, 0)
+offset_top = -500.0
+offset_right = 1180.0
+offset_bottom = -164.999
+texture = ExtResource("59_p6dm4")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="shuffle"]
+libraries = {
+"": SubResource("AnimationLibrary_ij3r6")
+}
+
+[node name="debug_color" type="Node2D" parent="."]
+visible = false
+
+[node name="ice_one" type="TextureButton" parent="debug_color"]
+offset_left = 378.0
+offset_top = 184.0
+offset_right = 505.0
+offset_bottom = 321.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("99_btslc")
+texture_pressed = ExtResource("100_f6tnb")
+
+[node name="ice_two" type="TextureButton" parent="debug_color"]
+modulate = Color(0.34902, 0.996078, 1, 1)
+offset_left = 480.0
+offset_top = 184.0
+offset_right = 608.0
+offset_bottom = 322.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("101_i8tar")
+texture_pressed = ExtResource("100_f6tnb")
+
+[node name="ice_three" type="TextureButton" parent="debug_color"]
+offset_left = 582.0
+offset_top = 185.0
+offset_right = 710.0
+offset_bottom = 323.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("102_kvs14")
+texture_pressed = ExtResource("100_f6tnb")
+
+[node name="ice_four" type="TextureButton" parent="debug_color"]
+offset_left = 691.0
+offset_top = 185.0
+offset_right = 819.0
+offset_bottom = 323.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("103_bqgji")
+texture_pressed = ExtResource("100_f6tnb")
+
+[node name="blue" type="TextureButton" parent="debug_color"]
+offset_left = 333.0
+offset_top = 302.0
+offset_right = 433.0
+offset_bottom = 402.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("99_mxcwe")
+texture_pressed = ExtResource("100_f6tnb")
+
+[node name="green" type="TextureButton" parent="debug_color"]
+offset_left = 426.0
+offset_top = 310.0
+offset_right = 526.0
+offset_bottom = 410.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("101_cjs4h")
+texture_pressed = ExtResource("100_f6tnb")
+
+[node name="orange" type="TextureButton" parent="debug_color"]
+offset_left = 510.0
+offset_top = 314.0
+offset_right = 610.0
+offset_bottom = 414.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("103_158q2")
+texture_pressed = ExtResource("100_f6tnb")
+
+[node name="pink" type="TextureButton" parent="debug_color"]
+offset_left = 609.0
+offset_top = 305.0
+offset_right = 710.0
+offset_bottom = 406.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("105_op6uk")
+texture_pressed = ExtResource("100_f6tnb")
+
+[node name="purple" type="TextureButton" parent="debug_color"]
+offset_left = 701.0
+offset_top = 305.0
+offset_right = 801.0
+offset_bottom = 405.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("107_2iedk")
+texture_pressed = ExtResource("100_f6tnb")
+
+[node name="yellow" type="TextureButton" parent="debug_color"]
+offset_left = 777.0
+offset_top = 303.0
+offset_right = 877.0
+offset_bottom = 403.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("109_fs8di")
+texture_pressed = ExtResource("100_f6tnb")
+metadata/_edit_use_anchors_ = true
+
+[node name="conc1" type="TextureButton" parent="debug_color"]
+offset_left = 367.0
+offset_top = 398.0
+offset_right = 489.0
+offset_bottom = 516.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("115_1wkgc")
+texture_pressed = ExtResource("100_f6tnb")
+
+[node name="conc2" type="TextureButton" parent="debug_color"]
+offset_left = 489.0
+offset_top = 396.0
+offset_right = 611.0
+offset_bottom = 514.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("116_hjmol")
+texture_pressed = ExtResource("100_f6tnb")
+
+[node name="conc3" type="TextureButton" parent="debug_color"]
+offset_left = 615.0
+offset_top = 390.0
+offset_right = 737.0
+offset_bottom = 509.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("117_j288r")
+texture_pressed = ExtResource("100_f6tnb")
+
+[node name="conc4" type="TextureButton" parent="debug_color"]
+offset_left = 740.0
+offset_top = 394.0
+offset_right = 862.0
+offset_bottom = 513.0
+scale = Vector2(0.8, 0.8)
+texture_normal = ExtResource("118_71cou")
+texture_pressed = ExtResource("100_f6tnb")
+
+[node name="marm1" type="TextureButton" parent="debug_color"]
+offset_left = 367.0
+offset_top = 498.0
+offset_right = 511.0
+offset_bottom = 641.0
+scale = Vector2(0.7, 0.7)
+texture_normal = ExtResource("114_ldyhl")
+texture_pressed = ExtResource("100_f6tnb")
+
+[node name="marm2" type="TextureButton" parent="debug_color"]
+offset_left = 497.0
+offset_top = 495.0
+offset_right = 641.0
+offset_bottom = 638.0
+scale = Vector2(0.7, 0.7)
+texture_normal = ExtResource("115_ltbkf")
+texture_pressed = ExtResource("100_f6tnb")
+
+[node name="marm3" type="TextureButton" parent="debug_color"]
+offset_left = 619.0
+offset_top = 498.0
+offset_right = 762.0
+offset_bottom = 641.0
+scale = Vector2(0.7, 0.7)
+texture_normal = ExtResource("116_b7v0h")
+texture_pressed = ExtResource("100_f6tnb")
+
+[connection signal="spawn_debug" from="level_editor" to="grid" method="_on_level_editor_spawn_debug"]
+[connection signal="break_concrete" from="grid" to="UI" method="_on_grid_break_concrete"]
+[connection signal="break_concrete" from="grid" to="goal_holder" method="_on_grid_break_concrete"]
+[connection signal="break_ice" from="grid" to="UI" method="_on_grid_break_ice"]
+[connection signal="break_ice" from="grid" to="goal_holder" method="_on_grid_break_ice"]
+[connection signal="break_lock" from="grid" to="UI" method="_on_grid_break_lock"]
+[connection signal="break_lock" from="grid" to="goal_holder" method="_on_grid_break_lock"]
+[connection signal="break_marmalade" from="grid" to="UI" method="_on_grid_break_marmalade"]
+[connection signal="break_marmalade" from="grid" to="goal_holder" method="_on_grid_break_marmalade"]
+[connection signal="break_slime" from="grid" to="UI" method="_on_grid_break_slime"]
+[connection signal="break_slime" from="grid" to="goal_holder" method="_on_grid_break_slime"]
+[connection signal="check_goal" from="grid" to="UI" method="_on_grid_check_goal"]
+[connection signal="check_goal" from="grid" to="goal_holder" method="_on_grid_check_goal"]
+[connection signal="deadlocked" from="grid" to="shuffle" method="_on_grid_deadlocked"]
+[connection signal="game_over" from="grid" to="game_lose" method="_on_grid_game_over"]
+[connection signal="update_counter" from="grid" to="UI" method="_on_grid_update_counter"]
+[connection signal="update_current_score" from="grid" to="score_goal" method="_on_grid_update_current_score"]
+[connection signal="update_score" from="grid" to="UI" method="_on_grid_update_score"]
+[connection signal="update_score" from="grid" to="game_won" method="_on_grid_update_score"]
+[connection signal="update_score" from="grid" to="game_lose" method="_on_grid_update_score"]
+[connection signal="timeout" from="grid/shuffle_timer" to="grid" method="_on_shuffle_timer_timeout"]
+[connection signal="timeout" from="grid/hint_timer" to="grid" method="_on_hint_timer_timeout"]
+[connection signal="timeout" from="grid/slime_timer" to="grid" method="_on_slime_timer_timeout"]
+[connection signal="booster_bought" from="UI" to="grid" method="_on_ui_booster_bought"]
+[connection signal="star_1_unlocked" from="UI" to="game_won" method="_on_ui_star_1_unlocked"]
+[connection signal="star_2_unlocked" from="UI" to="game_won" method="_on_ui_star_2_unlocked"]
+[connection signal="star_3_unlocked" from="UI" to="game_won" method="_on_ui_star_3_unlocked"]
+[connection signal="pressed" from="UI/booster_screens/blue_booster_screen/blue_booster_screen_exit_button" to="UI" method="_on_blue_booster_screen_exit_button_pressed"]
+[connection signal="pressed" from="UI/booster_screens/blue_booster_screen/blue_booster_use_button" to="grid" method="_on_blue_booster_use_button_pressed"]
+[connection signal="pressed" from="UI/booster_screens/blue_booster_screen/blue_booster_use_button" to="UI" method="_on_blue_booster_use_button_pressed"]
+[connection signal="pressed" from="UI/booster_screens/green_booster_screen/green_booster_screen_exit_button" to="UI" method="_on_green_booster_screen_exit_button_pressed"]
+[connection signal="pressed" from="UI/booster_screens/green_booster_screen/green_booster_use_button" to="grid" method="_on_green_booster_use_button_pressed"]
+[connection signal="pressed" from="UI/booster_screens/green_booster_screen/green_booster_use_button" to="UI" method="_on_green_booster_use_button_pressed"]
+[connection signal="pressed" from="UI/booster_screens/yellow_booster_screen/yellow_booster_screen_exit_button" to="UI" method="_on_yellow_booster_screen_exit_button_pressed"]
+[connection signal="pressed" from="UI/booster_screens/yellow_booster_screen/yellow_booster_use_button" to="grid" method="_on_yellow_booster_use_button_pressed"]
+[connection signal="pressed" from="UI/booster_screens/yellow_booster_screen/yellow_booster_use_button" to="UI" method="_on_yellow_booster_use_button_pressed"]
+[connection signal="pressed" from="UI/booster_screens/red_booster_screen/red_booster_screen_exit_button" to="UI" method="_on_red_booster_screen_exit_button_pressed"]
+[connection signal="pressed" from="UI/booster_screens/red_booster_screen/red_booster_use_button" to="grid" method="_on_red_booster_use_button_pressed"]
+[connection signal="pressed" from="UI/booster_screens/red_booster_screen/red_booster_use_button" to="UI" method="_on_red_booster_use_button_pressed"]
+[connection signal="pressed" from="UI/booster_screens/pink_booster_screen/pink_booster_screen_exit_button" to="UI" method="_on_pink_booster_screen_exit_button_pressed"]
+[connection signal="pressed" from="UI/booster_screens/pink_booster_screen/pink_booster_use_button" to="grid" method="_on_pink_booster_use_button_pressed"]
+[connection signal="pressed" from="UI/booster_screens/pink_booster_screen/pink_booster_use_button" to="UI" method="_on_pink_booster_use_button_pressed"]
+[connection signal="pressed" from="UI/booster_stores/blue_booster_store/booster_store_exit_button" to="UI" method="_on_booster_store_exit_button_pressed"]
+[connection signal="pressed" from="UI/booster_stores/blue_booster_store/blue_booster_buy_button_3x" to="UI" method="_on_blue_booster_buy_button_3x_pressed"]
+[connection signal="pressed" from="UI/booster_stores/blue_booster_store/blue_booster_buy_button_10x" to="UI" method="_on_blue_booster_buy_button_10x_pressed"]
+[connection signal="pressed" from="UI/booster_stores/blue_booster_store/blue_booster_buy_button_20x" to="UI" method="_on_blue_booster_buy_button_20x_pressed"]
+[connection signal="pressed" from="UI/booster_stores/green_booster_store/booster_store_exit_button" to="UI" method="_on_booster_store_exit_button_pressed"]
+[connection signal="pressed" from="UI/booster_stores/green_booster_store/green_booster_buy_button_3x" to="UI" method="_on_green_booster_store_buy_button_3x_pressed"]
+[connection signal="pressed" from="UI/booster_stores/green_booster_store/green_booster_buy_button_10x" to="UI" method="_on_green_booster_store_buy_button_10x_pressed"]
+[connection signal="pressed" from="UI/booster_stores/green_booster_store/green_booster_buy_button_20x" to="UI" method="_on_green_booster_store_buy_button_20x_pressed"]
+[connection signal="pressed" from="UI/booster_stores/yellow_booster_store/booster_store_exit_button" to="UI" method="_on_booster_store_exit_button_pressed"]
+[connection signal="pressed" from="UI/booster_stores/yellow_booster_store/yellow_booster_buy_button_3x" to="UI" method="_on_yellow_booster_store_buy_button_3x_pressed"]
+[connection signal="pressed" from="UI/booster_stores/yellow_booster_store/yellow_booster_buy_button_10x" to="UI" method="_on_yellow_booster_store_buy_button_10x_pressed"]
+[connection signal="pressed" from="UI/booster_stores/yellow_booster_store/yellow_booster_buy_button_20x" to="UI" method="_on_yellow_booster_store_buy_button_20x_pressed"]
+[connection signal="pressed" from="UI/booster_stores/red_booster_store/booster_store_exit_button" to="UI" method="_on_booster_store_exit_button_pressed"]
+[connection signal="pressed" from="UI/booster_stores/red_booster_store/red_booster_buy_button_3x" to="UI" method="_on_red_booster_store_buy_button_3x_pressed"]
+[connection signal="pressed" from="UI/booster_stores/red_booster_store/red_booster_buy_button_10x" to="UI" method="_on_red_booster_store_buy_button_10x_pressed"]
+[connection signal="pressed" from="UI/booster_stores/red_booster_store/red_booster_buy_button_20x" to="UI" method="_on_red_booster_store_buy_button_20x_pressed"]
+[connection signal="pressed" from="UI/booster_stores/pink_booster_store/booster_store_exit_button" to="UI" method="_on_booster_store_exit_button_pressed"]
+[connection signal="pressed" from="UI/booster_stores/pink_booster_store/pink_booster_buy_button_3x" to="UI" method="_on_pink_booster_store_buy_button_3x_pressed"]
+[connection signal="pressed" from="UI/booster_stores/pink_booster_store/pink_booster_buy_button_10x" to="UI" method="_on_pink_booster_store_buy_button_10x_pressed"]
+[connection signal="pressed" from="UI/booster_stores/pink_booster_store/pink_booster_buy_button_20x" to="UI" method="_on_pink_booster_store_buy_button_20x_pressed"]
+[connection signal="pressed" from="UI/top_ui/top_ui_lives_button" to="UI" method="_on_top_ui_lives_button_pressed"]
+[connection signal="pressed" from="UI/bottom_ui/blue_booster" to="UI" method="_on_blue_booster_pressed"]
+[connection signal="pressed" from="UI/bottom_ui/green_booster" to="UI" method="_on_green_booster_pressed"]
+[connection signal="pressed" from="UI/bottom_ui/yellow_booster" to="UI" method="_on_yellow_booster_pressed"]
+[connection signal="pressed" from="UI/bottom_ui/red_booster" to="UI" method="_on_red_booster_pressed"]
+[connection signal="pressed" from="UI/bottom_ui/pink_booster" to="UI" method="_on_pink_booster_pressed"]
+[connection signal="animation_finished" from="UI/confetti_sprites" to="UI" method="_on_confetti_sprites_animation_finished"]
+[connection signal="pressed" from="UI/in_level_settings/music_button" to="UI/in_level_settings" method="_on_music_button_pressed"]
+[connection signal="pressed" from="UI/in_level_settings/exit_button" to="UI/in_level_settings" method="_on_exit_button_pressed"]
+[connection signal="pressed" from="UI/in_level_settings/sound_button" to="UI/in_level_settings" method="_on_sound_button_pressed"]
+[connection signal="pressed" from="UI/in_level_settings/vibration_button" to="UI/in_level_settings" method="_on_vibration_button_pressed"]
+[connection signal="pressed" from="UI/in_level_settings/leave_button" to="UI/in_level_settings" method="_on_leave_button_pressed"]
+[connection signal="pressed" from="UI/quit_confirm/confim_cancel_button" to="UI/in_level_settings" method="_on_confim_cancel_button_pressed"]
+[connection signal="pressed" from="UI/quit_confirm/confirm_leave_button" to="UI/in_level_settings" method="_on_confirm_leave_button_pressed"]
+[connection signal="pressed" from="UI/lives_store/lives_store_exit_button" to="UI" method="_on_lives_store_exit_button_pressed"]
+[connection signal="pressed" from="UI/lives_store/lives_store_1life_buy_button" to="UI" method="_on_lives_store_1_life_buy_button_pressed"]
+[connection signal="pressed" from="UI/lives_store/lives_store_5life_buy_button" to="UI" method="_on_lives_store_5_life_buy_button_pressed"]
+[connection signal="pressed" from="UI/lives_store/lives_store_6h_buy_button" to="UI" method="_on_lives_store_6h_buy_button_pressed"]
+[connection signal="pressed" from="UI/moves_store/buy_moves_button" to="UI" method="_on_buy_moves_button_pressed"]
+[connection signal="pressed" from="UI/moves_store/moves_store_exit_button" to="UI" method="_on_moves_store_exit_button_pressed"]
+[connection signal="pressed" from="UI/map_store/buy_button_10_shards" to="UI" method="_on_buy_button_10_shards_pressed"]
+[connection signal="pressed" from="UI/map_store/buy_button_50_shards" to="UI" method="_on_buy_button_50_shards_pressed"]
+[connection signal="pressed" from="UI/map_store/buy_button_100_shards" to="UI" method="_on_buy_button_100_shards_pressed"]
+[connection signal="pressed" from="UI/map_store/buy_button_250_shards" to="UI" method="_on_buy_button_250_shards_pressed"]
+[connection signal="pressed" from="UI/map_store/buy_button_500_shards" to="UI" method="_on_buy_button_500_shards_pressed"]
+[connection signal="pressed" from="UI/map_store/buy_button_1000_shards" to="UI" method="_on_buy_button_1000_shards_pressed"]
+[connection signal="pressed" from="UI/map_store/exit_map_store_button" to="UI" method="_on_exit_map_store_button_pressed"]
+[connection signal="pressed" from="setting" to="UI" method="_on_setting_pressed"]
+[connection signal="create_goal" from="goal_holder" to="UI" method="_on_goal_holder_create_goal"]
+[connection signal="game_won" from="goal_holder" to="grid" method="_on_goal_holder_game_won"]
+[connection signal="game_won" from="goal_holder" to="game_won" method="_on_goal_holder_game_won"]
+[connection signal="score_met" from="score_goal" to="goal_holder" method="_on_score_goal_score_met"]
+[connection signal="setup_score_needed" from="score_goal" to="UI" method="_on_score_goal_setup_score_needed"]
+[connection signal="timeout" from="collapse_timer" to="grid" method="_on_collapse_timer_timeout"]
+[connection signal="timeout" from="swap_timer" to="grid" method="_on_swap_timer_timeout"]
+[connection signal="timeout" from="refill_timer" to="grid" method="_on_refill_timer_timeout"]
+[connection signal="timeout" from="destroy_timer" to="grid" method="_on_destroy_timer_timeout"]
+[connection signal="timeout" from="booster_tween" to="UI" method="_on_booster_tween_timeout"]
+[connection signal="pressed" from="game_won/complete_menu/retry_button" to="game_won" method="_on_retry_button_pressed"]
+[connection signal="pressed" from="game_won/complete_menu/continue_button" to="game_won" method="_on_continue_button_pressed"]
+[connection signal="animation_finished" from="game_won/AnimationPlayer" to="game_won" method="_on_animation_player_animation_finished"]
+[connection signal="pressed" from="game_lose/gameover_menu/quit_button" to="game_lose" method="_on_quit_button_pressed"]
+[connection signal="pressed" from="game_lose/gameover_menu/retry_button" to="game_lose" method="_on_retry_button_pressed"]
+[connection signal="pressed" from="debug_color/ice_one" to="grid" method="_on_ice_one_pressed"]
+[connection signal="pressed" from="debug_color/ice_two" to="grid" method="_on_ice_two_pressed"]
+[connection signal="pressed" from="debug_color/ice_three" to="grid" method="_on_ice_three_pressed"]
+[connection signal="pressed" from="debug_color/ice_four" to="grid" method="_on_ice_four_pressed"]
+[connection signal="pressed" from="debug_color/blue" to="grid" method="_on_blue_pressed"]
+[connection signal="pressed" from="debug_color/green" to="grid" method="_on_green_pressed"]
+[connection signal="pressed" from="debug_color/orange" to="grid" method="_on_orange_pressed"]
+[connection signal="pressed" from="debug_color/pink" to="grid" method="_on_pink_pressed"]
+[connection signal="pressed" from="debug_color/purple" to="grid" method="_on_purple_pressed"]
+[connection signal="pressed" from="debug_color/yellow" to="grid" method="_on_yellow_pressed"]
+[connection signal="pressed" from="debug_color/conc1" to="grid" method="_on_conc_1_pressed"]
+[connection signal="pressed" from="debug_color/conc2" to="grid" method="_on_conc_2_pressed"]
+[connection signal="pressed" from="debug_color/conc3" to="grid" method="_on_conc_3_pressed"]
+[connection signal="pressed" from="debug_color/conc4" to="grid" method="_on_conc_4_pressed"]
+[connection signal="pressed" from="debug_color/marm1" to="grid" method="_on_marm_1_pressed"]
+[connection signal="pressed" from="debug_color/marm2" to="grid" method="_on_marm_2_pressed"]
+[connection signal="pressed" from="debug_color/marm3" to="grid" method="_on_marm_3_pressed"]

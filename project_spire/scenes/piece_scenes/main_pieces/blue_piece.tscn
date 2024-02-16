@@ -1,0 +1,77 @@
+[gd_scene load_steps=16 format=3 uid="uid://c6tybrlnc1ruk"]
+
+[ext_resource type="Texture2D" uid="uid://dhbpnilln4rya" path="res://Assets/artwork/pieces/adjacent/adjacent_blue.png" id="2_ylrcp"]
+[ext_resource type="Texture2D" uid="uid://dnyh25nrd2lvb" path="res://Assets/artwork/pieces/column/column_blue.png" id="3_xyql3"]
+[ext_resource type="Texture2D" uid="uid://2a1wocdmya2v" path="res://Assets/artwork/pieces/regular/regular_blue.png" id="4_34f0d"]
+[ext_resource type="Script" path="res://scripts/general_scripts/piece.gd" id="5"]
+[ext_resource type="Texture2D" uid="uid://dkleisna8d3be" path="res://Assets/artwork/pieces/row/row_blue.png" id="5_0cvj6"]
+[ext_resource type="Texture2D" uid="uid://dhoq30lls4q2s" path="res://Assets/artwork/pieces/shiny_adjacent/shiny_adjacent_blue.png" id="6_qjj6h"]
+[ext_resource type="Texture2D" uid="uid://b0n1f53o1mq68" path="res://Assets/artwork/obstacles/rainbow.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://dwyd0vxvd6ycq" path="res://Assets/artwork/pieces/shiny_column/shiny_column_blue.png" id="7_naaq7"]
+[ext_resource type="Texture2D" uid="uid://dep88bg1dljsj" path="res://Assets/artwork/obstacles/sinker.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://bkgmnvvg86861" path="res://Assets/artwork/pieces/shiny_regular/shiny_blue.png" id="8_efrk3"]
+[ext_resource type="Texture2D" uid="uid://srej77l3eiaw" path="res://Assets/artwork/pieces/shiny_row/shiny_row_blue.png" id="9_ql611"]
+[ext_resource type="Texture2D" uid="uid://c0ep8ss7ecyc0" path="res://Assets/artwork/obstacles/fish/blue_fish.png" id="10_jk86l"]
+
+[sub_resource type="Animation" id="1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="2"]
+resource_name = "grow"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1e-05, 1e-05), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4yjac"]
+_data = {
+"RESET": SubResource("1"),
+"grow": SubResource("2")
+}
+
+[node name="blue_piece" type="Node2D"]
+scale = Vector2(1.2, 1.2)
+script = ExtResource("5")
+color = "blue"
+adjacent_texture = ExtResource("2_ylrcp")
+column_texture = ExtResource("3_xyql3")
+piece_texture = ExtResource("4_34f0d")
+row_texture = ExtResource("5_0cvj6")
+shiny_adjacent_texture = ExtResource("6_qjj6h")
+shiny_column_texture = ExtResource("7_naaq7")
+shiny_texture = ExtResource("8_efrk3")
+shiny_row_texture = ExtResource("9_ql611")
+color_bomb_texture = ExtResource("7")
+sinker_texture = ExtResource("8")
+fish_texture = ExtResource("10_jk86l")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("4_34f0d")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_4yjac")
+}
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

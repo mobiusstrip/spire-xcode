@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cf6xly6e6qlup"]
+
+[ext_resource type="Texture2D" uid="uid://c1nbhgxnn50yu" path="res://Assets/artwork/grids/purple_grid_b.png" id="1_vl1i7"]
+
+[node name="grid" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_vl1i7")

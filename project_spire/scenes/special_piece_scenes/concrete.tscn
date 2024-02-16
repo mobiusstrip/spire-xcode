@@ -1,0 +1,17 @@
+[gd_scene load_steps=6 format=3 uid="uid://cspltq5pexma5"]
+
+[ext_resource type="PackedScene" uid="uid://cgsbd1ojbc6xa" path="res://scenes/special_piece_scenes/ice.tscn" id="1"]
+[ext_resource type="Texture2D" uid="uid://o2i2kj7ni1nk" path="res://Assets/artwork/obstacles/concrete.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://cb3ucs6ssjkxj" path="res://Assets/artwork/obstacles/concrete2.png" id="3_b7ub6"]
+[ext_resource type="Texture2D" uid="uid://b0r73xxb8ct71" path="res://Assets/artwork/obstacles/concrete3.png" id="4_tvsaj"]
+[ext_resource type="Texture2D" uid="uid://fhmqwah8hphn" path="res://Assets/artwork/obstacles/concrete4.png" id="5_bqrmk"]
+
+[node name="concrete" instance=ExtResource("1")]
+modulate = Color(1, 1, 1, 1)
+health_1 = ExtResource("2")
+health_2 = ExtResource("3_b7ub6")
+health_3 = ExtResource("4_tvsaj")
+health_4 = ExtResource("5_bqrmk")
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2")

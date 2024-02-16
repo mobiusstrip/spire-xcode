@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dshyvf5fffog"
+path="res://.godot/imported/casdace_xylophone (6).wav-576a23fdf50f45fc4ef3478455ee4007.sample"
+
+[deps]
+
+source_file="res://Assets/artwork/sfx/old/cascade/casdace_xylophone (6).wav"
+dest_files=["res://.godot/imported/casdace_xylophone (6).wav-576a23fdf50f45fc4ef3478455ee4007.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

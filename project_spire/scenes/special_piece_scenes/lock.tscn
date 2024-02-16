@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://ck0corxfrgebd"]
+
+[ext_resource type="Texture2D" uid="uid://sbxbbj0xi1wc" path="res://Assets/artwork/obstacles/lock.png" id="1"]
+[ext_resource type="PackedScene" uid="uid://cgsbd1ojbc6xa" path="res://scenes/special_piece_scenes/ice.tscn" id="2"]
+
+[node name="lock" instance=ExtResource("2")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("1")

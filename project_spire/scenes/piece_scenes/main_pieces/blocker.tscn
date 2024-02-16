@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=3 uid="uid://golhq6w2kkqu"]
+
+[ext_resource type="Script" path="res://scripts/general_scripts/blocker.gd" id="1_t8w6e"]
+[ext_resource type="Texture2D" uid="uid://wedpv5uwpf1f" path="res://Assets/artwork/obstacles/blocker.png" id="2_xph1l"]
+
+[sub_resource type="Animation" id="1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1e-05, 1e-05)]
+}
+
+[sub_resource type="Animation" id="2"]
+resource_name = "grow"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1e-05, 1e-05), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4yjac"]
+_data = {
+"RESET": SubResource("1"),
+"grow": SubResource("2")
+}
+
+[node name="blocker" type="Node2D"]
+script = ExtResource("1_t8w6e")
+color = "blocker"
+piece_texture = ExtResource("2_xph1l")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_xph1l")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Sprite2D")
+libraries = {
+"": SubResource("AnimationLibrary_4yjac")
+}
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

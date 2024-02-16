@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://d0f0coav22d5k"
+path="res://.godot/imported/piece_move (2).wav-c7a693196a67e75faa74e76396beea95.sample"
+
+[deps]
+
+source_file="res://Assets/artwork/sfx/refill/unused_thocky_refill/piece_move (2).wav"
+dest_files=["res://.godot/imported/piece_move (2).wav-c7a693196a67e75faa74e76396beea95.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0
